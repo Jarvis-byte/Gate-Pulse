@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#E3E5E8"
+    tools:context=".Roaster">
+
+    <!--Recycler view for displaying
+        our data from Firestore-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/idRVdata"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E3E5E8"
+        android:padding="5dp" />
+
+    <!--Progress bar for showing loading screen-->
+
+
+</RelativeLayout>

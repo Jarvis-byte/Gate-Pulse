@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "81820504467",
+    "project_id": "fmo-application",
+    "storage_bucket": "fmo-application.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81820504467:android:3113b9f40132a8827f5866",
+        "android_client_info": {
+          "package_name": "com.example.fmoapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81820504467-suke0ktooc43tqidnhh6mjg81bq1vtst.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChve8bAFeNGg7GnZ1D4EnwgJ7BBPZ-ALY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81820504467-suke0ktooc43tqidnhh6mjg81bq1vtst.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
