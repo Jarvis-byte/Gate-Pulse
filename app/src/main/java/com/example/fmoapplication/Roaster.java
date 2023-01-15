@@ -1,10 +1,12 @@
 package com.example.fmoapplication;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -19,6 +21,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Roaster extends AppCompatActivity {
@@ -71,7 +76,18 @@ public class Roaster extends AppCompatActivity {
                         Data data = d.toObject(Data.class);
                         coursesArrayList.add(data);
 
+
                     }
+                    Collections.sort(coursesArrayList, new Comparator<Data>() {
+                        @Override
+                        public int compare(Data a, Data b) {
+                            if (a.getDate().equals(b.getDate())) {
+                                return b.getName().compareTo(a.getName());
+                            } else {
+                                return b.getDate().compareTo(a.getDate());
+                            }
+                        }
+                    });
                     courseRVAdapter.notifyDataSetChanged();
                 } else {
                     aLodingDialog.cancel();

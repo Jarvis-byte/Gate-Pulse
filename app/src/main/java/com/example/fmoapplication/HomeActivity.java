@@ -11,16 +11,19 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -62,6 +65,7 @@ public class HomeActivity extends AppCompatActivity {
     private ALodingDialog aLodingDialog;
     String name;
     boolean emailLogin = false;
+    ImageView btn_logOut;
     ArrayList<User> Userlist = new ArrayList<>();
     ArrayList<Pin> PinList = new ArrayList<>();
 
@@ -71,6 +75,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Welcome_User = findViewById(R.id.Welcome_User);
         date_picker = findViewById(R.id.date_picker);
         time_Picker_from = findViewById(R.id.time_Picker_from);
@@ -79,6 +84,40 @@ public class HomeActivity extends AppCompatActivity {
         btn_done = findViewById(R.id.btn_done);
         db = FirebaseFirestore.getInstance();
         aLodingDialog = new ALodingDialog(this);
+        btn_logOut = findViewById(R.id.btn_logOut);
+        //Logout
+        btn_logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
+                builder.setView(dialogView);
+                AlertDialog dialog = builder.create();
+                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // aLodingDialog.show();
+
+                        FirebaseAuth.getInstance().signOut();
+                        Intent intent = new Intent(HomeActivity.this, SignInActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                });
+                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                }
+                dialog.show();
+
+            }
+        });
 
 
         //Animation
@@ -235,7 +274,7 @@ public class HomeActivity extends AppCompatActivity {
             if (account != null) {
                 name = account.getDisplayName();
                 String namearr[] = name.split(" ");
-                Welcome_User.setText("Hi\t" + namearr[0] + " !");
+                Welcome_User.setText(namearr[0] + " !");
             }
 
         } else {
@@ -260,7 +299,7 @@ public class HomeActivity extends AppCompatActivity {
                                 name = user.getName();
                                 Userlist.add(user);
                                 String namearr[] = name.split(" ");
-                                Welcome_User.setText("Hi\t" + namearr[0] + " !");
+                                Welcome_User.setText(namearr[0] + " !");
                             }
 
                         }

@@ -44,6 +44,7 @@ public class SignInActivity extends AppCompatActivity {
     private Button loginButton;
     private EditText loginEmail, loginPassword;
     private ALodingDialog aLodingDialog;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,14 +107,14 @@ public class SignInActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         String userEmail = emailBox.getText().toString();
-                        if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()){
+                        if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
                             Toast.makeText(SignInActivity.this, "Enter your registered email id", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         firebaseAuth.sendPasswordResetEmail(userEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     Toast.makeText(SignInActivity.this, "Check your email", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
                                 } else {
@@ -129,16 +130,16 @@ public class SignInActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
-                if (dialog.getWindow() != null){
+                if (dialog.getWindow() != null) {
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
                 }
                 dialog.show();
             }
         });
         loginRedirectText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
             }
         });
 
@@ -161,12 +162,13 @@ public class SignInActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         // Initialize firebase user
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-          //  Check condition
+        //  Check condition
         if (firebaseUser != null) {
             // When user already sign in
             // redirect to profile activity
             startActivity(new Intent(SignInActivity.this, HomeActivity.class)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            finish();
         }
 
     }
@@ -216,6 +218,7 @@ public class SignInActivity extends AppCompatActivity {
                                             startActivity(new Intent(SignInActivity.this
                                                     , HomeActivity.class)
                                                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                            finish();
                                             // Display Toast
                                             displayToast("Welcome");
                                         } else {

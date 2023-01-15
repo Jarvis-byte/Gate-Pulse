@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pagebkg2"
+    android:background="@drawable/bg"
     tools:context=".HomeActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -17,39 +17,42 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/Welcome_User_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:orientation="horizontal">
+                android:padding="30dp">
+
+                <TextView
+                    android:id="@+id/hello"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Hello,"
+                    android:textColor="#fff"
+                    android:textSize="20dp" />
 
                 <TextView
                     android:id="@+id/Welcome_User"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:text="Hi !"
-                    android:padding="10dp"
-                    android:textColor="#000000"
-                    android:textSize="20dp"
+                    android:layout_below="@id/hello"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif-black"
+                    android:text="MAGESHKUMAR"
+                    android:textColor="#fff"
+                    android:textSize="26dp"
                     android:textStyle="bold" />
 
+                <ImageView
+                    android:id="@+id/btn_logOut"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/man" />
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-
-                </LinearLayout>
-
-
-            </LinearLayout>
+            </RelativeLayout>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/first_card"
@@ -57,7 +60,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/Welcome_User_ll"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/custom_edittext"
@@ -80,14 +83,6 @@
                     android:textSize="25dp"
                     android:textStyle="bold" />
 
-                <View
-                    android:layout_width="350dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="80dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#ffffff" />
-
 
                 <TextView
                     android:id="@+id/date_picker"
@@ -107,13 +102,6 @@
 
                     android:textStyle="bold" />
 
-                <View
-                    android:layout_width="350dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="170dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#ffffff" />
 
                 <TextView
                     android:id="@+id/time_Picker_from"
@@ -131,14 +119,6 @@
                     android:textColorHint="#E3E5E8"
                     android:textStyle="bold" />
 
-
-                <View
-                    android:layout_width="350dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="270dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#ffffff" />
 
                 <TextView
                     android:id="@+id/time_Picker_to"
@@ -192,7 +172,7 @@
                 android:layout_marginTop="50dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rounded_gradient_heading_pink"
-                android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
+                android:drawableRight="@drawable/arrow_right"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="Check Schedule"

@@ -4,36 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".SplashScreen">
 
     <ImageView
         android:id="@+id/img"
         android:layout_width="match_parent"
         android:layout_height="900dp"
-        android:background="@color/colorPrimary"
-
         android:scaleType="centerCrop"
+        android:src="@drawable/bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.988" />
+        app:layout_constraintVertical_bias="0.982" />
 
     <TextView
         android:id="@+id/app_name"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="FMO Roaster"
-        android:textSize="50dp"
+        android:fontFamily="@font/acme"
         android:gravity="center"
-        android:textColor="#ffffff"
+        android:text="FMO Roaster"
+        android:textColor="#111"
+        android:textSize="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.181" />
+        app:layout_constraintVertical_bias="0.499" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie"
@@ -41,19 +42,19 @@
         android:layout_height="300dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.881"
         app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/splash"
-        />
+        app:lottie_rawRes="@raw/splash" />
 
     <TextView
         android:id="@+id/made_by"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Made with ❤\n     by Arka"
-        android:textColor="@color/white"
-
+        android:textColor="#111"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
