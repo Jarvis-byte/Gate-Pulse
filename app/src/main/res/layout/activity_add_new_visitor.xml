@@ -1,9 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
     tools:context=".AddNewVisitor">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+
+        >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/Welcome_User_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="30dp">
+
+                <TextView
+                    android:id="@+id/hello"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Hello,"
+                    android:textColor="#fff"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/Welcome_User"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/hello"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif-black"
+                    android:text=""
+                    android:textColor="#fff"
+                    android:textSize="26dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/btn_logOut"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/man" />
+
+
+            </RelativeLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/first_card"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/Welcome_User_ll"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/custom_edittext"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="20dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Please input visitor's details"
+                        android:textColor="#7a7a7a"
+                        android:textColorHint="#E3E5E8"
+                        android:textSize="25dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/visitor_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_below="@+id/info"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/custom_edittext_purpose"
+                        android:drawablePadding="8dp"
+                        android:hint="Visitor's Name"
+                        android:padding="15dp"
+                        android:textColor="@color/black" />
+
+                    <EditText
+                        android:id="@+id/purpose_of_visit"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_below="@+id/visitor_name"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/custom_edittext_purpose"
+                        android:drawablePadding="8dp"
+                        android:gravity="top"
+                        android:hint="Purpose Of Visit"
+                        android:padding="15dp"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/date_picker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/purpose_of_visit"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/rounded_gradient_heading"
+                        android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Select Date"
+                        android:textColor="#E3E5E8"
+                        android:textColorHint="#E3E5E8"
+
+
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/time_Picker_from"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/date_picker"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/rounded_gradient_heading"
+                        android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Time - From"
+                        android:textColor="#E3E5E8"
+                        android:textColorHint="#E3E5E8"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/time_Picker_to"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/time_Picker_from"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/rounded_gradient_heading"
+                        android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Time - To"
+                        android:textColor="#E3E5E8"
+                        android:textColorHint="#E3E5E8"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="350dp"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/time_Picker_to"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="#ffffff" />
+
+                    <TextView
+                        android:id="@+id/btn_done"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/view"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="30dp"
+                        android:background="@drawable/rounded_gradient_heading"
+                        android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
+                        android:foregroundGravity="center_horizontal"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Submit"
+                        android:textColor="#E3E5E8"
+                        android:textColorHint="#E3E5E8"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,7 +1,5 @@
 package com.example.fmoapplication;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,18 +9,13 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -32,25 +25,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class TimesheetActivity extends AppCompatActivity {
     TextView Welcome_User;
     GoogleSignInOptions googleSignInOptions;
     GoogleSignInClient googleSignInClient;
@@ -89,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
         btn_logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(TimesheetActivity.this);
                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
                 builder.setView(dialogView);
                 AlertDialog dialog = builder.create();
@@ -99,7 +87,7 @@ public class HomeActivity extends AppCompatActivity {
                         // aLodingDialog.show();
 
                         FirebaseAuth.getInstance().signOut();
-                        Intent intent = new Intent(HomeActivity.this, SignInActivity.class);
+                        Intent intent = new Intent(TimesheetActivity.this, SignInActivity.class);
                         startActivity(intent);
                         finish();
 
@@ -142,7 +130,7 @@ public class HomeActivity extends AppCompatActivity {
         date_picker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerDialog dialog = new DatePickerDialog(HomeActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog = new DatePickerDialog(TimesheetActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         System.out.println("Month" + i1);
@@ -166,7 +154,7 @@ public class HomeActivity extends AppCompatActivity {
         time_Picker_from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(HomeActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(TimesheetActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
 
@@ -183,7 +171,7 @@ public class HomeActivity extends AppCompatActivity {
         time_Picker_to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(HomeActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(TimesheetActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
 
@@ -237,14 +225,14 @@ public class HomeActivity extends AppCompatActivity {
 
 
                     } else {
-                        Toast.makeText(HomeActivity.this, "No data found in Database", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TimesheetActivity.this, "No data found in Database", Toast.LENGTH_SHORT).show();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     System.out.println(e.getMessage());
-                    Toast.makeText(HomeActivity.this, "Fail to get the data.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TimesheetActivity.this, "Fail to get the data.", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -318,13 +306,13 @@ public class HomeActivity extends AppCompatActivity {
                 aLodingDialog.cancel();
                 time_Picker_from.setText("Time - From");
                 time_Picker_to.setText("Time - To");
-                Toast.makeText(HomeActivity.this, "Your Data has been added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimesheetActivity.this, "Your Data has been added", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 aLodingDialog.cancel();
-                Toast.makeText(HomeActivity.this, "Fail to add data!! Please try again \n" + e, Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimesheetActivity.this, "Fail to add data!! Please try again \n" + e, Toast.LENGTH_SHORT).show();
             }
         });
 

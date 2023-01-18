@@ -34,7 +34,7 @@ import java.util.List;
 public class HomeScreenDashboard extends AppCompatActivity {
     TextView Welcome_User;
     boolean emailLogin = false;
-    ConstraintLayout enterSchedule;
+    ConstraintLayout enterSchedule, add_visitor;
     String name;
     ArrayList<User> Userlist = new ArrayList<>();
     GoogleSignInOptions googleSignInOptions;
@@ -51,6 +51,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
         Welcome_User = findViewById(R.id.Welcome_User);
         enterSchedule = findViewById(R.id.enterSchedule);
         checkSchedule = findViewById(R.id.checkSchedule);
+        add_visitor = findViewById(R.id.add_visitor);
         aLodingDialog = new ALodingDialog(this);
         db = FirebaseFirestore.getInstance();
         for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
@@ -117,7 +118,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
         enterSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeScreenDashboard.this, HomeActivity.class);
+                Intent intent = new Intent(HomeScreenDashboard.this, TimesheetActivity.class);
                 startActivity(intent);
 
             }
@@ -191,5 +192,13 @@ public class HomeScreenDashboard extends AppCompatActivity {
 
             }
         });
+        add_visitor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeScreenDashboard.this, AddNewVisitor.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

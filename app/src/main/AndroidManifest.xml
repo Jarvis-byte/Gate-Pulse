@@ -57,7 +57,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".TimesheetActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

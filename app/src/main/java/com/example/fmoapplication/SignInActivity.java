@@ -163,13 +163,13 @@ public class SignInActivity extends AppCompatActivity {
         // Initialize firebase user
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         //  Check condition
-//        if (firebaseUser != null) {
-//            // When user already sign in
-//            // redirect to profile activity
-//            startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class)
-//                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-//            finish();
-//        }
+        if (firebaseUser != null) {
+            // When user already sign in
+            // redirect to profile activity
+            startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            finish();
+        }
 
     }
 
