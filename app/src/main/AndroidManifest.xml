@@ -16,6 +16,13 @@
         android:theme="@style/Theme.FMOApplication"
         tools:targetApi="31">
         <activity
+            android:name=".ViewVisitor"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".AddNewVisitor"
             android:exported="false">
             <meta-data

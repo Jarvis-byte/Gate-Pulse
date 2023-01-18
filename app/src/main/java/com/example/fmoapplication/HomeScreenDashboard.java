@@ -34,7 +34,7 @@ import java.util.List;
 public class HomeScreenDashboard extends AppCompatActivity {
     TextView Welcome_User;
     boolean emailLogin = false;
-    ConstraintLayout enterSchedule, add_visitor;
+    ConstraintLayout enterSchedule, add_visitor, view_visitor;
     String name;
     ArrayList<User> Userlist = new ArrayList<>();
     GoogleSignInOptions googleSignInOptions;
@@ -52,6 +52,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
         enterSchedule = findViewById(R.id.enterSchedule);
         checkSchedule = findViewById(R.id.checkSchedule);
         add_visitor = findViewById(R.id.add_visitor);
+        view_visitor = findViewById(R.id.view_visitor);
         aLodingDialog = new ALodingDialog(this);
         db = FirebaseFirestore.getInstance();
         for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
@@ -196,6 +197,13 @@ public class HomeScreenDashboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(HomeScreenDashboard.this, AddNewVisitor.class);
+                startActivity(intent);
+            }
+        });
+        view_visitor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeScreenDashboard.this, ViewVisitor.class);
                 startActivity(intent);
             }
         });
