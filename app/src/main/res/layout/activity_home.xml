@@ -39,7 +39,7 @@
                     android:layout_below="@id/hello"
                     android:layout_marginTop="10dp"
                     android:fontFamily="sans-serif-black"
-                    android:text="MAGESHKUMAR"
+                    android:text=""
                     android:textColor="#fff"
                     android:textSize="26dp"
                     android:textStyle="bold" />
@@ -163,22 +163,6 @@
                     android:textStyle="bold" />
             </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/checkSchedule"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/first_card"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/rounded_gradient_heading_pink"
-                android:drawableRight="@drawable/arrow_right"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="Check Schedule"
-                android:textColor="#353535"
-                android:textColorHint="#E3E5E8"
-                android:textStyle="bold" />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 

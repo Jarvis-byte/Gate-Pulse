@@ -74,7 +74,7 @@ public class SignInActivity extends AppCompatActivity {
                                     public void onSuccess(AuthResult authResult) {
                                         aLodingDialog.cancel();
                                         Toast.makeText(SignInActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(SignInActivity.this, HomeActivity.class));
+                                        startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class));
                                         finish();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -163,13 +163,13 @@ public class SignInActivity extends AppCompatActivity {
         // Initialize firebase user
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         //  Check condition
-        if (firebaseUser != null) {
-            // When user already sign in
-            // redirect to profile activity
-            startActivity(new Intent(SignInActivity.this, HomeActivity.class)
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            finish();
-        }
+//        if (firebaseUser != null) {
+//            // When user already sign in
+//            // redirect to profile activity
+//            startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class)
+//                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+//            finish();
+//        }
 
     }
 
@@ -216,7 +216,7 @@ public class SignInActivity extends AppCompatActivity {
                                             // When task is successful
                                             // Redirect to profile activity
                                             startActivity(new Intent(SignInActivity.this
-                                                    , HomeActivity.class)
+                                                    , HomeScreenDashboard.class)
                                                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                             finish();
                                             // Display Toast

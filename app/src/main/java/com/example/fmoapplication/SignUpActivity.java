@@ -40,7 +40,7 @@ public class SignUpActivity extends AppCompatActivity {
         signup_name = findViewById(R.id.signup_name);
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
-
+        db = FirebaseFirestore.getInstance();
         //progressbar
         aLodingDialog = new ALodingDialog(this);
 
@@ -68,12 +68,12 @@ public class SignUpActivity extends AppCompatActivity {
                                 FirebaseUser user = auth.getCurrentUser();
                                 Toast.makeText(SignUpActivity.this, "SignUp Successful", Toast.LENGTH_SHORT).show();
                                 String uId = user.getUid();
-                                System.out.println("UID" + uId);
-                                db = FirebaseFirestore.getInstance();
+                                System.out.println("UID_SignUp" + uId);
+
 
                                 setName(uId, name);
 
-                                Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
+                                Intent intent = new Intent(SignUpActivity.this, HomeScreenDashboard.class);
                                 startActivity(intent);
                             } else {
                                 aLodingDialog.cancel();
@@ -99,15 +99,18 @@ public class SignUpActivity extends AppCompatActivity {
 
         HashMap<String, String> map = new HashMap<>();
         map.put("Name", Name);
+        System.out.println("UID_SignUp_setName" + uId);
         db.collection("User").document(uId).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 aLodingDialog.cancel();
+                System.out.println("UID_SignUp_setName" + uId);
                 Toast.makeText(SignUpActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                System.out.println("UID_SignUp_setName" + e.getMessage());
                 aLodingDialog.cancel();
                 Toast.makeText(SignUpActivity.this, "Fail to Login!! Please try again\n" + e, Toast.LENGTH_SHORT).show();
             }
