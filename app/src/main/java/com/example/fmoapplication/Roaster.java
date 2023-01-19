@@ -14,6 +14,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -133,13 +134,15 @@ public class Roaster extends AppCompatActivity {
     private void verifyRoaster(String uid, String date, String name, int approvalStatus, String time_from, String time_to, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Roaster.this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_schedule, null);
-        Spinner dropdown = dialogView.findViewById(R.id.spinner1);
+
+
+        AutoCompleteTextView dropdown = dialogView.findViewById(R.id.spinner2);
         String[] items = new String[]{"Approved", "Rejected"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.drop_down_item, items);
         dropdown.setAdapter(adapter);
-        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        dropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0:
                         // Whatever you want to happen when the first item gets selected
@@ -154,10 +157,6 @@ public class Roaster extends AppCompatActivity {
                 }
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
         });
         // EditText emailBox = dialogView.findViewById(R.id.emailBox);
         builder.setView(dialogView);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dialogForgot"
     android:layout_width="match_parent"
@@ -7,7 +7,7 @@
     android:layout_margin="20dp"
     android:padding="20dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/dialogBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,72 +19,104 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/lavender_round"
-            android:drawableLeft="@drawable/ic_baseline_lock_24"
+            android:drawableLeft="@drawable/ic_baseline_verified_24"
             android:drawablePadding="8dp"
             android:padding="10dp"
             android:text="Verify"
             android:textColor="@color/white"
-            android:textSize="17sp"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/forgotTitle"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:text="Select Approval status"
-            android:textColor="@color/lavender"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/spinner1"
-            app:layout_constraintTop_toBottomOf="@id/forgotTitle" />
+            android:text="Select Approval status for"
+            android:textColor="@color/impText"
+            android:textSize="16sp" />
 
-        <Spinner
-            android:id="@+id/spinner1"
-            android:layout_width="300dp"
+        <TextView
+            android:id="@+id/Name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/desc"
             android:layout_marginStart="20dp"
-            android:layout_marginBottom="30dp"
-            android:prompt="@string/hint_resource"
-            android:spinnerMode="dropdown"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/forgotTitle" />
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="Name"
+            android:drawablePadding="8dp"
+            android:padding="10dp"
+            android:drawableLeft="@drawable/ic_baseline_person_24"
+            android:textColor="@color/normaltext"
+            android:textSize="17sp"
+            />
+        <!--spinner1-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/spinner1"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Name"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            android:textColorHint="@color/impText"
+            android:hint="Select"
+            app:boxStrokeColor="@color/lavender">
+
+            <AutoCompleteTextView
+                android:id="@+id/spinner2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none">
+
+            </AutoCompleteTextView>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner1"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+
+            >
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_below="@+id/spinner1"
+                android:layout_weight="1"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/white"
+                android:text="Cancel"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:cornerRadius="20dp" />
+
+            <Button
+                android:id="@+id/btnReset"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="8dp"
+                android:text="GO"
+                android:backgroundTint="@color/okButton"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:cornerRadius="20dp" />
+
+        </LinearLayout>
 
 
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="8dp"
-            android:text="Cancel"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:cornerRadius="20dp"
-            app:layout_constraintBottom_toBottomOf="@id/dialogBox"
-            app:layout_constraintEnd_toStartOf="@id/btnReset"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spinner1" />
-
-        <Button
-            android:id="@+id/btnReset"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="8dp"
-            android:text="GO"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:cornerRadius="20dp"
-            app:layout_constraintBottom_toBottomOf="@id/dialogBox"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnCancel" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</RelativeLayout>

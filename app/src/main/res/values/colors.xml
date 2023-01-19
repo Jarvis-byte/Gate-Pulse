@@ -13,4 +13,7 @@
     <color name="colorWhite">#ffffff</color>
     <color name="purple">#8692f7</color>
     <color name="lavender">#8692f7</color>
+    <color name="impText">#2d2d68</color>
+    <color name="okButton">#f66d5a</color>
+    <color name="normaltext">#635aff</color>
 </resources>
