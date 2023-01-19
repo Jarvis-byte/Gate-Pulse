@@ -7,17 +7,19 @@ public class Data {
     String time_FROM;
     String time_to;
     boolean isDoneForToday;
+    int approvalStatus;
 
     public Data() {
     }
 
-    public Data(String uid, String name, String date, String time_FROM, String time_to, boolean isDoneForToday) {
+    public Data(String uid, String name, String date, String time_FROM, String time_to, boolean isDoneForToday, int approvalStatus) {
         this.uid = uid;
         this.name = name;
         this.date = date;
         this.time_FROM = time_FROM;
         this.time_to = time_to;
         this.isDoneForToday = isDoneForToday;
+        this.approvalStatus = approvalStatus;
     }
 
     public String getUid() {
@@ -64,7 +66,11 @@ public class Data {
         return isDoneForToday;
     }
 
-    public void setDoneForToday(boolean doneForToday) {
-        isDoneForToday = doneForToday;
+    public int getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(int approvalStatus) {
+        this.approvalStatus = approvalStatus;
     }
 }

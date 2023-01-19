@@ -293,7 +293,7 @@ public class TimesheetActivity extends AppCompatActivity {
     private void addDataToFirestore(String uid, String nameFirst, String date, String time_from, String time_to) {
 
 
-        Data data = new Data(uid, nameFirst, date, time_from, time_to, true);
+        Data data = new Data(uid, nameFirst, date, time_from, time_to, true, 0);
 
         String docName = data.getDate();
         String docname[] = docName.split("/");

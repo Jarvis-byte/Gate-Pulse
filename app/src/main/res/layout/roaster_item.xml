@@ -10,6 +10,7 @@
     app:cardElevation="10dp">
 
     <LinearLayout
+        android:id="@+id/card_rv_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="2dp"
@@ -72,6 +73,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/status"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_weight="1"
