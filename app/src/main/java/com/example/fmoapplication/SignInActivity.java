@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -41,15 +43,16 @@ public class SignInActivity extends AppCompatActivity {
     TextView loginRedirectText;
     TextView forgotPassword;
     private TextView signupRedirectText;
-    private Button loginButton;
+    private ConstraintLayout loginButton;
     private EditText loginEmail, loginPassword;
     private ALodingDialog aLodingDialog;
 
+    @SuppressLint("MissingInflatedId")
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.new_login_activity);
         googleLogin = findViewById(R.id.googleLogin);
         loginEmail = findViewById(R.id.login_email);
         loginPassword = findViewById(R.id.login_password);

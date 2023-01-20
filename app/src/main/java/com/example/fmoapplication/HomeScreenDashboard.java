@@ -1,20 +1,26 @@
 package com.example.fmoapplication;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Patterns;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -28,32 +34,41 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
-public class HomeScreenDashboard extends AppCompatActivity {
-    TextView Welcome_User;
+public class HomeScreenDashboard extends AppCompatActivity implements LocationListener {
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    TextView Welcome_User, curr_date, curr_location;
     boolean emailLogin = false;
-    ConstraintLayout enterSchedule, add_visitor, view_visitor;
+    LinearLayout enterSchedule, add_visitor, view_visitor;
     String name;
     ArrayList<User> Userlist = new ArrayList<>();
     GoogleSignInOptions googleSignInOptions;
     GoogleSignInClient googleSignInClient;
     private FirebaseFirestore db;
     private ALodingDialog aLodingDialog;
-    private ConstraintLayout checkSchedule;
+    private LinearLayout checkSchedule;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_screen_dashboard);
+        setContentView(R.layout.new__home_screen_dashboard_activity);
         Welcome_User = findViewById(R.id.Welcome_User);
         enterSchedule = findViewById(R.id.enterSchedule);
         checkSchedule = findViewById(R.id.checkSchedule);
         add_visitor = findViewById(R.id.add_visitor);
         view_visitor = findViewById(R.id.view_visitor);
+        curr_date = findViewById(R.id.curr_date);
+        curr_location = findViewById(R.id.curr_location);
         aLodingDialog = new ALodingDialog(this);
+
         db = FirebaseFirestore.getInstance();
         for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
             if (user.getProviderId().equals("password")) {
@@ -148,5 +163,137 @@ public class HomeScreenDashboard extends AppCompatActivity {
             }
         });
 
+        fetchDate();
+        getLocation();
+
+    }
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setTitle("Share your location")
+                        .setMessage("We need to know your location to show you current temperature")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(HomeScreenDashboard.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void fetchDate() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd", Locale.getDefault());
+        String day = dayFormat.format(calendar.getTime());
+        String date = dateFormat.format(calendar.getTime());
+        String suffix;
+        int dayToday = calendar.get(Calendar.DAY_OF_MONTH);
+        if (dayToday >= 11 && dayToday <= 13) {
+            suffix = "th";
+        } else {
+            switch (dayToday % 10) {
+                case 1:
+                    suffix = "st";
+                    break;
+                case 2:
+                    suffix = "nd";
+                    break;
+                case 3:
+                    suffix = "rd";
+                    break;
+                default:
+                    suffix = "th";
+            }
+        }
+
+        curr_date.setText(day + ",\t" + date + suffix);
+        // System.out.println("Today is " + day + " and the date is " + date + suffix);
+    }
+
+    public void getLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            retrieveLocation();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void retrieveLocation() {
+        LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, this);
+        Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (location != null) {
+            double lat = location.getLatitude();
+            double longi = location.getLongitude();
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            try {
+                List<Address> addressList = geocoder.getFromLocation(lat, longi, 1);
+                System.out.println("Address" + addressList.get(0).getLocality());
+                curr_location.setText(addressList.get(0).getLocality() + ",\t" + addressList.get(0).getCountryName());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // curr_location.setText(lat + "-" + longi);
+            System.out.println("latitute" + lat + "----" + longi);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 200 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            retrieveLocation();
+        } else {
+            curr_location.setText("Permission Denied");
+        }
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        LocationListener.super.onStatusChanged(provider, status, extras);
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+        LocationListener.super.onProviderEnabled(provider);
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+        LocationListener.super.onProviderDisabled(provider);
     }
 }

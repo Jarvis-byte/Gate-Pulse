@@ -1,15 +1,15 @@
 package com.example.fmoapplication;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private EditText signupEmail, signupPassword, signup_name;
-    private Button signupButton;
+    private ConstraintLayout signupButton;
     private TextView loginRedirectText;
     private FirebaseFirestore db;
     private ALodingDialog aLodingDialog;
@@ -33,7 +33,7 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.new_signup_activity);
         auth = FirebaseAuth.getInstance();
         signupEmail = findViewById(R.id.signup_email);
         signupPassword = findViewById(R.id.signup_password);
