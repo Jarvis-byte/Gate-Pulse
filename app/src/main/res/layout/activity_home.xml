@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg"
+    android:background="#EDE7F8"
     tools:context=".TimesheetActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -13,59 +13,73 @@
 
         >
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp">
 
-            <RelativeLayout
-                android:id="@+id/Welcome_User_ll"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/btn_logOut"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="30dp">
+                android:layout_gravity="end"
+                android:layout_marginTop="32dp"
+                app:srcCompat="@drawable/bottom_btn4" />
 
-                <TextView
-                    android:id="@+id/hello"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Hello,"
-                    android:textColor="#fff"
-                    android:textSize="20dp" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/Welcome_User"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/hello"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="sans-serif-black"
-                    android:text=""
-                    android:textColor="#fff"
-                    android:textSize="26dp"
-                    android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/profile_pic"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/man" />
 
-                <ImageView
-                    android:id="@+id/btn_logOut"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/man" />
+                    <TextView
+                        android:id="@+id/Welcome_User"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text=""
+                        android:textColor="#000000"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/profile_pic"
+                        app:layout_constraintTop_toTopOf="@+id/profile_pic" />
+
+                    <TextView
+                        android:id="@+id/goodMorning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Good Morning"
+                        android:textColor="#373737"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/Welcome_User"
+                        app:layout_constraintTop_toBottomOf="@+id/Welcome_User" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </RelativeLayout>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/first_card"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/Welcome_User_ll"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/custom_edittext"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="30dp"
+                android:padding="5dp"
+                android:backgroundTint="#fff"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="10dp">
+                app:cardElevation="5dp">
 
 
                 <TextView
@@ -78,92 +92,124 @@
                     android:gravity="center"
                     android:padding="10dp"
                     android:text="Please input date and time"
-                    android:textColor="#7a7a7a"
+                    android:textColor="#fe5b52"
                     android:textColorHint="#E3E5E8"
                     android:textSize="25dp"
                     android:textStyle="bold" />
 
-
-                <TextView
-                    android:id="@+id/date_picker"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
                     android:layout_marginTop="100dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@drawable/rounded_gradient_heading"
-                    android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="Select Date"
-                    android:textColor="#E3E5E8"
-                    android:textColorHint="#E3E5E8"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Select Date"
+                        android:textColor="#7868e5"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/date_picker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="@drawable/background_edt"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="dd/mm/yyyy"
+                        android:textColorHint="#404040"
+                        android:textColor="#404040"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Select Time-From"
+                        android:textColor="#7868e5"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/time_Picker_from"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="@drawable/background_edt"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Time - From"
+                        android:textColorHint="#404040"
+                        android:textColor="#404040"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Select Time-To"
+                        android:textColor="#7868e5"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/time_Picker_to"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="@drawable/background_edt"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Time - To"
+                        android:textColorHint="#404040"
+                        android:textColor="#404040"
+                        android:textStyle="bold" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/btn_done"
+                        android:layout_width="300dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/orange_background">
+
+                        <TextView
+                            android:id="@+id/textView10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Submit"
+                            android:textColor="#ffffff"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
 
 
-                    android:textStyle="bold" />
-
-
-                <TextView
-                    android:id="@+id/time_Picker_from"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="200dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@drawable/rounded_gradient_heading"
-                    android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="Time - From"
-                    android:textColor="#E3E5E8"
-                    android:textColorHint="#E3E5E8"
-                    android:textStyle="bold" />
-
-
-                <TextView
-                    android:id="@+id/time_Picker_to"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="300dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@drawable/rounded_gradient_heading"
-                    android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="Time - To"
-                    android:textColor="#E3E5E8"
-                    android:textColorHint="#E3E5E8"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="350dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="370dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#ffffff" />
-
-                <TextView
-                    android:id="@+id/btn_done"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="400dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="30dp"
-                    android:background="@drawable/rounded_gradient_heading"
-                    android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="Submit"
-                    android:textColor="#E3E5E8"
-                    android:textColorHint="#E3E5E8"
-                    android:textStyle="bold" />
             </androidx.cardview.widget.CardView>
 
-        </RelativeLayout>
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
 

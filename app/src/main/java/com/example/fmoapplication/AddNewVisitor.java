@@ -1,10 +1,8 @@
 package com.example.fmoapplication;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -40,7 +42,8 @@ public class AddNewVisitor extends AppCompatActivity {
     GoogleSignInClient googleSignInClient;
     String name;
     ArrayList<User> Userlist = new ArrayList<>();
-    TextView Welcome_User, date_picker, time_Picker_from, time_Picker_to, btn_done;
+    TextView Welcome_User, date_picker, time_Picker_from, time_Picker_to;
+    ConstraintLayout btn_done;
     EditText visitor_name, purpose_of_visit;
     private ALodingDialog aLodingDialog;
     Animation scaleUp, scaleDown;
@@ -53,6 +56,8 @@ public class AddNewVisitor extends AppCompatActivity {
         visitor_name = findViewById(R.id.visitor_name);
         purpose_of_visit = findViewById(R.id.purpose_of_visit);
         date_picker = findViewById(R.id.date_picker);
+
+
         time_Picker_from = findViewById(R.id.time_Picker_from);
         time_Picker_to = findViewById(R.id.time_Picker_to);
         btn_done = findViewById(R.id.btn_done);
@@ -130,9 +135,10 @@ public class AddNewVisitor extends AppCompatActivity {
         date_picker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerDialog dialog = new DatePickerDialog(AddNewVisitor.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog = new DatePickerDialog(AddNewVisitor.this, R.style.TimePickerTheme, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        datePicker.setBackgroundColor(Color.parseColor("#dad8ff"));
                         System.out.println("Month" + i1);
                         i1 = i1 + 1;
                         String date = i2 + "/" + i1 + "/" + i;
@@ -140,6 +146,7 @@ public class AddNewVisitor extends AppCompatActivity {
 
                     }
                 }, year, month - 1, day);
+
 
                 dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 dialog.show();
@@ -154,7 +161,7 @@ public class AddNewVisitor extends AppCompatActivity {
         time_Picker_from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewVisitor.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewVisitor.this, R.style.TimePickerTheme, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
 
@@ -171,7 +178,7 @@ public class AddNewVisitor extends AppCompatActivity {
         time_Picker_to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewVisitor.this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewVisitor.this, R.style.TimePickerTheme, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
 
