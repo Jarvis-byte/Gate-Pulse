@@ -22,14 +22,14 @@
             >
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/btn_logOut"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="32dp"
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
-                app:srcCompat="@drawable/bottom_btn4" />
+                app:srcCompat="@drawable/log_out_32" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                 android:paddingEnd="32dp">
 
                 <ImageView
-                    android:id="@+id/btn_logOut"
+                    android:id="@+id/profile_pic"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -47,28 +47,28 @@
                     app:srcCompat="@drawable/man" />
 
                 <TextView
-                    android:id="@+id/Welcome_User"
+                    android:id="@+id/greeting_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:text=""
                     android:textColor="#000000"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/btn_logOut"
-                    app:layout_constraintTop_toTopOf="@+id/btn_logOut" />
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toEndOf="@+id/profile_pic"
+                    app:layout_constraintTop_toTopOf="@+id/profile_pic" />
 
                 <TextView
-                    android:id="@+id/textView10"
+                    android:id="@+id/Welcome_User"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Good Morning"
-                    android:textColor="#373737"
-                    android:textSize="18sp"
+                    android:text=""
+                    android:textColor="#000000"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/Welcome_User"
-                    app:layout_constraintTop_toBottomOf="@+id/Welcome_User" />
+                    app:layout_constraintStart_toStartOf="@+id/greeting_text"
+                    app:layout_constraintTop_toBottomOf="@+id/greeting_text" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -86,16 +86,18 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+
                     app:srcCompat="@drawable/bottom_banner" />
 
                 <TextView
                     android:id="@+id/curr_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="To Get Unlimited "
+                    android:text=""
                     android:textColor="#ffffff"
                     android:textSize="20sp"
                     android:textStyle="bold"
+
                     app:layout_constraintBottom_toTopOf="@+id/curr_location"
                     app:layout_constraintEnd_toEndOf="@+id/curr_location"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -106,10 +108,12 @@
                     android:id="@+id/curr_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upgrade Your Account"
-                    android:textColor="#ffffff"
+                    android:layout_marginTop="40dp"
+                    android:text=""
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    android:textColor="#FEDD06"
+                    android:layout_marginBottom="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.819"
@@ -117,6 +121,39 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.657" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="12">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="3"
+                    android:background="#111" />
+
+                <TextView
+                    android:id="@+id/text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:text="Please Select An Option"
+                    android:textAlignment="center"
+                    android:textColor="@color/okButton"
+                    android:textSize="20sp" />
+
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="3"
+                    android:background="#111" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -154,6 +191,7 @@
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
+
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
@@ -341,80 +379,8 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+            <!-- Line           -->
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="170dp"
-                android:layout_margin="32dp"
-                android:background="@drawable/green_banner_background"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tableLayout">
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="Discount"
-                    android:textColor="#ffffff"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="20 June -30 July"
-                    android:textColor="#ffffff"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/circle_white" />
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/green_banner" />
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="24dp"
-                    android:text="Until"
-                    android:textColor="#ffffff"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="40%"
-                    android:textColor="#FEDD06"
-                    android:textSize="40sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/textView5"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </ScrollView>

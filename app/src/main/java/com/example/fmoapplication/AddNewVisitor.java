@@ -2,7 +2,9 @@ package com.example.fmoapplication;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,11 +12,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -47,6 +51,7 @@ public class AddNewVisitor extends AppCompatActivity {
     EditText visitor_name, purpose_of_visit;
     private ALodingDialog aLodingDialog;
     Animation scaleUp, scaleDown;
+    ImageView btn_logOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,6 +243,42 @@ public class AddNewVisitor extends AppCompatActivity {
 
 
                 return true;
+            }
+        });
+
+        btn_logOut = findViewById(R.id.btn_logOut);
+        //Logout
+        btn_logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddNewVisitor.this);
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
+                builder.setView(dialogView);
+                AlertDialog dialog = builder.create();
+                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // aLodingDialog.show();
+
+                        FirebaseAuth.getInstance().signOut();
+                        dialog.dismiss();
+                        Intent intent = new Intent(AddNewVisitor.this, SignInActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                });
+                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                }
+                dialog.show();
+
             }
         });
 

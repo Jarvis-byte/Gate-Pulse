@@ -5,13 +5,16 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +46,7 @@ import java.util.Locale;
 
 public class HomeScreenDashboard extends AppCompatActivity implements LocationListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    TextView Welcome_User, curr_date, curr_location;
+    TextView Welcome_User, curr_date, curr_location, greeting_text;
     boolean emailLogin = false;
     LinearLayout enterSchedule, add_visitor, view_visitor;
     String name;
@@ -53,8 +56,7 @@ public class HomeScreenDashboard extends AppCompatActivity implements LocationLi
     private FirebaseFirestore db;
     private ALodingDialog aLodingDialog;
     private LinearLayout checkSchedule;
-
-
+    ImageView btn_logOut;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +67,17 @@ public class HomeScreenDashboard extends AppCompatActivity implements LocationLi
         checkSchedule = findViewById(R.id.checkSchedule);
         add_visitor = findViewById(R.id.add_visitor);
         view_visitor = findViewById(R.id.view_visitor);
+        greeting_text = findViewById(R.id.greeting_text);
+
+
         curr_date = findViewById(R.id.curr_date);
         curr_location = findViewById(R.id.curr_location);
+        curr_location.setCompoundDrawablesWithIntrinsicBounds(R.drawable.placeholder, 0, 0, 0);
+        curr_location.setCompoundDrawablePadding(10);
+        curr_location.setGravity(Gravity.CENTER_VERTICAL);
+        curr_date.setCompoundDrawablesWithIntrinsicBounds(R.drawable.calendar, 0, 0, 0);
+        curr_date.setCompoundDrawablePadding(15);
+        curr_date.setGravity(Gravity.CENTER_VERTICAL);
         aLodingDialog = new ALodingDialog(this);
 
         db = FirebaseFirestore.getInstance();
@@ -165,6 +176,43 @@ public class HomeScreenDashboard extends AppCompatActivity implements LocationLi
 
         fetchDate();
         getLocation();
+        setGreetingMessage();
+
+        btn_logOut = findViewById(R.id.btn_logOut);
+        //Logout
+        btn_logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeScreenDashboard.this);
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
+                builder.setView(dialogView);
+                AlertDialog dialog = builder.create();
+                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // aLodingDialog.show();
+
+                        FirebaseAuth.getInstance().signOut();
+                        dialog.dismiss();
+                        Intent intent = new Intent(HomeScreenDashboard.this, SignInActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                });
+                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                }
+                dialog.show();
+
+            }
+        });
 
     }
 
@@ -295,5 +343,34 @@ public class HomeScreenDashboard extends AppCompatActivity implements LocationLi
     @Override
     public void onProviderDisabled(@NonNull String provider) {
         LocationListener.super.onProviderDisabled(provider);
+    }
+
+    public void setGreetingMessage() {
+        Calendar c = Calendar.getInstance();
+        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+
+        if (timeOfDay >= 0 && timeOfDay < 12) {
+
+            greeting_text.setText(" Good Morning");
+
+        //   greeting_text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.sunrise, 0, 0, 0);
+        } else if (timeOfDay >= 12 && timeOfDay < 16) {
+            greeting_text.setText(" Good Afternoon");
+
+
+         //   greeting_text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.afternoon, 0, 0, 0);
+        } else if (timeOfDay >= 16 && timeOfDay < 21) {
+
+            greeting_text.setText(" Good Evening");
+
+
+           // greeting_text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.sunset, 0, 0, 0);
+
+        } else if (timeOfDay >= 21 && timeOfDay < 24) {
+
+            greeting_text.setText(" Good Night");
+           // greeting_text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.night, 0, 0, 0);
+
+        }
     }
 }

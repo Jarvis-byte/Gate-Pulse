@@ -298,7 +298,7 @@ public class TimesheetActivity extends AppCompatActivity {
 
         String docName = data.getDate();
         String docname[] = docName.split("/");
-        String finalDocName = nameFirst + docname[0] + docname[1] + docname[2];
+        String finalDocName = nameFirst + docname[0] + docname[1] + docname[2] + time_from;
 
 
         db.collection("Data").document(finalDocName).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
