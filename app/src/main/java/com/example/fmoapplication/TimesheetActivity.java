@@ -64,7 +64,7 @@ public class TimesheetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+       // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Welcome_User = findViewById(R.id.Welcome_User);
         date_picker = findViewById(R.id.date_picker);
         time_Picker_from = findViewById(R.id.time_Picker_from);

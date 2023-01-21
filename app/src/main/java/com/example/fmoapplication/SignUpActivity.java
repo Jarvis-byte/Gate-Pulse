@@ -75,6 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(SignUpActivity.this, HomeScreenDashboard.class);
                                 startActivity(intent);
+                                finish();
                             } else {
                                 aLodingDialog.cancel();
                                 Toast.makeText(SignUpActivity.this, "SignUp Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

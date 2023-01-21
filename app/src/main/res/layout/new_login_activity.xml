@@ -59,9 +59,10 @@
                 android:background="@drawable/background_edt"
                 android:ems="10"
                 android:hint="Enter your Email ID"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:paddingStart="20dp"
-                android:textColorHint="#404040"
+                android:textColorHint="#825bc3"
+                android:textColor="#6d42b5"
                 android:textSize="17sp" />
 
             <TextView
@@ -85,9 +86,13 @@
                 android:background="@drawable/background_edt"
                 android:ems="10"
                 android:hint="Enter Your Password..."
-                android:inputType="textPersonName"
+                android:inputType="textPassword"
                 android:paddingStart="20dp"
-                android:textColorHint="#404040"
+                android:paddingEnd="10dp"
+                android:textColor="#6d42b5"
+                android:textColorHint="#825bc3"
+                android:drawableRight="@drawable/visibility"
+
                 android:textSize="17sp" />
 
             <TextView
@@ -100,6 +105,28 @@
                 android:textColor="#7868e5"
                 android:textSize="16sp" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/login_button"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/orange_background">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Login"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -133,16 +160,23 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/loginRedirectText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:padding="8dp"
-                android:text="Not yet registered? Sign Up"
-                android:textColor="#7868e5"
-                android:textSize="18sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/googleLogin"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dp"
+                    android:layout_marginBottom="20dp" />
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -162,7 +196,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
-                    android:text="Login With Gmail ID"
+                    android:text="New User"
                     android:textAlignment="center"
                     android:textColor="@color/okButton"
                     android:textSize="20sp" />
@@ -176,45 +210,20 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
+            <TextView
+                android:id="@+id/loginRedirectText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/button_background_green1"
+                android:padding="15dp"
+                android:text="Not yet registered? Sign Up"
+                android:textColor="#fff"
+                android:textSize="18sp" />
 
 
-                <com.google.android.gms.common.SignInButton
-                    android:id="@+id/googleLogin"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_margin="10dp"
-                    android:layout_marginBottom="20dp"
-                    android:contentDescription="@string/google_icon" />
-            </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/login_button"
-                android:layout_width="300dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="32dp"
-                android:background="@drawable/orange_background">
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Login"
-                    android:textColor="#ffffff"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

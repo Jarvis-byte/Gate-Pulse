@@ -1,24 +1,24 @@
 package com.example.fmoapplication;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
+import android.util.Patterns;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-
-import android.text.TextUtils;
-import android.util.Patterns;
-import android.view.View;
-
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -46,7 +46,9 @@ public class SignInActivity extends AppCompatActivity {
     private ConstraintLayout loginButton;
     private EditText loginEmail, loginPassword;
     private ALodingDialog aLodingDialog;
+    boolean mPasswordVisible;
 
+    //right_arrow
     @SuppressLint("MissingInflatedId")
     @Override
 
@@ -54,12 +56,17 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_login_activity);
         googleLogin = findViewById(R.id.googleLogin);
+        setGooglePlusButtonText(googleLogin, "Sign In with Gmail Account");
         loginEmail = findViewById(R.id.login_email);
         loginPassword = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
         forgotPassword = findViewById(R.id.forgot_password);
         //New user register
         loginRedirectText = findViewById(R.id.loginRedirectText);
+        loginRedirectText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.right_arrow, 0);
+        loginRedirectText.setCompoundDrawablePadding(10);
+        loginRedirectText.setGravity(Gravity.CENTER_VERTICAL);
+
         aLodingDialog = new ALodingDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
         //Login in
@@ -174,6 +181,37 @@ public class SignInActivity extends AppCompatActivity {
             finish();
         }
 
+
+        loginPassword.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (loginPassword.getRight() - loginPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        if (!mPasswordVisible) {
+                            loginPassword.setTransformationMethod(null);
+                            loginPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.visible, 0);
+                            loginPassword.setCompoundDrawablePadding(10);
+                            loginPassword.setGravity(Gravity.CENTER_VERTICAL);
+                        } else {
+                            loginPassword.setTransformationMethod(new PasswordTransformationMethod());
+                            loginPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.visibility, 0);
+                            loginPassword.setCompoundDrawablePadding(10);
+                            loginPassword.setGravity(Gravity.CENTER_VERTICAL);
+                        }
+                        mPasswordVisible = !mPasswordVisible;
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
     }
 
     private void Signin() {
@@ -243,6 +281,19 @@ public class SignInActivity extends AppCompatActivity {
 
     private void displayToast(String s) {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void setGooglePlusButtonText(SignInButton signInButton, String buttonText) {
+        // Find the TextView that is inside of the SignInButton and set its text
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View v = signInButton.getChildAt(i);
+
+            if (v instanceof TextView) {
+                TextView tv = (TextView) v;
+                tv.setText(buttonText);
+                return;
+            }
+        }
     }
 
 }

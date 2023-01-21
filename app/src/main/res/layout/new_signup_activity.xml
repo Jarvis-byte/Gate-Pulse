@@ -60,7 +60,8 @@
                 android:hint="Enter Your Name..."
                 android:inputType="textPersonName"
                 android:paddingStart="20dp"
-                android:textColorHint="#404040"
+                android:textColorHint="#825bc3"
+                android:textColor="#6d42b5"
                 android:textSize="17sp" />
 
             <TextView
@@ -84,9 +85,10 @@
                 android:background="@drawable/background_edt"
                 android:ems="10"
                 android:hint="Enter Your Email..."
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:paddingStart="20dp"
-                android:textColorHint="#404040"
+                android:textColorHint="#825bc3"
+                android:textColor="#6d42b5"
                 android:textSize="17sp" />
 
             <TextView
@@ -112,7 +114,8 @@
                 android:hint="Enter Your Password..."
                 android:inputType="textPassword"
                 android:paddingStart="20dp"
-                android:textColorHint="#404040"
+                android:textColorHint="#825bc3"
+                android:textColor="#6d42b5"
                 android:textSize="17sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout

@@ -53,7 +53,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:text=""
-                    android:textColor="#000000"
+                    android:textColor="#5b3799"
                     android:textSize="18sp"
                     app:layout_constraintStart_toEndOf="@+id/profile_pic"
                     app:layout_constraintTop_toTopOf="@+id/profile_pic" />
@@ -63,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:textColor="#000000"
+                    android:textColor="#4a2d7c"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
