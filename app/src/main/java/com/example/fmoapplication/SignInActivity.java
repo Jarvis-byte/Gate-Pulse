@@ -56,7 +56,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_login_activity);
         googleLogin = findViewById(R.id.googleLogin);
-        setGooglePlusButtonText(googleLogin, "Sign In with Gmail Account");
+        setGooglePlusButtonText(googleLogin, "Sign in with Gmail Account");
         loginEmail = findViewById(R.id.login_email);
         loginPassword = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
