@@ -11,9 +11,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/cloudy"
+        android:icon="@drawable/storm"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/cloudy"
+        android:roundIcon="@drawable/storm"
         android:supportsRtl="true"
         android:theme="@style/Theme.FMOApplication"
         tools:targetApi="31">
