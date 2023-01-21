@@ -2,6 +2,9 @@ package com.example.fmoapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,7 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
     private TextView loginRedirectText;
     private FirebaseFirestore db;
     private ALodingDialog aLodingDialog;
-
+    private boolean mPasswordVisible;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +97,37 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         });
+        signupPassword.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (signupPassword.getRight() - signupPassword.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        if (!mPasswordVisible) {
+                            signupPassword.setTransformationMethod(null);
+                            signupPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.visible, 0);
+                            signupPassword.setCompoundDrawablePadding(10);
+                            signupPassword.setGravity(Gravity.CENTER_VERTICAL);
+                        } else {
+                            signupPassword.setTransformationMethod(new PasswordTransformationMethod());
+                            signupPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.visibility, 0);
+                            signupPassword.setCompoundDrawablePadding(10);
+                            signupPassword.setGravity(Gravity.CENTER_VERTICAL);
+                        }
+                        mPasswordVisible = !mPasswordVisible;
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        
+        
     }
 
     private void setName(String uId, String Name) {
