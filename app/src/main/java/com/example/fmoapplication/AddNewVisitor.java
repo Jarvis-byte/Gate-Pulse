@@ -2,10 +2,16 @@ package com.example.fmoapplication;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -18,6 +24,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -35,6 +42,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -51,7 +59,10 @@ public class AddNewVisitor extends AppCompatActivity {
     EditText visitor_name, purpose_of_visit;
     private ALodingDialog aLodingDialog;
     Animation scaleUp, scaleDown;
-    ImageView btn_logOut, back;
+    ImageView back;
+    LocalTime time1;
+    LocalTime time2;
+    Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +76,8 @@ public class AddNewVisitor extends AppCompatActivity {
 
         time_Picker_from = findViewById(R.id.time_Picker_from);
         time_Picker_to = findViewById(R.id.time_Picker_to);
-        btn_done = findViewById(R.id.btn_done);
-      //  Welcome_User = findViewById(R.id.Welcome_User);
+        // btn_done = findViewById(R.id.btn_done);
+        //  Welcome_User = findViewById(R.id.Welcome_User);
         aLodingDialog = new ALodingDialog(this);
         btn_done = findViewById(R.id.btn_done);
         //Name Finding
@@ -166,10 +177,13 @@ public class AddNewVisitor extends AppCompatActivity {
         time_Picker_from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                time_Picker_from.setError(null);
                 TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewVisitor.this, R.style.TimePickerTheme, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            time1 = LocalTime.of(timePicker.getHour(), timePicker.getMinute());
+                        }
                         calendar1.set(0, 0, 0, i, i1);
                         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
                         time_Picker_from.setText(sdf.format(calendar1.getTime()));
@@ -183,10 +197,13 @@ public class AddNewVisitor extends AppCompatActivity {
         time_Picker_to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                time_Picker_from.setError(null);
                 TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewVisitor.this, R.style.TimePickerTheme, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            time2 = LocalTime.of(timePicker.getHour(), timePicker.getMinute());
+                        }
                         calendar1.set(0, 0, 0, i, i1);
                         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
                         time_Picker_to.setText(sdf.format(calendar1.getTime()));
@@ -200,44 +217,63 @@ public class AddNewVisitor extends AppCompatActivity {
         scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
         scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
         btn_done.setOnTouchListener(new View.OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                aLodingDialog.show();
-
-                String uid = "";
-                User user = new User();
-                if (finalEmailLogin == false) {
-                    uid = finalAccount.getId();
-                    String firstName = finalAccount.getDisplayName();
-                    //  System.out.println("name" + user.getName());
-                    String namearr[] = firstName.split(" ");
-                    String visitorName = visitor_name.getText().toString().trim();
-                    String purposeOfvisit = purpose_of_visit.getText().toString().trim();
-                    String date = date_picker.getText().toString();
-                    String time_from = time_Picker_from.getText().toString();
-                    String time_to = time_Picker_to.getText().toString();
-                    addDataToFirestore(uid, namearr[0], visitorName, purposeOfvisit, date, time_from, time_to);
-                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        btn_done.startAnimation(scaleUp);
-                    } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                        btn_done.startAnimation(scaleDown);
-                    }
-
+                if (!isConnected(AddNewVisitor.this)) {
+                    showCustomeDialog();
                 } else {
-                    uid = Userlist.get(0).getUid();
-                    String firstName = Userlist.get(0).getName();
-                    System.out.println("name" + user.getName());
-                    String namearr[] = firstName.split(" ");
-                    String visitorName = visitor_name.getText().toString().trim();
-                    String purposeOfvisit = purpose_of_visit.getText().toString().trim();
-                    String date = date_picker.getText().toString();
-                    String time_from = time_Picker_from.getText().toString();
-                    String time_to = time_Picker_to.getText().toString();
-                    addDataToFirestore(uid, namearr[0], visitorName, purposeOfvisit, date, time_from, time_to);
-                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        btn_done.startAnimation(scaleUp);
-                    } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                        btn_done.startAnimation(scaleDown);
+                    if (TextUtils.isEmpty(visitor_name.getText().toString())) {
+                        visitor_name.setError("Enter Name");
+                    } else if (TextUtils.isEmpty(purpose_of_visit.getText().toString())) {
+                        purpose_of_visit.setError("Enter Purpose");
+                    } else if (time_Picker_from.getText().equals("Time - From")) {
+                        time_Picker_from.setError("Please Select Time From");
+
+                    } else if (time_Picker_to.getText().equals("Time - To")) {
+                        time_Picker_to.setError("Please Select Time To");
+
+                    } else if (!time1.isBefore(time2)) {
+                        displayToast("Please Select Time To After Time From", AddNewVisitor.this);
+
+                    } else {
+                        aLodingDialog.show();
+                        String uid = "";
+                        User user = new User();
+                        if (finalEmailLogin == false) {
+                            uid = finalAccount.getId();
+                            String firstName = finalAccount.getDisplayName();
+                            //  System.out.println("name" + user.getName());
+                            String namearr[] = firstName.split(" ");
+                            String visitorName = visitor_name.getText().toString().trim();
+                            String purposeOfvisit = purpose_of_visit.getText().toString().trim();
+                            String date = date_picker.getText().toString();
+                            String time_from = time_Picker_from.getText().toString();
+                            String time_to = time_Picker_to.getText().toString();
+                            addDataToFirestore(uid, namearr[0], visitorName, purposeOfvisit, date, time_from, time_to);
+                            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                                btn_done.startAnimation(scaleUp);
+                            } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                                btn_done.startAnimation(scaleDown);
+                            }
+
+                        } else {
+                            uid = Userlist.get(0).getUid();
+                            String firstName = Userlist.get(0).getName();
+                            System.out.println("name" + user.getName());
+                            String namearr[] = firstName.split(" ");
+                            String visitorName = visitor_name.getText().toString().trim();
+                            String purposeOfvisit = purpose_of_visit.getText().toString().trim();
+                            String date = date_picker.getText().toString();
+                            String time_from = time_Picker_from.getText().toString();
+                            String time_to = time_Picker_to.getText().toString();
+                            addDataToFirestore(uid, namearr[0], visitorName, purposeOfvisit, date, time_from, time_to);
+                            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                                btn_done.startAnimation(scaleUp);
+                            } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                                btn_done.startAnimation(scaleDown);
+                            }
+                        }
                     }
                 }
 
@@ -258,6 +294,13 @@ public class AddNewVisitor extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        if(toast != null)
+            toast.cancel();
+        super.onPause();
+
+    }
     private void addDataToFirestore(String uid, String nameFirst, String visitorName, String purposeOfvisit, String date, String time_from, String time_to) {
 
 
@@ -284,5 +327,55 @@ public class AddNewVisitor extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void showCustomeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddNewVisitor.this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_no_internet, null);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // aLodingDialog.show();
+
+                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                dialog.dismiss();
+
+
+            }
+        });
+        dialogView.findViewById(R.id.Cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialog.dismiss();
+            }
+        });
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+        dialog.show();
+    }
+
+    private boolean isConnected(AddNewVisitor signInActivity) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) signInActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifiConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobileConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        if ((wifiConn != null && wifiConn.isConnected()) || (mobileConn != null && mobileConn.isConnected())) {
+            return true;
+        } else {
+            return false;
+        }
+
+
+    }
+
+    public void displayToast(String message, Context context) {
+        if (toast != null)
+            toast.cancel();
+        toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+        toast.show();
     }
 }

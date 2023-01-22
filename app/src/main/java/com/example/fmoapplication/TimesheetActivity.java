@@ -3,9 +3,14 @@ package com.example.fmoapplication;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -34,6 +39,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -56,6 +62,9 @@ public class TimesheetActivity extends AppCompatActivity {
     ImageView btn_logOut, back;
     ArrayList<User> Userlist = new ArrayList<>();
     ArrayList<Pin> PinList = new ArrayList<>();
+    LocalTime time1;
+    LocalTime time2;
+    Toast toast;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -64,7 +73,7 @@ public class TimesheetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-       // Welcome_User = findViewById(R.id.Welcome_User);
+        // Welcome_User = findViewById(R.id.Welcome_User);
         date_picker = findViewById(R.id.date_picker);
         time_Picker_from = findViewById(R.id.time_Picker_from);
         time_Picker_to = findViewById(R.id.time_Picker_to);
@@ -119,10 +128,13 @@ public class TimesheetActivity extends AppCompatActivity {
         time_Picker_from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                time_Picker_from.setError(null);
                 TimePickerDialog timePickerDialog = new TimePickerDialog(TimesheetActivity.this, R.style.TimePickerTheme, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            time1 = LocalTime.of(timePicker.getHour(), timePicker.getMinute());
+                        }
                         calendar1.set(0, 0, 0, i, i1);
                         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
                         time_Picker_from.setText(sdf.format(calendar1.getTime()));
@@ -136,10 +148,13 @@ public class TimesheetActivity extends AppCompatActivity {
         time_Picker_to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                time_Picker_to.setError(null);
                 TimePickerDialog timePickerDialog = new TimePickerDialog(TimesheetActivity.this, R.style.TimePickerTheme, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            time2 = LocalTime.of(timePicker.getHour(), timePicker.getMinute());
+                        }
                         calendar1.set(0, 0, 0, i, i1);
                         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
                         time_Picker_to.setText(sdf.format(calendar1.getTime()));
@@ -213,41 +228,53 @@ public class TimesheetActivity extends AppCompatActivity {
         btn_done.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                aLodingDialog.show();
 
-                String uid = "";
-                User user = new User();
-                if (finalEmailLogin == false) {
-                    uid = finalAccount.getId();
-                    String firstName = finalAccount.getDisplayName();
-                    //  System.out.println("name" + user.getName());
-                    String namearr[] = firstName.split(" ");
-                    String date = date_picker.getText().toString();
-                    String time_from = time_Picker_from.getText().toString();
-                    String time_to = time_Picker_to.getText().toString();
-                    addDataToFirestore(uid, namearr[0], date, time_from, time_to);
-                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        btn_done.startAnimation(scaleUp);
-                    } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                        btn_done.startAnimation(scaleDown);
-                    }
 
+                if (!isConnected(TimesheetActivity.this)) {
+                    showCustomeDialog();
                 } else {
-                    uid = Userlist.get(0).getUid();
-                    String firstName = Userlist.get(0).getName();
-                    System.out.println("name" + user.getName());
-                    String namearr[] = firstName.split(" ");
-                    String date = date_picker.getText().toString();
-                    String time_from = time_Picker_from.getText().toString();
-                    String time_to = time_Picker_to.getText().toString();
-                    addDataToFirestore(uid, namearr[0], date, time_from, time_to);
-                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        btn_done.startAnimation(scaleUp);
-                    } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                        btn_done.startAnimation(scaleDown);
-                    }
-                }
+                    if (time_Picker_from.getText().equals("Time - From")) {
+                        time_Picker_from.setError("Please Select Time From");
 
+                    } else if (time_Picker_to.getText().equals("Time - To")) {
+                        time_Picker_to.setError("Please Select Time To");
+
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (!time1.isBefore(time2)) {
+                            displayToast("Please Select Time To After Time From", TimesheetActivity.this);
+                         //   Toast.makeText(TimesheetActivity.this, "Please Select Time To After Time From", Toast.LENGTH_SHORT).show();
+                            time_Picker_to.setError("Please Select Time-To After Time-From");
+                        } else {
+                            aLodingDialog.show();
+
+                            String uid = "";
+                            User user = new User();
+                            if (finalEmailLogin == false) {
+
+                                uid = finalAccount.getId();
+                                String firstName = finalAccount.getDisplayName();
+                                //  System.out.println("name" + user.getName());
+                                String namearr[] = firstName.split(" ");
+                                String date = date_picker.getText().toString();
+                                String time_from = time_Picker_from.getText().toString();
+                                String time_to = time_Picker_to.getText().toString();
+                                addDataToFirestore(uid, namearr[0], date, time_from, time_to);
+
+                            } else {
+                                uid = Userlist.get(0).getUid();
+                                String firstName = Userlist.get(0).getName();
+                                System.out.println("name" + user.getName());
+                                String namearr[] = firstName.split(" ");
+                                String date = date_picker.getText().toString();
+                                String time_from = time_Picker_from.getText().toString();
+                                String time_to = time_Picker_to.getText().toString();
+                                addDataToFirestore(uid, namearr[0], date, time_from, time_to);
+
+                            }
+                        }
+                    }
+
+                }
 
                 return true;
             }
@@ -261,6 +288,14 @@ public class TimesheetActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+    }
+
+    @Override
+    protected void onPause() {
+        if(toast != null)
+            toast.cancel();
+        super.onPause();
 
     }
 
@@ -280,7 +315,9 @@ public class TimesheetActivity extends AppCompatActivity {
                 aLodingDialog.cancel();
                 time_Picker_from.setText("Time - From");
                 time_Picker_to.setText("Time - To");
-                Toast.makeText(TimesheetActivity.this, "Your Data has been added", Toast.LENGTH_SHORT).show();
+                displayToast("Your Entry has been succefully saved", TimesheetActivity.this);
+                startActivity(new Intent(TimesheetActivity.this, HomeScreenDashboard.class));
+                finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -292,5 +329,54 @@ public class TimesheetActivity extends AppCompatActivity {
 
     }
 
+    private void showCustomeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(TimesheetActivity.this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_no_internet, null);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // aLodingDialog.show();
+
+                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                dialog.dismiss();
+
+
+            }
+        });
+        dialogView.findViewById(R.id.Cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialog.dismiss();
+            }
+        });
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+        dialog.show();
+    }
+
+    private boolean isConnected(TimesheetActivity signInActivity) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) signInActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifiConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobileConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        if ((wifiConn != null && wifiConn.isConnected()) || (mobileConn != null && mobileConn.isConnected())) {
+            return true;
+        } else {
+            return false;
+        }
+
+
+    }
+
+    public void displayToast(String message, Context context) {
+        if (toast != null)
+            toast.cancel();
+        toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+        toast.show();
+    }
 
 }

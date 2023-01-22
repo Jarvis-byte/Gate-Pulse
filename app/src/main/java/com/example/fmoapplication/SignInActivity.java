@@ -254,7 +254,7 @@ public class SignInActivity extends AppCompatActivity {
 
             }
         });
-        dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+        dialogView.findViewById(R.id.Cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();

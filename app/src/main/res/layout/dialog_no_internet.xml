@@ -42,7 +42,7 @@
 
 
         <Button
-            android:id="@+id/btnCancel"
+            android:id="@+id/Cancel"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="40dp"
@@ -74,6 +74,6 @@
             app:cornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="@id/dialogBox"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnCancel" />
+            app:layout_constraintStart_toEndOf="@id/Cancel" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
