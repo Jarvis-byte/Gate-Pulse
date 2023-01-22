@@ -251,11 +251,7 @@ public class AddNewVisitor extends AppCompatActivity {
                             String time_from = time_Picker_from.getText().toString();
                             String time_to = time_Picker_to.getText().toString();
                             addDataToFirestore(uid, namearr[0], visitorName, purposeOfvisit, date, time_from, time_to);
-                            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                                btn_done.startAnimation(scaleUp);
-                            } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                                btn_done.startAnimation(scaleDown);
-                            }
+
 
                         } else {
                             uid = Userlist.get(0).getUid();
@@ -268,11 +264,6 @@ public class AddNewVisitor extends AppCompatActivity {
                             String time_from = time_Picker_from.getText().toString();
                             String time_to = time_Picker_to.getText().toString();
                             addDataToFirestore(uid, namearr[0], visitorName, purposeOfvisit, date, time_from, time_to);
-                            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                                btn_done.startAnimation(scaleUp);
-                            } else if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                                btn_done.startAnimation(scaleDown);
-                            }
                         }
                     }
                 }
