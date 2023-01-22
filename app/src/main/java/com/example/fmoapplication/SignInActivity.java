@@ -1,9 +1,13 @@
 package com.example.fmoapplication;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
@@ -73,77 +77,89 @@ public class SignInActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                aLodingDialog.show();
-                String email = loginEmail.getText().toString();
-                String pass = loginPassword.getText().toString();
-                if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    if (!pass.isEmpty()) {
-                        firebaseAuth.signInWithEmailAndPassword(email, pass)
-                                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                                    @Override
-                                    public void onSuccess(AuthResult authResult) {
-                                        aLodingDialog.cancel();
-                                        Toast.makeText(SignInActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class));
-                                        finish();
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        aLodingDialog.cancel();
-                                        Toast.makeText(SignInActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    } else {
-                        loginPassword.setError("Empty fields are not allowed");
-                    }
-                } else if (email.isEmpty()) {
-                    loginEmail.setError("Empty fields are not allowed");
+                if (!isConnected(SignInActivity.this)) {
+                    showCustomeDialog();
                 } else {
-                    loginEmail.setError("Please enter correct email");
+
+                    String email = loginEmail.getText().toString();
+                    String pass = loginPassword.getText().toString();
+                    if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        if (!pass.isEmpty()) {
+                            aLodingDialog.show();
+                            firebaseAuth.signInWithEmailAndPassword(email, pass)
+                                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                        @Override
+                                        public void onSuccess(AuthResult authResult) {
+                                            aLodingDialog.cancel();
+                                            Toast.makeText(SignInActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class));
+                                            finish();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            aLodingDialog.cancel();
+                                            Toast.makeText(SignInActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } else {
+                            loginPassword.setError("Empty fields are not allowed");
+                        }
+                    } else if (email.isEmpty()) {
+                        loginEmail.setError("Empty fields are not allowed");
+                    } else {
+                        loginEmail.setError("Please enter correct email");
+                    }
                 }
+
             }
         });
         //forgot password
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
-                View dialogView = getLayoutInflater().inflate(R.layout.dialog_forgot, null);
-                EditText emailBox = dialogView.findViewById(R.id.emailBox);
-                builder.setView(dialogView);
-                AlertDialog dialog = builder.create();
-                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String userEmail = emailBox.getText().toString();
-                        if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
-                            Toast.makeText(SignInActivity.this, "Enter your registered email id", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        firebaseAuth.sendPasswordResetEmail(userEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(SignInActivity.this, "Check your email", Toast.LENGTH_SHORT).show();
-                                    dialog.dismiss();
-                                } else {
-                                    Toast.makeText(SignInActivity.this, "Unable to send, failed", Toast.LENGTH_SHORT).show();
-                                }
+                if (!isConnected(SignInActivity.this)) {
+                    showCustomeDialog();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
+                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_forgot, null);
+                    EditText emailBox = dialogView.findViewById(R.id.emailBox);
+                    builder.setView(dialogView);
+                    AlertDialog dialog = builder.create();
+                    dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String userEmail = emailBox.getText().toString();
+                            if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
+                                Toast.makeText(SignInActivity.this, "Enter your registered email id", Toast.LENGTH_SHORT).show();
+                                return;
                             }
-                        });
+                            firebaseAuth.sendPasswordResetEmail(userEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(SignInActivity.this, "Check your email", Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    } else {
+                                        Toast.makeText(SignInActivity.this, "Unable to send, failed", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+                    if (dialog.getWindow() != null) {
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
                     }
-                });
-                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-                if (dialog.getWindow() != null) {
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                    dialog.show();
                 }
-                dialog.show();
+
+
             }
         });
         loginRedirectText.setOnClickListener(new View.OnClickListener() {
@@ -164,8 +180,13 @@ public class SignInActivity extends AppCompatActivity {
         googleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                aLodingDialog.show();
-                Signin();
+                if (!isConnected(SignInActivity.this)) {
+                    showCustomeDialog();
+                } else {
+                    aLodingDialog.show();
+                    Signin();
+                }
+
             }
         });
         // Initialize firebase auth
@@ -211,6 +232,51 @@ public class SignInActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        //check Internet
+
+// startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+    }
+
+    private void showCustomeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_no_internet, null);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // aLodingDialog.show();
+
+                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                dialog.dismiss();
+
+
+            }
+        });
+        dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+        dialog.show();
+    }
+
+    private boolean isConnected(SignInActivity signInActivity) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) signInActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifiConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobileConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        if ((wifiConn != null && wifiConn.isConnected()) || (mobileConn != null && mobileConn.isConnected())) {
+            return true;
+        } else {
+            return false;
+        }
+
 
     }
 
