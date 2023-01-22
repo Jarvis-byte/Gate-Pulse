@@ -46,12 +46,12 @@ public class AddNewVisitor extends AppCompatActivity {
     GoogleSignInClient googleSignInClient;
     String name;
     ArrayList<User> Userlist = new ArrayList<>();
-    TextView Welcome_User, date_picker, time_Picker_from, time_Picker_to;
+    TextView date_picker, time_Picker_from, time_Picker_to;
     ConstraintLayout btn_done;
     EditText visitor_name, purpose_of_visit;
     private ALodingDialog aLodingDialog;
     Animation scaleUp, scaleDown;
-    ImageView btn_logOut;
+    ImageView btn_logOut, back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class AddNewVisitor extends AppCompatActivity {
         time_Picker_from = findViewById(R.id.time_Picker_from);
         time_Picker_to = findViewById(R.id.time_Picker_to);
         btn_done = findViewById(R.id.btn_done);
-        Welcome_User = findViewById(R.id.Welcome_User);
+      //  Welcome_User = findViewById(R.id.Welcome_User);
         aLodingDialog = new ALodingDialog(this);
         btn_done = findViewById(R.id.btn_done);
         //Name Finding
@@ -85,7 +85,7 @@ public class AddNewVisitor extends AppCompatActivity {
             if (account != null) {
                 name = account.getDisplayName();
                 String namearr[] = name.split(" ");
-                Welcome_User.setText(namearr[0] + " !");
+             //   Welcome_User.setText(namearr[0] + " !");
             }
 
         } else {
@@ -110,7 +110,7 @@ public class AddNewVisitor extends AppCompatActivity {
                                 name = user.getName();
                                 Userlist.add(user);
                                 String namearr[] = name.split(" ");
-                                Welcome_User.setText(namearr[0] + " !");
+                              //  Welcome_User.setText(namearr[0] + " !");
                             }
 
                         }
@@ -246,39 +246,13 @@ public class AddNewVisitor extends AppCompatActivity {
             }
         });
 
-        btn_logOut = findViewById(R.id.btn_logOut);
-        //Logout
-        btn_logOut.setOnClickListener(new View.OnClickListener() {
+
+
+        back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddNewVisitor.this);
-                View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
-                builder.setView(dialogView);
-                AlertDialog dialog = builder.create();
-                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // aLodingDialog.show();
-
-                        FirebaseAuth.getInstance().signOut();
-                        dialog.dismiss();
-                        Intent intent = new Intent(AddNewVisitor.this, SignInActivity.class);
-                        startActivity(intent);
-                        finish();
-
-                    }
-                });
-                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-                if (dialog.getWindow() != null) {
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-                }
-                dialog.show();
-
+                finish();
             }
         });
 

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CircularBorderWhite">
+        <![CDATA[<style name="CircularBorderWhite" parent="ShapeAppearance.MaterialComponents.SmallComponent">     <item name="cornerFamily">rounded</item>     <item name="cornerSize">50dp</item>     <item name="strokeColor">@android:color/white</item>     <item name="strokeWidth">2dp</item> </style>]]></style>
+</resources>

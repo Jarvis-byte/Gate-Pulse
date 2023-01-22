@@ -3,17 +3,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#E3E5E8"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#E3E5E8"
     tools:context=".ViewVisitor">
 
     <!--Recycler view for displaying
         our data from Firestore-->
+    <LinearLayout
+        android:id="@+id/LLlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E3E5E8">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="32dp"
+            app:srcCompat="@drawable/back" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/LL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:layout_below="@+id/LLlayout"
+        android:orientation="horizontal"
+        android:weightSum="12">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="3"
+            android:background="#111" />
+
+        <TextView
+            android:id="@+id/text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:text="Visitors' List"
+            android:textAlignment="center"
+            android:textColor="@color/okButton"
+            android:textSize="20sp" />
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="3"
+            android:background="#111" />
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/idRVdata"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/LL"
+        android:layout_marginTop="20dp"
         android:background="#E3E5E8"
-        android:padding="5dp" />
+        android:padding="10dp" />
+
 
     <!--Progress bar for showing loading screen-->
 

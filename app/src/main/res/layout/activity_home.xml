@@ -20,51 +20,30 @@
             android:paddingStart="32dp"
             android:paddingEnd="32dp">
 
-            <ImageView
-                android:id="@+id/btn_logOut"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="32dp"
-                app:srcCompat="@drawable/log_out_32" />
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
+                >
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="left|bottom"
+                    android:layout_marginTop="32dp"
+                    app:srcCompat="@drawable/back" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="left"/>
 
-                    <ImageView
-                        android:id="@+id/profile_pic"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/man" />
 
-                    <TextView
-                        android:id="@+id/Welcome_User"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:text=""
-                        android:textColor="#000000"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toEndOf="@+id/profile_pic"
-                        app:layout_constraintTop_toTopOf="@+id/profile_pic" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/goodMorning"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Good Morning"
-                        android:textColor="#373737"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/Welcome_User"
-                        app:layout_constraintTop_toBottomOf="@+id/Welcome_User" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 

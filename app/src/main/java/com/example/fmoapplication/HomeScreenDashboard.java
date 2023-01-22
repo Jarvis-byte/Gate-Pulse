@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -56,7 +57,8 @@ public class HomeScreenDashboard extends AppCompatActivity implements LocationLi
     private FirebaseFirestore db;
     private ALodingDialog aLodingDialog;
     private LinearLayout checkSchedule;
-    ImageView btn_logOut;
+    ImageView btn_logOut, profile_pic;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,6 +215,13 @@ public class HomeScreenDashboard extends AppCompatActivity implements LocationLi
 
             }
         });
+
+
+        profile_pic = findViewById(R.id.profile_pic);
+        if(emailLogin==false){
+            Glide.with(this).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).into(profile_pic);
+        }
+
 
     }
 

@@ -37,14 +37,25 @@
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp">
 
-                <ImageView
-                    android:id="@+id/profile_pic"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/view2"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerHorizontal="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/man" />
+                    android:elevation="12dp"
+                    app:cardCornerRadius="40dp">
+
+                    <ImageView
+                        android:id="@+id/profile_pic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/man" />
+                </androidx.cardview.widget.CardView>
+
 
                 <TextView
                     android:id="@+id/greeting_text"
@@ -55,8 +66,8 @@
                     android:text=""
                     android:textColor="#5b3799"
                     android:textSize="18sp"
-                    app:layout_constraintStart_toEndOf="@+id/profile_pic"
-                    app:layout_constraintTop_toTopOf="@+id/profile_pic" />
+                    app:layout_constraintStart_toEndOf="@+id/view2"
+                    app:layout_constraintTop_toTopOf="@+id/view2" />
 
                 <TextView
                     android:id="@+id/Welcome_User"

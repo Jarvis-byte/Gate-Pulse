@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,7 +26,7 @@ public class ViewVisitor extends AppCompatActivity {
     private ArrayList<AddVisitor> coursesArrayList;
     private ViewVisitorRVAdapter courseRVAdapter;
     private FirebaseFirestore db;
-
+    ImageView back;
     private ALodingDialog aLodingDialog;
 
     @Override
@@ -50,6 +52,13 @@ public class ViewVisitor extends AppCompatActivity {
         // setting adapter to our recycler view.
         dataRV.setAdapter(courseRVAdapter);
         getData();
+        back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     public void getData() {

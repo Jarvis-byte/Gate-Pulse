@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -37,7 +38,7 @@ public class Roaster extends AppCompatActivity {
     private FirebaseFirestore db;
     String choiceSpinner;
     private ALodingDialog aLodingDialog;
-
+    ImageView back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +130,13 @@ public class Roaster extends AppCompatActivity {
         // setting adapter to our recycler view.
         dataRV.setAdapter(courseRVAdapter);
         getData();
+        back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void verifyRoaster(String uid, String date, String name, int approvalStatus, String time_from, String time_to, int position) {

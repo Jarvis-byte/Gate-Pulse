@@ -32,7 +32,7 @@
             android:fontFamily="@font/lato_bold"
             android:padding="2dp"
             android:text="Visitor's Name"
-            android:textColor="@color/black"
+            android:textColor="@color/impText"
 
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -44,7 +44,7 @@
             android:fontFamily="@font/amethysta"
             android:padding="2dp"
             android:text="Purpose"
-            android:textColor="@color/black" />
+            android:textColor="@color/normaltext" />
 
         <!--Textview for displaying our Course Duration-->
         <TextView
@@ -54,7 +54,7 @@
             android:fontFamily="@font/amethysta"
             android:padding="2dp"
             android:text="Data"
-            android:textColor="@color/black" />
+            android:textColor="@color/normaltext" />
 
         <!--Textview for displaying our Course Description-->
         <TextView
@@ -64,7 +64,7 @@
             android:fontFamily="@font/amethysta"
             android:padding="2dp"
             android:text="Time"
-            android:textColor="@color/black" />
+            android:textColor="@color/normaltext" />
 
         <TextView
             android:id="@+id/idTVsubmittedBy"
@@ -73,8 +73,7 @@
             android:fontFamily="@font/lato_bold"
             android:padding="2dp"
             android:text="Submitted By"
-            android:textColor="@color/black"
-
+            android:textColor="@color/impText"
             android:textStyle="bold" />
     </LinearLayout>
 

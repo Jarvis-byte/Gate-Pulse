@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.DatePicker;
@@ -54,7 +53,7 @@ public class TimesheetActivity extends AppCompatActivity {
     private ALodingDialog aLodingDialog;
     String name;
     boolean emailLogin = false;
-    ImageView btn_logOut;
+    ImageView btn_logOut, back;
     ArrayList<User> Userlist = new ArrayList<>();
     ArrayList<Pin> PinList = new ArrayList<>();
 
@@ -64,50 +63,15 @@ public class TimesheetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-       // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        Welcome_User = findViewById(R.id.Welcome_User);
+        // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+       // Welcome_User = findViewById(R.id.Welcome_User);
         date_picker = findViewById(R.id.date_picker);
         time_Picker_from = findViewById(R.id.time_Picker_from);
         time_Picker_to = findViewById(R.id.time_Picker_to);
-
+        back = findViewById(R.id.back);
         btn_done = findViewById(R.id.btn_done);
         db = FirebaseFirestore.getInstance();
         aLodingDialog = new ALodingDialog(this);
-        btn_logOut = findViewById(R.id.btn_logOut);
-        //Logout
-        btn_logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TimesheetActivity.this);
-                View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
-                builder.setView(dialogView);
-                AlertDialog dialog = builder.create();
-                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // aLodingDialog.show();
-
-                        FirebaseAuth.getInstance().signOut();
-                        Intent intent = new Intent(TimesheetActivity.this, SignInActivity.class);
-                        startActivity(intent);
-                        finish();
-
-                    }
-                });
-                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-                if (dialog.getWindow() != null) {
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-                }
-                dialog.show();
-
-            }
-        });
-
 
         //Animation
         scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
@@ -194,7 +158,7 @@ public class TimesheetActivity extends AppCompatActivity {
             if (account != null) {
                 name = account.getDisplayName();
                 String namearr[] = name.split(" ");
-                Welcome_User.setText(namearr[0] + " !");
+               // Welcome_User.setText(namearr[0] + " !");
             }
 
         } else {
@@ -219,7 +183,7 @@ public class TimesheetActivity extends AppCompatActivity {
                                 name = user.getName();
                                 Userlist.add(user);
                                 String namearr[] = name.split(" ");
-                                Welcome_User.setText(namearr[0] + " !");
+                              //  Welcome_User.setText(namearr[0] + " !");
                             }
 
                         }
@@ -286,6 +250,15 @@ public class TimesheetActivity extends AppCompatActivity {
 
 
                 return true;
+            }
+        });
+
+
+        //back
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
