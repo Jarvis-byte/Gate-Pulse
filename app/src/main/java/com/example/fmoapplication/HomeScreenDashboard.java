@@ -48,6 +48,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import co.mobiwise.materialintro.shape.Focus;
+import co.mobiwise.materialintro.shape.FocusGravity;
+import co.mobiwise.materialintro.shape.ShapeType;
+import co.mobiwise.materialintro.view.MaterialIntroView;
+
 public class HomeScreenDashboard extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     TextView Welcome_User, curr_date, curr_location, greeting_text;
@@ -228,6 +233,33 @@ public class HomeScreenDashboard extends AppCompatActivity {
         }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
+        new MaterialIntroView.Builder(this)
+                .enableDotAnimation(true)
+                .enableIcon(false)
+                .setFocusGravity(FocusGravity.CENTER)
+                .setFocusType(Focus.MINIMUM)
+                .setDelayMillis(500)
+                .enableFadeAnimation(true)
+                .performClick(true)
+                .setInfoText("Click here to input your timesheet")
+                .setShape(ShapeType.CIRCLE)
+                .setTarget(enterSchedule)
+                .setUsageId("intro_card") //THIS SHOULD BE UNIQUE ID
+                .show();
+
+        new MaterialIntroView.Builder(this)
+                .enableDotAnimation(true)
+                .enableIcon(false)
+                .setFocusGravity(FocusGravity.CENTER)
+                .setFocusType(Focus.MINIMUM)
+                .setDelayMillis(500)
+                .enableFadeAnimation(true)
+                .performClick(true)
+                .setInfoText("Click here to input Visitor details")
+                .setShape(ShapeType.CIRCLE)
+                .setTarget(add_visitor)
+                .setUsageId("visitor") //THIS SHOULD BE UNIQUE ID
+                .show();
     }
 
     private void getLastLocation() {

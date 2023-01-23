@@ -17,6 +17,7 @@
         android:roundIcon="@drawable/storm"
         android:supportsRtl="true"
         android:theme="@style/Theme.FMOApplication"
+
         tools:targetApi="31">
         <activity
             android:name=".ViewVisitor"
