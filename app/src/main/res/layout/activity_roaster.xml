@@ -59,6 +59,7 @@
             android:background="#111" />
 
     </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/idRVdata"
         android:layout_width="match_parent"
@@ -66,6 +67,13 @@
         android:layout_below="@+id/LL"
         android:background="#E3E5E8"
         android:padding="5dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/LL"
+        android:visibility="gone" />
 
     <!--Progress bar for showing loading screen-->
 

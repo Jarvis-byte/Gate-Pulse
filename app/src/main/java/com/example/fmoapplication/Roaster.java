@@ -1,11 +1,5 @@
 package com.example.fmoapplication;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,9 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -38,13 +38,16 @@ public class Roaster extends AppCompatActivity {
     private FirebaseFirestore db;
     String choiceSpinner;
     private ALodingDialog aLodingDialog;
-    ImageView back;
+    ImageView back, imageView;
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roaster);
         dataRV = findViewById(R.id.idRVdata);
-
+        imageView = findViewById(R.id.imageView);
+        Glide.with(this).load(R.drawable.weather_bg).into(imageView);
         aLodingDialog = new ALodingDialog(this);
         aLodingDialog.show();
         // initializing our variable for firebase
@@ -55,7 +58,8 @@ public class Roaster extends AppCompatActivity {
         coursesArrayList = new ArrayList<>();
         dataRV.setHasFixedSize(true);
         dataRV.setLayoutManager(new LinearLayoutManager(this));
-
+        //+ coursesArrayList.size()
+        System.out.println("ArrayList Size"+ coursesArrayList.size());
         // adding our array list to our recycler view adapter class.
         courseRVAdapter = new RoasterRVAdapter(coursesArrayList, this, new RoasterRVAdapter.ItemClickListner() {
             @Override
@@ -192,6 +196,7 @@ public class Roaster extends AppCompatActivity {
                         coursesArrayList.set(position, data);
                         System.out.println("ArrayList Size" + coursesArrayList.size());
                         courseRVAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -199,6 +204,12 @@ public class Roaster extends AppCompatActivity {
                         Toast.makeText(Roaster.this, "Fail to add data!! Please try again \n" + e, Toast.LENGTH_SHORT).show();
                     }
                 });
+            }
+        });
+        dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
             }
         });
         if (dialog.getWindow() != null) {

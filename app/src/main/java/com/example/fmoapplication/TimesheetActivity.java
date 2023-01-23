@@ -22,6 +22,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -39,7 +40,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -62,8 +62,10 @@ public class TimesheetActivity extends AppCompatActivity {
     ImageView btn_logOut, back;
     ArrayList<User> Userlist = new ArrayList<>();
     ArrayList<Pin> PinList = new ArrayList<>();
-    LocalTime time1;
-    LocalTime time2;
+    int hour1;
+    int minute1;
+    int hour2;
+    int minute2;
     Toast toast;
 
     @SuppressLint("WrongViewCast")
@@ -132,11 +134,14 @@ public class TimesheetActivity extends AppCompatActivity {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(TimesheetActivity.this, R.style.TimePickerTheme, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            time1 = LocalTime.of(timePicker.getHour(), timePicker.getMinute());
-                        }
                         calendar1.set(0, 0, 0, i, i1);
                         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            hour1 = timePicker.getHour();
+                        }
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            minute1 = timePicker.getMinute();
+                        }
                         time_Picker_from.setText(sdf.format(calendar1.getTime()));
                     }
                 }, 12, 0, false);
@@ -150,11 +155,11 @@ public class TimesheetActivity extends AppCompatActivity {
             public void onClick(View view) {
                 time_Picker_to.setError(null);
                 TimePickerDialog timePickerDialog = new TimePickerDialog(TimesheetActivity.this, R.style.TimePickerTheme, new TimePickerDialog.OnTimeSetListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            time2 = LocalTime.of(timePicker.getHour(), timePicker.getMinute());
-                        }
+                        hour2 = timePicker.getHour();
+                        minute2 = timePicker.getMinute();
                         calendar1.set(0, 0, 0, i, i1);
                         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
                         time_Picker_to.setText(sdf.format(calendar1.getTime()));
@@ -225,26 +230,29 @@ public class TimesheetActivity extends AppCompatActivity {
         boolean finalEmailLogin = emailLogin;
 
         GoogleSignInAccount finalAccount = account;
-        btn_done.setOnTouchListener(new View.OnTouchListener() {
+
+        btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            public void onClick(View view) {
 
-
+                System.out.println("OnClick -> Submit");
                 if (!isConnected(TimesheetActivity.this)) {
                     showCustomeDialog();
                 } else {
                     if (time_Picker_from.getText().equals("Time - From")) {
+
                         time_Picker_from.setError("Please Select Time From");
 
                     } else if (time_Picker_to.getText().equals("Time - To")) {
                         time_Picker_to.setError("Please Select Time To");
 
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        if (!time1.isBefore(time2)) {
+                    } else {
+                        if (!(hour1 < hour2 || (hour1 == hour2 && minute1 < minute2))) {
                             displayToast("Please Select Time To After Time From", TimesheetActivity.this);
-                         //   Toast.makeText(TimesheetActivity.this, "Please Select Time To After Time From", Toast.LENGTH_SHORT).show();
+                            //   Toast.makeText(TimesheetActivity.this, "Please Select Time To After Time From", Toast.LENGTH_SHORT).show();
                             time_Picker_to.setError("Please Select Time-To After Time-From");
                         } else {
+                            System.out.println("ELSE -> Submit");
                             aLodingDialog.show();
 
                             String uid = "";
@@ -276,10 +284,8 @@ public class TimesheetActivity extends AppCompatActivity {
 
                 }
 
-                return true;
             }
         });
-
 
         //back
         back.setOnClickListener(new View.OnClickListener() {

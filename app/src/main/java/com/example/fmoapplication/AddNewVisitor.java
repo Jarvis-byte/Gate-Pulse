@@ -60,8 +60,10 @@ public class AddNewVisitor extends AppCompatActivity {
     private ALodingDialog aLodingDialog;
     Animation scaleUp, scaleDown;
     ImageView back;
-    LocalTime time1;
-    LocalTime time2;
+    int hour1;
+    int minute1;
+    int hour2;
+    int minute2;
     Toast toast;
 
     @Override
@@ -181,8 +183,11 @@ public class AddNewVisitor extends AppCompatActivity {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewVisitor.this, R.style.TimePickerTheme, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            time1 = LocalTime.of(timePicker.getHour(), timePicker.getMinute());
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            hour1 = timePicker.getHour();
+                        }
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            minute1 = timePicker.getMinute();
                         }
                         calendar1.set(0, 0, 0, i, i1);
                         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
@@ -199,11 +204,11 @@ public class AddNewVisitor extends AppCompatActivity {
             public void onClick(View view) {
                 time_Picker_from.setError(null);
                 TimePickerDialog timePickerDialog = new TimePickerDialog(AddNewVisitor.this, R.style.TimePickerTheme, new TimePickerDialog.OnTimeSetListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            time2 = LocalTime.of(timePicker.getHour(), timePicker.getMinute());
-                        }
+                        hour2 = timePicker.getHour();
+                        minute2 = timePicker.getMinute();
                         calendar1.set(0, 0, 0, i, i1);
                         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
                         time_Picker_to.setText(sdf.format(calendar1.getTime()));
@@ -233,7 +238,7 @@ public class AddNewVisitor extends AppCompatActivity {
                     } else if (time_Picker_to.getText().equals("Time - To")) {
                         time_Picker_to.setError("Please Select Time To");
 
-                    } else if (!time1.isBefore(time2)) {
+                    } else if (!(hour1 < hour2 || (hour1 == hour2 && minute1 < minute2))) {
                         displayToast("Please Select Time To After Time From", AddNewVisitor.this);
 
                     } else {
