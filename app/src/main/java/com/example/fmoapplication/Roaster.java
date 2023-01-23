@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,7 +40,7 @@ public class Roaster extends AppCompatActivity {
     String choiceSpinner;
     private ALodingDialog aLodingDialog;
     ImageView back, imageView;
-
+    TextView text_no_data;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class Roaster extends AppCompatActivity {
         setContentView(R.layout.activity_roaster);
         dataRV = findViewById(R.id.idRVdata);
         imageView = findViewById(R.id.imageView);
-        Glide.with(this).load(R.drawable.weather_bg).into(imageView);
+        text_no_data = findViewById(R.id.text_no_data);
         aLodingDialog = new ALodingDialog(this);
         aLodingDialog.show();
         // initializing our variable for firebase
@@ -221,7 +222,7 @@ public class Roaster extends AppCompatActivity {
 
     public void getData() {
 
-        System.out.println("DATA from Firebase" + "\tCalled");
+        //System.out.println("DATA from Firebase" + "\tCalled");
 
         db.collection("Data").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -231,6 +232,10 @@ public class Roaster extends AppCompatActivity {
                     // hiding our progress bar and adding
                     // our data in a list.
                     aLodingDialog.cancel();
+                    // image view gone and recycler view show
+                    imageView.setVisibility(View.GONE);
+                    text_no_data.setVisibility(View.GONE);
+                    dataRV.setVisibility(View.VISIBLE);
                     List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                     for (DocumentSnapshot d : list) {
                         Data data = d.toObject(Data.class);
@@ -248,8 +253,14 @@ public class Roaster extends AppCompatActivity {
                     });
                     courseRVAdapter.notifyDataSetChanged();
                 } else {
+
+                    imageView.setVisibility(View.VISIBLE);
+                    text_no_data.setVisibility(View.VISIBLE);
+                    dataRV.setVisibility(View.GONE);
+                    Glide.with(Roaster.this).load(R.drawable.empty_3).into(imageView);
+
                     aLodingDialog.cancel();
-                    Toast.makeText(Roaster.this, "No data found in Database", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Roaster.this, "No data found in Database", Toast.LENGTH_SHORT).show();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

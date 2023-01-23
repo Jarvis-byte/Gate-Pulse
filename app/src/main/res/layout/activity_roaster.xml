@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#E3E5E8"
+    android:background="#EDE7F8"
     tools:context=".Roaster">
 
     <!--Recycler view for displaying
@@ -13,7 +13,7 @@
         android:id="@+id/LLlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#E3E5E8">
+        android:background="#EDE7F8">
 
         <ImageView
             android:id="@+id/back"
@@ -65,15 +65,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/LL"
-        android:background="#E3E5E8"
+        android:background="#EDE7F8"
+        android:visibility="gone"
         android:padding="5dp" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:layout_below="@+id/LL"
-        android:visibility="gone" />
+        android:layout_marginTop="50dp" />
+
+    <TextView
+        android:id="@+id/text_no_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="No Data Available"
+        android:textColor="#5b3799"
+        android:textSize="25sp"
+        android:visibility="gone"
+
+        />
 
     <!--Progress bar for showing loading screen-->
 

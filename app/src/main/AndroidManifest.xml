@@ -27,7 +27,9 @@
         </activity>
         <activity
             android:name=".AddNewVisitor"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -69,6 +71,7 @@
         </activity>
         <activity
             android:name=".TimesheetActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
