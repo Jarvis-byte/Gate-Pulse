@@ -48,6 +48,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import co.mobiwise.materialintro.animation.MaterialIntroListener;
 import co.mobiwise.materialintro.shape.Focus;
 import co.mobiwise.materialintro.shape.FocusGravity;
 import co.mobiwise.materialintro.shape.ShapeType;
@@ -233,6 +234,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
         }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
+
         new MaterialIntroView.Builder(this)
                 .enableDotAnimation(true)
                 .enableIcon(false)
@@ -243,23 +245,86 @@ public class HomeScreenDashboard extends AppCompatActivity {
                 .performClick(true)
                 .setInfoText("Click here to input your timesheet")
                 .setShape(ShapeType.CIRCLE)
-                .setTarget(enterSchedule)
-                .setUsageId("intro_card") //THIS SHOULD BE UNIQUE ID
-                .show();
+                .setIdempotent(true)
+                .setTarget(btn_logOut)
+                .setUsageId("logout")
+                .setListener(new MaterialIntroListener() {
+                    @Override
+                    public void onUserClicked(String materialIntroViewId) {
+                        new MaterialIntroView.Builder(HomeScreenDashboard.this)
+                                .enableDotAnimation(true)
+                                .enableIcon(false)
+                                .setFocusGravity(FocusGravity.CENTER)
+                                .setFocusType(Focus.MINIMUM)
+                                .setDelayMillis(500)
+                                .enableFadeAnimation(true)
+                                .performClick(true)
+                                .setInfoText("Click here to input your timesheet")
+                                .setShape(ShapeType.CIRCLE)
+                                .setIdempotent(true)
+                                .setTarget(enterSchedule)
+                                .setUsageId("intro_card")
+                                .setListener(new MaterialIntroListener() {
+                                    @Override
+                                    public void onUserClicked(String materialIntroViewId) {
+                                        new MaterialIntroView.Builder(HomeScreenDashboard.this)
+                                                .enableDotAnimation(true)
+                                                .enableIcon(false)
+                                                .setFocusGravity(FocusGravity.CENTER)
+                                                .setFocusType(Focus.MINIMUM)
+                                                .setDelayMillis(500)
+                                                .enableFadeAnimation(true)
+                                                .performClick(true)
+                                                .setInfoText("Click here to input Visitor details")
+                                                .setShape(ShapeType.CIRCLE)
+                                                .setTarget(add_visitor)
+                                                .setUsageId("visitor") //THIS SHOULD BE UNIQUE ID
+                                                .setListener(new MaterialIntroListener() {
+                                                    @Override
+                                                    public void onUserClicked(String materialIntroViewId) {
+                                                        new MaterialIntroView.Builder(HomeScreenDashboard.this)
+                                                                .enableDotAnimation(true)
+                                                                .enableIcon(false)
+                                                                .setFocusGravity(FocusGravity.CENTER)
+                                                                .setFocusType(Focus.MINIMUM)
+                                                                .setDelayMillis(500)
+                                                                .enableFadeAnimation(true)
+                                                                .performClick(true)
+                                                                .setInfoText("View Your Schedule here")
+                                                                .setShape(ShapeType.CIRCLE)
+                                                                .setIdempotent(true)
+                                                                .setTarget(checkSchedule)
+                                                                .setUsageId("schedule")
+                                                                .setListener(new MaterialIntroListener() {
+                                                                    @Override
+                                                                    public void onUserClicked(String materialIntroViewId) {
+                                                                        new MaterialIntroView.Builder(HomeScreenDashboard.this)
+                                                                                .enableDotAnimation(true)
+                                                                                .enableIcon(false)
+                                                                                .setFocusGravity(FocusGravity.CENTER)
+                                                                                .setFocusType(Focus.MINIMUM)
+                                                                                .setDelayMillis(500)
+                                                                                .enableFadeAnimation(true)
+                                                                                .performClick(true)
+                                                                                .setInfoText("Click here to View Visitor details")
+                                                                                .setShape(ShapeType.CIRCLE)
+                                                                                .setTarget(view_visitor)
+                                                                                .setUsageId("visitor_schedule")
+                                                                                .show();
 
-        new MaterialIntroView.Builder(this)
-                .enableDotAnimation(true)
-                .enableIcon(false)
-                .setFocusGravity(FocusGravity.CENTER)
-                .setFocusType(Focus.MINIMUM)
-                .setDelayMillis(500)
-                .enableFadeAnimation(true)
-                .performClick(true)
-                .setInfoText("Click here to input Visitor details")
-                .setShape(ShapeType.CIRCLE)
-                .setTarget(add_visitor)
-                .setUsageId("visitor") //THIS SHOULD BE UNIQUE ID
-                .show();
+                                                                    }
+                                                                })
+                                                                .show();
+                                                    }
+                                                })
+                                                .show();
+                                    }
+                                })//THIS SHOULD BE UNIQUE ID
+                                .show();
+                    }
+                }).show();
+
+
     }
 
     private void getLastLocation() {
