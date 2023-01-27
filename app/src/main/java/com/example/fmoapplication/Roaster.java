@@ -21,8 +21,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -97,7 +100,7 @@ public class Roaster extends AppCompatActivity {
                                             String firstName = data.getName();
                                             String namearr[] = firstName.split(" ");
                                             verifyRoaster(data.getUid(), data.getDate(), namearr[0], data.getApprovalStatus(), data.getTime_FROM(), data.getTime_to(), position);
-                                            Toast.makeText(Roaster.this, position + "Yes!!!!", Toast.LENGTH_SHORT).show();
+                                            // Toast.makeText(Roaster.this, "", Toast.LENGTH_SHORT).show();
                                         } else {
                                             aLodingDialog.cancel();
                                             emailBox.setText("");
@@ -147,10 +150,11 @@ public class Roaster extends AppCompatActivity {
     private void verifyRoaster(String uid, String date, String name, int approvalStatus, String time_from, String time_to, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Roaster.this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_schedule, null);
-
+        TextView nameFor = dialogView.findViewById(R.id.Name);
+        nameFor.setText(name);
 
         AutoCompleteTextView dropdown = dialogView.findViewById(R.id.spinner2);
-        String[] items = new String[]{"Approved", "Rejected"};
+        String[] items = new String[]{"Approved", "Rejected", "Delete"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.drop_down_item, items);
         dropdown.setAdapter(adapter);
         dropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -165,7 +169,10 @@ public class Roaster extends AppCompatActivity {
                         // Whatever you want to happen when the second item gets selected
                         choiceSpinner = String.valueOf(adapterView.getItemAtPosition(i));
                         break;
-
+                    case 2:
+                        // Whatever you want to happen when the second item gets selected
+                        choiceSpinner = String.valueOf(adapterView.getItemAtPosition(i));
+                        break;
 
                 }
             }
@@ -179,14 +186,59 @@ public class Roaster extends AppCompatActivity {
         dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String datearr[] = date.split("/");
+                String finalDate = datearr[0] + datearr[1] + datearr[2] + time_from;
+
+
                 int choice = 0;
+
                 if (choiceSpinner.equals("Approved")) {
                     choice = 1;
+                } else if (choiceSpinner.equals("Delete")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Roaster.this);
+                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_sure_delete, null);
+                    builder.setView(dialogView);
+                    AlertDialog dialog1 = builder.create();
+                    dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            System.out.println("Final Date\t" + finalDate);
+                            DocumentReference docRef = db.collection("Data").document(name + finalDate);
+                            docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(Roaster.this, "Your Data Deleted", Toast.LENGTH_SHORT).show();
+                                        coursesArrayList.remove(position);
+                                        courseRVAdapter.notifyDataSetChanged();
+                                        dialog1.dismiss();
+                                        dialog.dismiss();
+
+                                    } else {
+                                        Toast.makeText(Roaster.this, "Not Deleted", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+                            });
+                            return;
+                        }
+                    });
+                    dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog1.dismiss();
+                        }
+                    });
+                    if (dialog1.getWindow() != null) {
+                        dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                    }
+                    dialog1.show();
+                    return;
                 } else {
                     choice = 2;
                 }
-                String datearr[] = date.split("/");
-                String finalDate = datearr[0] + datearr[1] + datearr[2];
+
                 Data data = new Data(uid, name, date, time_from, time_to, true, choice);
 
                 db.collection("Data").document(name + finalDate).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {

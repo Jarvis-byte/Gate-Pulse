@@ -3,6 +3,8 @@ package com.example.fmoapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -37,6 +39,15 @@ public class SplashScreen extends AppCompatActivity {
         splashimg.animate().translationY(-2500).setDuration(1000).setStartDelay(5000);
         appname.animate().translationY(2000).setDuration(1000).setStartDelay(5000);
         made_by.animate().translationY(1500).setDuration(1000).setStartDelay(5000);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        if (width <= 720) {
+            System.out.println("LOL");
+            appname.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_huge));
+
+        }
 
 
         //   lottieAnimationView.animate().translationY(1500).setDuration(200).setStartDelay(5000);

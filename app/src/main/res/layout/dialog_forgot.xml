@@ -51,7 +51,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/forgotTitle"/>
         <Button
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:id="@+id/btnCancel"
             android:layout_marginStart="40dp"
@@ -68,7 +68,7 @@
             app:layout_constraintBottom_toBottomOf="@id/dialogBox"
             app:layout_constraintEnd_toStartOf="@id/btnReset"/>
         <Button
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:id="@+id/btnReset"
             android:text="Reset"

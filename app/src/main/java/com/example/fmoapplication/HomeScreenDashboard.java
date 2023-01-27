@@ -10,6 +10,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -56,7 +58,7 @@ import co.mobiwise.materialintro.view.MaterialIntroView;
 
 public class HomeScreenDashboard extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    TextView Welcome_User, curr_date, curr_location, greeting_text;
+    TextView Welcome_User, curr_date, curr_location, greeting_text, textView3, textView4, textView2, textView1;
     boolean emailLogin = false;
     LinearLayout enterSchedule, add_visitor, view_visitor;
     String name;
@@ -233,7 +235,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
             Glide.with(this).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).into(profile_pic);
         }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        getLastLocation();
+        //  getLastLocation();
 
         new MaterialIntroView.Builder(this)
                 .enableDotAnimation(true)
@@ -323,6 +325,27 @@ public class HomeScreenDashboard extends AppCompatActivity {
                                 .show();
                     }
                 }).show();
+        textView3 = findViewById(R.id.textView3);
+        textView1 = findViewById(R.id.textView1);
+        textView2 = findViewById(R.id.textView2);
+        textView4 = findViewById(R.id.textView4);
+
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        int height = displayMetrics.heightPixels;
+        System.out.println("Height" + "\t" + height);
+
+        if (width <= 720) {
+            System.out.println("LOL");
+            textView3.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_small));
+            textView1.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_small));
+            textView2.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_small));
+            textView4.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_small));
+            //   curr_date.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_small));
+            curr_location.setText("Asansol, India");
+        }
 
 
     }

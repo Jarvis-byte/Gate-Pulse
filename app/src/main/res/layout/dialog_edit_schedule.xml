@@ -84,17 +84,19 @@
             android:gravity="center_horizontal"
 
             >
+
             <Button
                 android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_below="@+id/spinner1"
-                android:layout_weight="1"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="8dp"
+                android:layout_weight="1"
                 android:backgroundTint="@color/white"
+                android:maxLines="1"
                 android:text="Cancel"
                 android:textColor="@color/black"
                 android:textSize="14sp"

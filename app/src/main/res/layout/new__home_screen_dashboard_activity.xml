@@ -317,26 +317,26 @@
                                 app:srcCompat="@mipmap/view" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+
                             android:background="@drawable/purple2_background">
 
                             <TextView
                                 android:id="@+id/textView3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:gravity="center"
+                                android:maxLines="2"
                                 android:text="View Schedule"
                                 android:textColor="#7868e5"
                                 android:textSize="18sp"
-                                android:textStyle="bold"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                android:textStyle="bold" />
 
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        </RelativeLayout>
                     </LinearLayout>
 
                     <LinearLayout
