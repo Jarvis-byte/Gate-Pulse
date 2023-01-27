@@ -15,11 +15,12 @@ public class ViewVisitorRVAdapter extends RecyclerView.Adapter<ViewVisitorRVAdap
     // creating variables for our ArrayList and context
     private ArrayList<AddVisitor> roasterArrayList;
     private Context context;
-
+    private ItemClickListner mItemListener;
     // creating constructor for our adapter class
-    public ViewVisitorRVAdapter(ArrayList<AddVisitor> roasterArrayList, Context context) {
+    public ViewVisitorRVAdapter(ArrayList<AddVisitor> roasterArrayList, Context context, ItemClickListner itemClickListner) {
         this.roasterArrayList = roasterArrayList;
         this.context = context;
+        this.mItemListener = itemClickListner;
     }
 
     @NonNull
@@ -39,6 +40,9 @@ public class ViewVisitorRVAdapter extends RecyclerView.Adapter<ViewVisitorRVAdap
         String time = "From " + data.getTime_from() + "\tTo " + data.getTime_to();
         holder.idTVCtime.setText(time);
         holder.idTVsubmittedBy.setText("Submitted By\t:- " + data.getNameofsubmitor());
+        holder.itemView.setOnClickListener(v -> {
+            mItemListener.onItemClick(data, position);
+        });
     }
 
     @Override
@@ -46,7 +50,9 @@ public class ViewVisitorRVAdapter extends RecyclerView.Adapter<ViewVisitorRVAdap
         // returning the size of our array list.
         return roasterArrayList.size();
     }
-
+    public interface ItemClickListner {
+        void onItemClick(AddVisitor data, int position);
+    }
     class ViewHolder extends RecyclerView.ViewHolder {
         // creating variables for our text views.
         private final TextView idTVVisitorName;

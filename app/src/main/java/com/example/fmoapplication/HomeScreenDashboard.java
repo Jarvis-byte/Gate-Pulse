@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -71,9 +72,10 @@ public class HomeScreenDashboard extends AppCompatActivity {
     ImageView btn_logOut, profile_pic;
     private final static int REQUEST_CODE = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
-
+    //ConstraintLayout constraint;
     @SuppressLint("MissingInflatedId")
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new__home_screen_dashboard_activity);
@@ -90,7 +92,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
         curr_location.setCompoundDrawablesWithIntrinsicBounds(R.drawable.placeholder, 0, 0, 0);
         curr_location.setCompoundDrawablePadding(10);
         curr_location.setGravity(Gravity.CENTER_VERTICAL);
-        curr_date.setCompoundDrawablesWithIntrinsicBounds(R.drawable.calendar, 0, 0, 0);
+        curr_date.setCompoundDrawablesWithIntrinsicBounds(R.drawable.calendar_24, 0, 0, 0);
         curr_date.setCompoundDrawablePadding(15);
         curr_date.setGravity(Gravity.CENTER_VERTICAL);
         aLodingDialog = new ALodingDialog(this);
@@ -235,7 +237,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
             Glide.with(this).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).into(profile_pic);
         }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        //  getLastLocation();
+        getLastLocation();
 
         new MaterialIntroView.Builder(this)
                 .enableDotAnimation(true)
@@ -329,7 +331,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
         textView1 = findViewById(R.id.textView1);
         textView2 = findViewById(R.id.textView2);
         textView4 = findViewById(R.id.textView4);
-
+        ConstraintLayout constraint = findViewById(R.id.constraint);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -345,6 +347,8 @@ public class HomeScreenDashboard extends AppCompatActivity {
             textView4.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_small));
             //   curr_date.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_small));
             curr_location.setText("Asansol, India");
+//            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(50, 50);
+//            constraint.setLayoutParams(params);
         }
 
 
