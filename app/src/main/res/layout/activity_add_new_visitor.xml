@@ -104,8 +104,11 @@
                         android:layout_marginEnd="20dp"
                         android:background="@drawable/background_edt"
                         android:drawablePadding="8dp"
+                        android:scrollbars="vertical"
+                        android:overScrollMode="always"
                         android:gravity="top"
                         android:hint="Purpose Of Visit"
+                        android:inputType="textMultiLine"
                         android:padding="15dp"
                         android:textColorHint="#825bc3"
                         android:textColor="#825bc3" />

@@ -42,7 +42,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -300,7 +299,7 @@ public class AddNewVisitor extends AppCompatActivity {
     private void addDataToFirestore(String uid, String nameFirst, String visitorName, String purposeOfvisit, String date, String time_from, String time_to) {
 
 
-        AddVisitor addVisitor = new AddVisitor(uid, nameFirst, visitorName, purposeOfvisit, date, time_from, time_to);
+        AddVisitor addVisitor = new AddVisitor(uid, nameFirst, visitorName, purposeOfvisit, date, time_from, time_to, 0);
 
         String docName = addVisitor.getDate();
         String docname[] = docName.split("/");

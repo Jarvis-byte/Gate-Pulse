@@ -8,8 +8,12 @@ public class AddVisitor {
     private String date;
     private String Time_from;
     private String Time_to;
+    private int seen;
 
-    public AddVisitor(String uid, String nameofsubmitor, String nameOfVisitor, String purposeOfvisit, String date, String time_from, String time_to) {
+    public AddVisitor() {
+    }
+
+    public AddVisitor(String uid, String nameofsubmitor, String nameOfVisitor, String purposeOfvisit, String date, String time_from, String time_to, int seen) {
         this.uid = uid;
         this.nameofsubmitor = nameofsubmitor;
         this.nameOfVisitor = nameOfVisitor;
@@ -17,9 +21,7 @@ public class AddVisitor {
         this.date = date;
         Time_from = time_from;
         Time_to = time_to;
-    }
-
-    public AddVisitor() {
+        this.seen = seen;
     }
 
     public String getUid() {
@@ -76,5 +78,13 @@ public class AddVisitor {
 
     public void setTime_to(String time_to) {
         Time_to = time_to;
+    }
+
+    public int getSeen() {
+        return seen;
+    }
+
+    public void setSeen(int seen) {
+        this.seen = seen;
     }
 }
