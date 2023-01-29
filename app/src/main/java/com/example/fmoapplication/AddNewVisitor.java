@@ -82,34 +82,7 @@ public class AddNewVisitor extends AppCompatActivity {
         visitor_name = findViewById(R.id.visitor_name);
         purpose_of_visit = findViewById(R.id.purpose_of_visit);
         date_picker = findViewById(R.id.date_picker);
-        FirebaseMessaging.getInstance().subscribeToTopic("PushNotifications");
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            //Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
 
-                        // Get new FCM registration token
-                        String token = task.getResult();
-
-                        // Log and toast
-                        msg = token;
-                        //Log.d(TAG, msg);
-                        Toast.makeText(AddNewVisitor.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create channel to show notifications.
-            String channelId = getString(R.string.default_notification_channel_id);
-            String channelName = "Fcm notifications";
-            NotificationManager notificationManager =
-                    getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
-                    channelName, NotificationManager.IMPORTANCE_HIGH));
-        }
         time_Picker_from = findViewById(R.id.time_Picker_from);
         time_Picker_to = findViewById(R.id.time_Picker_to);
         // btn_done = findViewById(R.id.btn_done);
@@ -386,22 +359,6 @@ public class AddNewVisitor extends AppCompatActivity {
 
     }
 
-    private void notification() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel("n", "n", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(notificationChannel);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n")
-                    .setContentTitle("New Visitor")
-                    .setSmallIcon(R.drawable.storm)
-                    .setAutoCancel(true)
-                    .setContentText("New Visitor is visiting");
-            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
-            managerCompat.notify(999, builder.build());
-        }
-
-
-    }
 
 
     private void showCustomeDialog() {

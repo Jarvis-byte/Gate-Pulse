@@ -320,6 +320,8 @@ public class SignInActivity extends AppCompatActivity {
                     if (googleSignInAccount != null) {
                         // When sign in account is not equal to null
                         // Initialize auth credential
+
+
                         AuthCredential authCredential = GoogleAuthProvider
                                 .getCredential(googleSignInAccount.getIdToken()
                                         , null);
@@ -333,11 +335,8 @@ public class SignInActivity extends AppCompatActivity {
                                             // When task is successful
                                             // Redirect to profile activity
 
-
-                                            firebaseAuth = FirebaseAuth.getInstance();
-                                            // Initialize firebase user
-                                            firebaseUser = firebaseAuth.getCurrentUser();
                                             setName(firebaseUser.getUid(), firebaseUser.getDisplayName());
+
 
 
                                         } else {
@@ -376,38 +375,9 @@ public class SignInActivity extends AppCompatActivity {
 
     private void setName(String uId, String Name) {
         HashMap<String, String> map = new HashMap<>();
-        String tokenID;
-        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
 
-// Creating an Editor object to edit(write to the file)
-
-
-
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            //Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
-
-                        // Get new FCM registration token
-                        String token = task.getResult();
-                        SharedPreferences.Editor myEdit = sharedPreferences.edit();
-                        myEdit.putString("token", token.toString());
-                        myEdit.commit();
-                     //   msg = token;
-                        System.out.println("Token inside" + token);
-
-                    }
-                });
-        SharedPreferences sh = getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
-        String s1 = sh.getString("token", "");
         map.put("Name", Name);
         map.put("Uid", uId);
-        map.put("Token", s1);
-        System.out.println("Token outside" + s1);
        // System.out.println("UID_SignUp_setName" + uId);
         db.collection("User").document(uId).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
