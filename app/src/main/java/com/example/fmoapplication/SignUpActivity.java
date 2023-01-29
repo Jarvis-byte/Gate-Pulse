@@ -51,7 +51,7 @@ public class SignUpActivity extends AppCompatActivity {
         loginRedirectText = findViewById(R.id.loginRedirectText);
         db = FirebaseFirestore.getInstance();
         //progressbar
-        aLodingDialog = new ALodingDialog(this);
+        aLodingDialog = new ALodingDialog(SignUpActivity.this);
 
 
         signupButton.setOnClickListener(new View.OnClickListener() {
@@ -149,6 +149,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         HashMap<String, String> map = new HashMap<>();
         map.put("Name", Name);
+        map.put("Uid", uId);
         System.out.println("UID_SignUp_setName" + uId);
         db.collection("User").document(uId).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -193,6 +194,12 @@ public class SignUpActivity extends AppCompatActivity {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
         }
         dialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        aLodingDialog.cancel();
     }
 
     private boolean isConnected(SignUpActivity signInActivity) {

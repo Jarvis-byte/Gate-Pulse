@@ -247,7 +247,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
                 .setDelayMillis(500)
                 .enableFadeAnimation(true)
                 .performClick(true)
-                .setInfoText("Click here to input your timesheet")
+                .setInfoText("Click here to Log Out")
                 .setShape(ShapeType.CIRCLE)
                 .setIdempotent(true)
                 .setTarget(btn_logOut)

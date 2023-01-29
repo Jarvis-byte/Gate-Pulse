@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -19,6 +20,17 @@
         android:theme="@style/Theme.FMOApplication"
 
         tools:targetApi="31">
+
+
+        <service
+            android:name=".Service.MyFirebaseInstanceService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+
         <activity
             android:name=".ViewVisitor"
             android:exported="false">
@@ -87,9 +99,13 @@
                 android:value="" />
         </activity>
 
+
         <meta-data
             android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+            android:resource="@array/preloaded_fonts"
+
+            />
+
     </application>
 
 </manifest>
