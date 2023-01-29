@@ -116,7 +116,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
             if (account != null) {
                 name = account.getDisplayName();
                 String namearr[] = name.split(" ");
-                Welcome_User.setText(namearr[0] + " !");
+                Welcome_User.setText(name + " !");
             }
 
         } else {
@@ -141,7 +141,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
                                 name = user.getName();
                                 Userlist.add(user);
                                 String namearr[] = name.split(" ");
-                                Welcome_User.setText(namearr[0] + " !");
+                                Welcome_User.setText(name+ " !");
                             }
 
                         }
