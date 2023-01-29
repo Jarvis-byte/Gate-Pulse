@@ -1,6 +1,8 @@
 package com.example.fmoapplication;
 
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,11 +26,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -40,15 +43,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.RemoteMessage;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,6 +71,8 @@ public class AddNewVisitor extends AppCompatActivity {
     int hour2;
     int minute2;
     Toast toast;
+    int id = 0;
+    String msg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +82,34 @@ public class AddNewVisitor extends AppCompatActivity {
         visitor_name = findViewById(R.id.visitor_name);
         purpose_of_visit = findViewById(R.id.purpose_of_visit);
         date_picker = findViewById(R.id.date_picker);
+        FirebaseMessaging.getInstance().subscribeToTopic("PushNotifications");
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            //Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
 
+                        // Get new FCM registration token
+                        String token = task.getResult();
 
+                        // Log and toast
+                        msg = token;
+                        //Log.d(TAG, msg);
+                        Toast.makeText(AddNewVisitor.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            String channelId = getString(R.string.default_notification_channel_id);
+            String channelName = "Fcm notifications";
+            NotificationManager notificationManager =
+                    getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
+                    channelName, NotificationManager.IMPORTANCE_HIGH));
+        }
         time_Picker_from = findViewById(R.id.time_Picker_from);
         time_Picker_to = findViewById(R.id.time_Picker_to);
         // btn_done = findViewById(R.id.btn_done);
@@ -263,6 +289,7 @@ public class AddNewVisitor extends AppCompatActivity {
                             String date = date_picker.getText().toString();
                             String time_from = time_Picker_from.getText().toString();
                             String time_to = time_Picker_to.getText().toString();
+                            System.out.println("called by  gamil");
                             addDataToFirestore(uid, namearr[0], visitorName, purposeOfvisit, date, time_from, time_to);
 
 
@@ -276,6 +303,7 @@ public class AddNewVisitor extends AppCompatActivity {
                             String date = date_picker.getText().toString();
                             String time_from = time_Picker_from.getText().toString();
                             String time_to = time_Picker_to.getText().toString();
+                            System.out.println("called by non gamil");
                             addDataToFirestore(uid, namearr[0], visitorName, purposeOfvisit, date, time_from, time_to);
                         }
                     }
@@ -313,7 +341,23 @@ public class AddNewVisitor extends AppCompatActivity {
         String docName = addVisitor.getDate();
         String docname[] = docName.split("/");
         String finalDocName = uid + visitorName + nameFirst;
-
+        db.collection("Visitor Data")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int count = 0;
+                            for (DocumentSnapshot document : task.getResult()) {
+                                count++;
+                            }
+                            id = count;
+                            System.out.println("Count first\t:-\t" + id);
+                        } else {
+                            System.out.println("Error in count" + task.getException());
+                        }
+                    }
+                });
 
         db.collection("Visitor Data").document(finalDocName).set(addVisitor).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -321,6 +365,14 @@ public class AddNewVisitor extends AppCompatActivity {
                 aLodingDialog.cancel();
                 time_Picker_from.setText("Time - From");
                 time_Picker_to.setText("Time - To");
+                visitor_name.setText("");
+                purpose_of_visit.setText("");
+                //fire notification
+                id = id + 1;
+                System.out.println("Count after\t:-\t" + id);
+                //notification();
+
+
                 Toast.makeText(AddNewVisitor.this, "Your Data has been added", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -331,8 +383,25 @@ public class AddNewVisitor extends AppCompatActivity {
             }
         });
 
+
     }
 
+    private void notification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel("n", "n", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(notificationChannel);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "n")
+                    .setContentTitle("New Visitor")
+                    .setSmallIcon(R.drawable.storm)
+                    .setAutoCancel(true)
+                    .setContentText("New Visitor is visiting");
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+            managerCompat.notify(999, builder.build());
+        }
+
+
+    }
 
 
     private void showCustomeDialog() {

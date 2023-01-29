@@ -6,8 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
+
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -23,13 +25,16 @@
 
 
         <service
-            android:name=".Service.MyFirebaseInstanceService"
-            android:exported="true">
+            android:name=".Service.CustomMessagingService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
+<!--        <receiver-->
+<!--            android:name=".Service.NotificationReceiver"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false" />-->
 
         <activity
             android:name=".ViewVisitor"

@@ -43,6 +43,7 @@ import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -350,6 +351,8 @@ public class HomeScreenDashboard extends AppCompatActivity {
 //            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(50, 50);
 //            constraint.setLayoutParams(params);
         }
+
+        FirebaseMessaging.getInstance().subscribeToTopic("PushNotifications");
 
 
     }

@@ -3,6 +3,7 @@ package com.example.fmoapplication;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -39,6 +40,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.HashMap;
 
 public class SignInActivity extends AppCompatActivity {
     SignInButton googleLogin;
@@ -51,8 +56,11 @@ public class SignInActivity extends AppCompatActivity {
     private EditText loginEmail, loginPassword;
     private ALodingDialog aLodingDialog;
     boolean mPasswordVisible;
-
+    String msg;
     //right_arrow
+    private FirebaseFirestore db;
+    FirebaseUser firebaseUser;
+
     @SuppressLint("MissingInflatedId")
     @Override
 
@@ -70,7 +78,7 @@ public class SignInActivity extends AppCompatActivity {
         loginRedirectText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.right_arrow, 0);
         loginRedirectText.setCompoundDrawablePadding(10);
         loginRedirectText.setGravity(Gravity.CENTER_VERTICAL);
-
+        db = FirebaseFirestore.getInstance();
         aLodingDialog = new ALodingDialog(this);
         firebaseAuth = FirebaseAuth.getInstance();
         //Login in
@@ -192,7 +200,7 @@ public class SignInActivity extends AppCompatActivity {
         // Initialize firebase auth
         firebaseAuth = FirebaseAuth.getInstance();
         // Initialize firebase user
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseUser = firebaseAuth.getCurrentUser();
         //  Check condition
         if (firebaseUser != null) {
             // When user already sign in
@@ -200,6 +208,8 @@ public class SignInActivity extends AppCompatActivity {
             startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             finish();
+
+
         }
 
 
@@ -322,12 +332,14 @@ public class SignInActivity extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             // When task is successful
                                             // Redirect to profile activity
-                                            startActivity(new Intent(SignInActivity.this
-                                                    , HomeScreenDashboard.class)
-                                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                                            finish();
-                                            // Display Toast
-                                            displayToast("Welcome");
+
+
+                                            firebaseAuth = FirebaseAuth.getInstance();
+                                            // Initialize firebase user
+                                            firebaseUser = firebaseAuth.getCurrentUser();
+                                            setName(firebaseUser.getUid(), firebaseUser.getDisplayName());
+
+
                                         } else {
                                             // When task is unsuccessful
                                             // Display Toast
@@ -362,4 +374,61 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
+    private void setName(String uId, String Name) {
+        HashMap<String, String> map = new HashMap<>();
+        String tokenID;
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+
+// Creating an Editor object to edit(write to the file)
+
+
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            //Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+                        myEdit.putString("token", token.toString());
+                        myEdit.commit();
+                     //   msg = token;
+                        System.out.println("Token inside" + token);
+
+                    }
+                });
+        SharedPreferences sh = getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
+        String s1 = sh.getString("token", "");
+        map.put("Name", Name);
+        map.put("Uid", uId);
+        map.put("Token", s1);
+        System.out.println("Token outside" + s1);
+       // System.out.println("UID_SignUp_setName" + uId);
+        db.collection("User").document(uId).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                aLodingDialog.cancel();
+                System.out.println("UID_SignUp_setName" + uId);
+                startActivity(new Intent(SignInActivity.this
+                        , HomeScreenDashboard.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                finish();
+                // Display Toast
+                displayToast("Welcome");
+                Toast.makeText(SignInActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("UID_SignUp_setName" + e.getMessage());
+                aLodingDialog.cancel();
+                Toast.makeText(SignInActivity.this, "Fail to Login!! Please try again\n" + e, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
