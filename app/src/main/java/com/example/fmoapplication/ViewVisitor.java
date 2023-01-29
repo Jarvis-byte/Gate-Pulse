@@ -2,8 +2,10 @@ package com.example.fmoapplication;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -45,6 +47,7 @@ public class ViewVisitor extends AppCompatActivity {
     TextView text_no_data;
     LayoutInflater inflater;
 
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,9 @@ public class ViewVisitor extends AppCompatActivity {
         dataRV.setLayoutManager(new LinearLayoutManager(this));
 
         // adding our array list to our recycler view adapter class.
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ViewVisitor.this);
+        SharedPreferences.Editor editor = prefs.edit();
+
         courseRVAdapter = new ViewVisitorRVAdapter(coursesArrayList, this, new ViewVisitorRVAdapter.ItemClickListner() {
             @Override
             public void onItemClick(AddVisitor data, int position) {
@@ -109,6 +115,10 @@ public class ViewVisitor extends AppCompatActivity {
                                             dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
+                                                    editor.putString("Visitor_name_delete", coursesArrayList.get(position).getNameOfVisitor());
+                                                    editor.putString("Submitor_name_delete", coursesArrayList.get(position).getNameofsubmitor());
+                                                    editor.putInt("AddedFrom_delete", 2);
+                                                    editor.apply();
 
                                                     DocumentReference docRef = db.collection("Visitor Data").document(finalDocName);
                                                     docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -119,6 +129,8 @@ public class ViewVisitor extends AppCompatActivity {
                                                             dialog.dismiss();
                                                             dialog1.dismiss();
                                                             aLodingDialog.cancel();
+
+
                                                             if (coursesArrayList.size() == 0) {
                                                                 imageView.setVisibility(View.VISIBLE);
                                                                 text_no_data.setVisibility(View.VISIBLE);
@@ -189,6 +201,8 @@ public class ViewVisitor extends AppCompatActivity {
                 finish();
             }
         });
+
+
     }
 
     public void getData() {
@@ -264,6 +278,8 @@ public class ViewVisitor extends AppCompatActivity {
                         Toast.makeText(context, "Enter your Admin PIN", Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    //  SharedPreferences sharedPref = getSharedPreferences("application", MODE_PRIVATE);
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                     db.collection("Pin").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -285,7 +301,8 @@ public class ViewVisitor extends AppCompatActivity {
                                         } else {
                                             checkbox.setChecked(false);
                                         }
-                                        addDataToFirestore(data.getUid(), data.getNameofsubmitor(), data.getNameOfVisitor(), data.getPurposeOfvisit(), data.getDate(), data.getTime_from(), data.getTime_to(), 1, context, LodingDialog, checkBox_Seen, checkbox);
+
+                                        addDataToFirestore(data.getUid(), data.getNameofsubmitor(), data.getNameOfVisitor(), data.getPurposeOfvisit(), data.getDate(), data.getTime_from(), data.getTime_to(), 1, context, LodingDialog, checkBox_Seen, checkbox, prefs);
                                         // Toast.makeText(Roaster.this, "", Toast.LENGTH_SHORT).show();
                                     } else {
                                         LodingDialog.cancel();
@@ -324,7 +341,7 @@ public class ViewVisitor extends AppCompatActivity {
 
     }
 
-    private void addDataToFirestore(String uid, String nameofsubmitor, String nameOfVisitor, String purposeOfvisit, String date, String time_from, String time_to, int i, Context context, ALodingDialog lodingDialog, ImageView checkBox_Seen, CheckBox checkbox) {
+    private void addDataToFirestore(String uid, String nameofsubmitor, String nameOfVisitor, String purposeOfvisit, String date, String time_from, String time_to, int i, Context context, ALodingDialog lodingDialog, ImageView checkBox_Seen, CheckBox checkbox, SharedPreferences prefs) {
         AddVisitor addVisitor = new AddVisitor(uid, nameofsubmitor, nameOfVisitor, purposeOfvisit, date, time_from, time_to, i);
         String finalDocName = uid + nameOfVisitor + nameofsubmitor;
 
@@ -334,6 +351,12 @@ public class ViewVisitor extends AppCompatActivity {
                 lodingDialog.cancel();
                 checkBox_Seen.setVisibility(View.VISIBLE);
                 checkbox.setVisibility(View.GONE);
+                //   SharedPreferences sharedPref1 = getSharedPreferences("Seen", ViewVisitor.this.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("Visitor_name_seen", nameOfVisitor);
+                editor.putString("Submitor_name_seen", nameofsubmitor);
+                editor.putInt("AddedFrom_seen", 1);
+                editor.apply();
                 Toast.makeText(context, "You have seen :- " + nameOfVisitor, Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {

@@ -7,11 +7,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -33,20 +35,78 @@ public class CustomMessagingService extends FirebaseMessagingService {
 
     Uri defaultSoundUri;
 
+
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+
+        SharedPreferences sh = this.getSharedPreferences("application", Context.MODE_PRIVATE);
+        int fromWhere = sh.getInt("AddedFrom", -1);
+        String nameOfVisitor = sh.getString("Visitor_name", "");
+
+        //for seen
+        SharedPreferences sh_seen = PreferenceManager.getDefaultSharedPreferences(CustomMessagingService.this);
+        int fromWhere_seen = sh_seen.getInt("AddedFrom_seen", -1);
+        String nameOfVisitor_seen = sh_seen.getString("Visitor_name_seen", "");
+        String nameOfSubmitter_seen = sh_seen.getString("Submitor_name_seen", "");
+
+        //For Delete
+        SharedPreferences sh_delete = PreferenceManager.getDefaultSharedPreferences(CustomMessagingService.this);
+        int fromWhere_delete = sh_delete.getInt("AddedFrom_delete", -1);
+        String nameOfVisitor_delete = sh_delete.getString("Visitor_name_delete", "");
+        String nameOfSubmitter_delete = sh_delete.getString("Submitor_name_delete", "");
+
+
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (remoteMessage != null) {
             String title = remoteMessage.getNotification().getTitle();
             String message = remoteMessage.getNotification().getBody();
-            notifyUser(title, message);
+
+            if (fromWhere == 0) {
+                SharedPreferences.Editor editor = sh.edit().remove("Visitor_name");
+                editor.remove("AddedFrom");
+                editor.apply();
+                notifyUser(title, nameOfVisitor + " is visiting your office.");
+            } else if (fromWhere_seen == 1) {
+                SharedPreferences.Editor editor = sh_delete.edit().remove("Visitor_name_seen");
+                editor.remove("AddedFrom_seen");
+                editor.remove("Submitor_name_seen");
+                editor.apply();
+                notifyUser(title, "Visitor " + nameOfVisitor_seen + " has been seen by " + nameOfSubmitter_seen);
+            } else if (fromWhere_delete == 2) {
+                SharedPreferences.Editor editor = sh_seen.edit().remove("Visitor_name_delete");
+                editor.remove("AddedFrom_delete");
+                editor.remove("Submitor_name_delete");
+                editor.apply();
+                notifyUser(title, "Visitor " + nameOfVisitor_delete + " has been deleted by " + nameOfSubmitter_delete);
+
+            } else {
+                notifyUser(title, "Visitor's List has been Updated");
+            }
+
 
             if (remoteMessage.getData().size() > 0) {
+                if (fromWhere == 0) {
+                    SharedPreferences.Editor editor = sh.edit().remove("Visitor_name");
+                    editor.remove("AddedFrom");
+                    editor.apply();
+                    notifyUser(title, nameOfVisitor + " is visiting your office.");
+                } else if (fromWhere_seen == 1) {
+                    SharedPreferences.Editor editor = sh_delete.edit().remove("Visitor_name_seen");
+                    editor.remove("AddedFrom_seen");
+                    editor.remove("Submitor_name_seen");
+                    editor.apply();
+                    notifyUser(title, "Visitor " + nameOfVisitor_seen + " has been seen by you ");
+                } else if (fromWhere_delete == 2) {
+                    SharedPreferences.Editor editor = sh_seen.edit().remove("Visitor_name_delete");
+                    editor.remove("AddedFrom_delete");
+                    editor.remove("Submitor_name_delete");
+                    editor.apply();
+                    notifyUser(title, "Visitor " + nameOfVisitor_delete + " has been deleted by you " );
 
-                String title2 = remoteMessage.getData().get("title");
-                String message2 = remoteMessage.getData().get("message");
-                notifyUser(title2, message2);
+                } else {
+                    notifyUser(title, "Visitor's List Updated");
+                }
             }
             defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -81,7 +141,6 @@ public class CustomMessagingService extends FirebaseMessagingService {
                         .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
-                        .setColor(Color.BLUE)
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
 

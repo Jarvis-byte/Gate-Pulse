@@ -1,11 +1,10 @@
 package com.example.fmoapplication;
 
 import android.app.DatePickerDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -30,23 +29,18 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,7 +66,7 @@ public class AddNewVisitor extends AppCompatActivity {
     int minute2;
     Toast toast;
     int id = 0;
-    String msg;
+    //String msg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,7 +257,7 @@ public class AddNewVisitor extends AppCompatActivity {
                             String time_from = time_Picker_from.getText().toString();
                             String time_to = time_Picker_to.getText().toString();
                             System.out.println("called by  gamil");
-                            addDataToFirestore(uid, namearr[0], visitorName, purposeOfvisit, date, time_from, time_to);
+                            addDataToFirestore(uid, namearr[0], visitorName, purposeOfvisit, date, time_from, time_to,firstName);
 
 
                         } else {
@@ -277,7 +271,7 @@ public class AddNewVisitor extends AppCompatActivity {
                             String time_from = time_Picker_from.getText().toString();
                             String time_to = time_Picker_to.getText().toString();
                             System.out.println("called by non gamil");
-                            addDataToFirestore(uid, namearr[0], visitorName, purposeOfvisit, date, time_from, time_to);
+                            addDataToFirestore(uid, namearr[0], visitorName, purposeOfvisit, date, time_from, time_to, firstName);
                         }
                     }
                 }
@@ -306,47 +300,31 @@ public class AddNewVisitor extends AppCompatActivity {
         super.onPause();
 
     }
-    private void addDataToFirestore(String uid, String nameFirst, String visitorName, String purposeOfvisit, String date, String time_from, String time_to) {
+    private void addDataToFirestore(String uid, String nameFirst, String visitorName, String purposeOfvisit, String date, String time_from, String time_to, String firstName) {
 
 
         AddVisitor addVisitor = new AddVisitor(uid, nameFirst, visitorName, purposeOfvisit, date, time_from, time_to, 0);
-
-        String docName = addVisitor.getDate();
-        String docname[] = docName.split("/");
         String finalDocName = uid + visitorName + nameFirst;
-        db.collection("Visitor Data")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            int count = 0;
-                            for (DocumentSnapshot document : task.getResult()) {
-                                count++;
-                            }
-                            id = count;
-                            System.out.println("Count first\t:-\t" + id);
-                        } else {
-                            System.out.println("Error in count" + task.getException());
-                        }
-                    }
-                });
 
         db.collection("Visitor Data").document(finalDocName).set(addVisitor).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
+                SharedPreferences sharedPref = getSharedPreferences("application", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("Visitor_name", visitorName);
+
+                editor.putInt("AddedFrom", 0);
+                editor.apply();
+
                 aLodingDialog.cancel();
                 time_Picker_from.setText("Time - From");
                 time_Picker_to.setText("Time - To");
                 visitor_name.setText("");
                 purpose_of_visit.setText("");
-                //fire notification
-                id = id + 1;
-                System.out.println("Count after\t:-\t" + id);
-                //notification();
+                //  CustomMessagingService customMessagingService = new CustomMessagingService(0, visitorName);
 
 
-                Toast.makeText(AddNewVisitor.this, "Your Data has been added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddNewVisitor.this, "New Visitor has been added successfully", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

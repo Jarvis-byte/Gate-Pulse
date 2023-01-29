@@ -334,7 +334,7 @@ public class SignInActivity extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             // When task is successful
                                             // Redirect to profile activity
-
+                                            firebaseUser = firebaseAuth.getCurrentUser();
                                             setName(firebaseUser.getUid(), firebaseUser.getDisplayName());
 
 
