@@ -88,31 +88,34 @@
                 android:paddingEnd="32dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bottom_banner"
                 android:layout_marginTop="20dp">
 
-                <ImageView
-                    android:id="@+id/imageView10"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/imageView10"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent"-->
 
-                    app:srcCompat="@drawable/bottom_banner" />
+                <!--                    app:srcCompat="@drawable/bottom_banner" />-->
 
                 <TextView
                     android:id="@+id/curr_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:layout_marginTop="20dp"
                     android:textColor="#ffffff"
+                    android:layout_marginBottom="15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/curr_location"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView10"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="@+id/curr_location"
+                    tools:text="arka"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -120,16 +123,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
+                    android:layout_marginBottom="40dp"
                     android:text="Fetching Location..."
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="#FEDD06"
-                    android:layout_marginBottom="10dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.819"
-                    app:layout_constraintStart_toStartOf="@+id/imageView10"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.657" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,7 +3,6 @@ package com.example.fmoapplication;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -41,7 +40,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
 
@@ -94,14 +92,22 @@ public class SignInActivity extends AppCompatActivity {
                     if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                         if (!pass.isEmpty()) {
                             aLodingDialog.show();
+
                             firebaseAuth.signInWithEmailAndPassword(email, pass)
                                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                         @Override
                                         public void onSuccess(AuthResult authResult) {
-                                            aLodingDialog.cancel();
-                                            Toast.makeText(SignInActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class));
-                                            finish();
+
+                                            if (authResult.getUser().isEmailVerified()) {
+                                                aLodingDialog.cancel();
+                                                Toast.makeText(SignInActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class));
+                                                finish();
+                                            } else {
+                                                aLodingDialog.cancel();
+                                                Toast.makeText(SignInActivity.this, "Email verification pending! Please verify your email", Toast.LENGTH_SHORT).show();
+                                            }
+
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
@@ -202,7 +208,7 @@ public class SignInActivity extends AppCompatActivity {
         // Initialize firebase user
         firebaseUser = firebaseAuth.getCurrentUser();
         //  Check condition
-        if (firebaseUser != null) {
+        if (firebaseUser != null && firebaseUser.isEmailVerified()) {
             // When user already sign in
             // redirect to profile activity
             startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class)

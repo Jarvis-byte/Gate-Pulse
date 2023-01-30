@@ -80,17 +80,27 @@ public class SignUpActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+                                    //send the verification link
                                     FirebaseUser user = auth.getCurrentUser();
-                                    Toast.makeText(SignUpActivity.this, "SignUp Successful", Toast.LENGTH_SHORT).show();
-                                    String uId = user.getUid();
-                                    System.out.println("UID_SignUp" + uId);
+
+                                    user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(SignUpActivity.this, "Verification Email has been sent to you email Id. Please check and verify", Toast.LENGTH_SHORT).show();
+                                            String uId = user.getUid();
+                                            setName(uId, name);
+                                            Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(SignUpActivity.this, "Failed to send mail:- " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
 
 
-                                    setName(uId, name);
-
-                                    Intent intent = new Intent(SignUpActivity.this, HomeScreenDashboard.class);
-                                    startActivity(intent);
-                                    finish();
                                 } else {
                                     aLodingDialog.cancel();
                                     Toast.makeText(SignUpActivity.this, "SignUp Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

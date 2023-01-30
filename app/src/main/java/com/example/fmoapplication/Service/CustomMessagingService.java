@@ -59,54 +59,16 @@ public class CustomMessagingService extends FirebaseMessagingService {
 
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (remoteMessage != null) {
+
             String title = remoteMessage.getNotification().getTitle();
             String message = remoteMessage.getNotification().getBody();
-
-            if (fromWhere == 0) {
-                SharedPreferences.Editor editor = sh.edit().remove("Visitor_name");
-                editor.remove("AddedFrom");
-                editor.apply();
-                notifyUser(title, nameOfVisitor + " is visiting your office.");
-            } else if (fromWhere_seen == 1) {
-                SharedPreferences.Editor editor = sh_delete.edit().remove("Visitor_name_seen");
-                editor.remove("AddedFrom_seen");
-                editor.remove("Submitor_name_seen");
-                editor.apply();
-                notifyUser(title, "Visitor " + nameOfVisitor_seen + " has been seen by " + nameOfSubmitter_seen);
-            } else if (fromWhere_delete == 2) {
-                SharedPreferences.Editor editor = sh_seen.edit().remove("Visitor_name_delete");
-                editor.remove("AddedFrom_delete");
-                editor.remove("Submitor_name_delete");
-                editor.apply();
-                notifyUser(title, "Visitor " + nameOfVisitor_delete + " has been deleted by " + nameOfSubmitter_delete);
-
-            } else {
-                notifyUser(title, "Visitor's List has been Updated");
-            }
+            notifyUser(title, message);
 
 
             if (remoteMessage.getData().size() > 0) {
-                if (fromWhere == 0) {
-                    SharedPreferences.Editor editor = sh.edit().remove("Visitor_name");
-                    editor.remove("AddedFrom");
-                    editor.apply();
-                    notifyUser(title, nameOfVisitor + " is visiting your office.");
-                } else if (fromWhere_seen == 1) {
-                    SharedPreferences.Editor editor = sh_delete.edit().remove("Visitor_name_seen");
-                    editor.remove("AddedFrom_seen");
-                    editor.remove("Submitor_name_seen");
-                    editor.apply();
-                    notifyUser(title, "Visitor " + nameOfVisitor_seen + " has been seen by you ");
-                } else if (fromWhere_delete == 2) {
-                    SharedPreferences.Editor editor = sh_seen.edit().remove("Visitor_name_delete");
-                    editor.remove("AddedFrom_delete");
-                    editor.remove("Submitor_name_delete");
-                    editor.apply();
-                    notifyUser(title, "Visitor " + nameOfVisitor_delete + " has been deleted by you " );
 
-                } else {
-                    notifyUser(title, "Visitor's List Updated");
-                }
+                notifyUser(title, message);
+
             }
             defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
