@@ -7,13 +7,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -39,24 +37,6 @@ public class CustomMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
-        SharedPreferences sh = this.getSharedPreferences("application", Context.MODE_PRIVATE);
-        int fromWhere = sh.getInt("AddedFrom", -1);
-        String nameOfVisitor = sh.getString("Visitor_name", "");
-
-        //for seen
-        SharedPreferences sh_seen = PreferenceManager.getDefaultSharedPreferences(CustomMessagingService.this);
-        int fromWhere_seen = sh_seen.getInt("AddedFrom_seen", -1);
-        String nameOfVisitor_seen = sh_seen.getString("Visitor_name_seen", "");
-        String nameOfSubmitter_seen = sh_seen.getString("Submitor_name_seen", "");
-
-        //For Delete
-        SharedPreferences sh_delete = PreferenceManager.getDefaultSharedPreferences(CustomMessagingService.this);
-        int fromWhere_delete = sh_delete.getInt("AddedFrom_delete", -1);
-        String nameOfVisitor_delete = sh_delete.getString("Visitor_name_delete", "");
-        String nameOfSubmitter_delete = sh_delete.getString("Submitor_name_delete", "");
-
-
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (remoteMessage != null) {
 
@@ -90,11 +70,6 @@ public class CustomMessagingService extends FirebaseMessagingService {
             pendingIntent = PendingIntent.getActivity
                     (this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         }
-
-
-
-
-
         String channelId = getString(R.string.default_notification_channel_id);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
@@ -118,7 +93,6 @@ public class CustomMessagingService extends FirebaseMessagingService {
         }
 
         notificationManager.notify(0, notificationBuilder.build());
-
 
     }
 

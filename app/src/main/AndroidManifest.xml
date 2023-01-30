@@ -42,6 +42,12 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+            <intent-filter>
+                <action android:name="ViewVisitor" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+
         </activity>
         <activity
             android:name=".AddNewVisitor"
