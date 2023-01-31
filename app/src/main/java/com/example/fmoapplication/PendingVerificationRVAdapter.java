@@ -40,7 +40,7 @@ public class PendingVerificationRVAdapter extends RecyclerView.Adapter<PendingVe
 
     @Override
     public int getItemCount() {
-        return 0;
+        return userDataList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

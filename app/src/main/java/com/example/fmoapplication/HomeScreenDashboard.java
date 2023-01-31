@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -20,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -201,33 +199,36 @@ public class HomeScreenDashboard extends AppCompatActivity {
         btn_logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(HomeScreenDashboard.this);
-                View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
-                builder.setView(dialogView);
-                AlertDialog dialog = builder.create();
-                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // aLodingDialog.show();
-
-                        FirebaseAuth.getInstance().signOut();
-                        dialog.dismiss();
-                        Intent intent = new Intent(HomeScreenDashboard.this, SignInActivity.class);
-                        startActivity(intent);
-                        finish();
-
-                    }
-                });
-                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-                if (dialog.getWindow() != null) {
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-                }
-                dialog.show();
+                Intent intent = new Intent(HomeScreenDashboard.this, PendingVerification.class);
+                startActivity(intent);
+                finish();
+//                AlertDialog.Builder builder = new AlertDialog.Builder(HomeScreenDashboard.this);
+//                View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
+//                builder.setView(dialogView);
+//                AlertDialog dialog = builder.create();
+//                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        // aLodingDialog.show();
+//
+//                        FirebaseAuth.getInstance().signOut();
+//                        dialog.dismiss();
+//                        Intent intent = new Intent(HomeScreenDashboard.this, SignInActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//
+//                    }
+//                });
+//                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//                if (dialog.getWindow() != null) {
+//                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+//                }
+//                dialog.show();
 
             }
         });
