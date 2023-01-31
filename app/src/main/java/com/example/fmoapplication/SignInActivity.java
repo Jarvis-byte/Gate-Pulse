@@ -39,9 +39,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class SignInActivity extends AppCompatActivity {
     SignInButton googleLogin;
@@ -99,10 +102,30 @@ public class SignInActivity extends AppCompatActivity {
                                         public void onSuccess(AuthResult authResult) {
 
                                             if (authResult.getUser().isEmailVerified()) {
-                                                aLodingDialog.cancel();
-                                                Toast.makeText(SignInActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                                startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class));
-                                                finish();
+                                                aLodingDialog.cancel() ;
+                                                db.collection("User").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                        if (!queryDocumentSnapshots.isEmpty()) {
+                                                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                                                            for (DocumentSnapshot d : list) {
+                                                                User user = d.toObject(User.class);
+                                                                firebaseUser = firebaseAuth.getCurrentUser();
+                                                                if (user.getUid().equals(firebaseUser.getUid())) {
+                                                                    if (user.getIsVerified().equals("1")) {
+                                                                        Toast.makeText(SignInActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                                                        startActivity(new Intent(SignInActivity.this
+                                                                                , HomeScreenDashboard.class)
+                                                                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                                                        finish();
+                                                                    } else {
+                                                                        displayToast("Your account is waiting for verification with admin!");
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                });
                                             } else {
                                                 aLodingDialog.cancel();
                                                 Toast.makeText(SignInActivity.this, "Email verification pending! Please verify your email", Toast.LENGTH_SHORT).show();
@@ -337,13 +360,40 @@ public class SignInActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         // Check condition
+                                        boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
+
                                         if (task.isSuccessful()) {
                                             // When task is successful
                                             // Redirect to profile activity
                                             firebaseUser = firebaseAuth.getCurrentUser();
-                                            setName(firebaseUser.getUid(), firebaseUser.getDisplayName());
+                                            if (isNewUser) {
+                                                setName(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail());
+                                            } else {
+                                                //check if user is verified of not;
 
+                                                db.collection("User").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                        if (!queryDocumentSnapshots.isEmpty()) {
+                                                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                                                            for (DocumentSnapshot d : list) {
+                                                                User user = d.toObject(User.class);
+                                                                if (user.getUid().equals(firebaseUser.getUid())) {
+                                                                    if (user.getIsVerified().equals("1")) {
+                                                                        startActivity(new Intent(SignInActivity.this
+                                                                                , HomeScreenDashboard.class)
+                                                                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                                                        finish();
+                                                                    } else {
+                                                                        displayToast("Your account is waiting for verification with admin!");
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                });
 
+                                            }
 
                                         } else {
                                             // When task is unsuccessful
@@ -379,29 +429,24 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
-    private void setName(String uId, String Name) {
+    private void setName(String uId, String Name, String email) {
         HashMap<String, String> map = new HashMap<>();
 
         map.put("Name", Name);
         map.put("Uid", uId);
-       // System.out.println("UID_SignUp_setName" + uId);
+        map.put("isAdmin", "0");
+        map.put("isVerified", "0");
+        map.put("Email", email);
+        // System.out.println("UID_SignUp_setName" + uId);
         db.collection("User").document(uId).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 aLodingDialog.cancel();
-                System.out.println("UID_SignUp_setName" + uId);
-                startActivity(new Intent(SignInActivity.this
-                        , HomeScreenDashboard.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                finish();
-                // Display Toast
-                displayToast("Welcome");
-                Toast.makeText(SignInActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignInActivity.this, "Register Successfully. Please wait till account is verified by Admin", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                System.out.println("UID_SignUp_setName" + e.getMessage());
                 aLodingDialog.cancel();
                 Toast.makeText(SignInActivity.this, "Fail to Login!! Please try again\n" + e, Toast.LENGTH_SHORT).show();
             }

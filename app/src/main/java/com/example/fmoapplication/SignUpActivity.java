@@ -82,13 +82,12 @@ public class SignUpActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     //send the verification link
                                     FirebaseUser user = auth.getCurrentUser();
-
                                     user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
                                             Toast.makeText(SignUpActivity.this, "Verification Email has been sent to you email Id. Please check and verify", Toast.LENGTH_SHORT).show();
                                             String uId = user.getUid();
-                                            setName(uId, name);
+                                            setName(uId, name,user.getEmail());
                                             Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
                                             startActivity(intent);
                                             finish();
@@ -155,25 +154,27 @@ public class SignUpActivity extends AppCompatActivity {
         
     }
 
-    private void setName(String uId, String Name) {
+    private void setName(String uId, String Name, String email) {
 
         HashMap<String, String> map = new HashMap<>();
         map.put("Name", Name);
         map.put("Uid", uId);
-        System.out.println("UID_SignUp_setName" + uId);
+        map.put("isAdmin", "0");
+        map.put("isVerified", "0");
+        map.put("Email", email);
         db.collection("User").document(uId).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 aLodingDialog.cancel();
                 System.out.println("UID_SignUp_setName" + uId);
-                Toast.makeText(SignUpActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUpActivity.this, "Your name hase been saved!", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 System.out.println("UID_SignUp_setName" + e.getMessage());
                 aLodingDialog.cancel();
-                Toast.makeText(SignUpActivity.this, "Fail to Login!! Please try again\n" + e, Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUpActivity.this, "Failed to save your name!! Please try again\n" + e, Toast.LENGTH_SHORT).show();
             }
         });
     }
