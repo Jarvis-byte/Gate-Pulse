@@ -3,11 +3,13 @@ package com.example.fmoapplication;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -68,9 +70,10 @@ public class HomeScreenDashboard extends AppCompatActivity {
     private FirebaseFirestore db;
     private ALodingDialog aLodingDialog;
     private LinearLayout checkSchedule;
-    ImageView btn_logOut, profile_pic;
+    ImageView btn_logOut, profile_pic, btn_menu;
     private final static int REQUEST_CODE = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
+
     //ConstraintLayout constraint;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -78,6 +81,51 @@ public class HomeScreenDashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new__home_screen_dashboard_activity);
+
+        //checking for admin user
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+        String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        myEdit.clear();
+        myEdit.commit();
+        db = FirebaseFirestore.getInstance();
+        db.collection("User").document(Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                if (user.getIsAdmin().equals("1")) {
+                    System.out.println("ADMIN USER");
+                    myEdit.putBoolean("isAdmin", true);
+                    myEdit.commit();
+                }
+            }
+        });
+
+        btn_menu = findViewById(R.id.btn_menu);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                boolean isAdmin = sharedPreferences.getBoolean("isAdmin", false);
+                System.out.println("isAdmin123" + isAdmin);
+                if (isAdmin) {
+                    btn_menu.setVisibility(View.GONE);
+                }
+            }
+        }, 1000);
+
+        btn_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myEdit.clear();
+                myEdit.apply();
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(HomeScreenDashboard.this, SignInActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         Welcome_User = findViewById(R.id.Welcome_User);
         enterSchedule = findViewById(R.id.enterSchedule);
         checkSchedule = findViewById(R.id.checkSchedule);
@@ -96,7 +144,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
         curr_date.setGravity(Gravity.CENTER_VERTICAL);
         aLodingDialog = new ALodingDialog(this);
 
-        db = FirebaseFirestore.getInstance();
+
         for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
             if (user.getProviderId().equals("password")) {
                 System.out.println("User is signed in with email/password");
@@ -118,7 +166,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
             }
 
         } else {
-            String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            // String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             System.out.println("UID ELSE" + Uid);
             db.collection("User").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
@@ -199,9 +247,11 @@ public class HomeScreenDashboard extends AppCompatActivity {
         btn_logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(HomeScreenDashboard.this, PendingVerification.class);
                 startActivity(intent);
-                finish();
+
+                //finish();
 //                AlertDialog.Builder builder = new AlertDialog.Builder(HomeScreenDashboard.this);
 //                View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
 //                builder.setView(dialogView);
@@ -355,6 +405,19 @@ public class HomeScreenDashboard extends AppCompatActivity {
 
         FirebaseMessaging.getInstance().subscribeToTopic("PushNotifications");
 
+//        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+//        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+//        String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        db.collection("User").document(Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                User user = documentSnapshot.toObject(User.class);
+//                if (user.getIsAdmin().equals("1")) {
+//                    myEdit.putBoolean("isAdmin", true);
+//                    myEdit.commit();
+//                }
+//            }
+//        });
 
     }
 

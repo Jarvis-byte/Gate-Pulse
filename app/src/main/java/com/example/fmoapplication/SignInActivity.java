@@ -3,6 +3,7 @@ package com.example.fmoapplication;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -41,10 +42,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class SignInActivity extends AppCompatActivity {
     SignInButton googleLogin;
@@ -102,27 +101,35 @@ public class SignInActivity extends AppCompatActivity {
                                         public void onSuccess(AuthResult authResult) {
 
                                             if (authResult.getUser().isEmailVerified()) {
-                                                aLodingDialog.cancel() ;
-                                                db.collection("User").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                aLodingDialog.cancel();
+                                                String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                                System.out.println("UID from shared pref" + Uid);
+                                                db.collection("User").document(Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                     @Override
-                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                        if (!queryDocumentSnapshots.isEmpty()) {
-                                                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                                                            for (DocumentSnapshot d : list) {
-                                                                User user = d.toObject(User.class);
-                                                                firebaseUser = firebaseAuth.getCurrentUser();
-                                                                if (user.getUid().equals(firebaseUser.getUid())) {
-                                                                    if (user.getIsVerified().equals("1")) {
-                                                                        Toast.makeText(SignInActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                                                        startActivity(new Intent(SignInActivity.this
-                                                                                , HomeScreenDashboard.class)
-                                                                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                                                                        finish();
-                                                                    } else {
-                                                                        displayToast("Your account is waiting for verification with admin!");
-                                                                    }
-                                                                }
+                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                        if (documentSnapshot.exists()) {
+
+                                                            User user = documentSnapshot.toObject(User.class);
+                                                            System.out.println("Document from shared pref" + user.getName());
+                                                            if (user.getIsVerified().equals("1")) {
+//                                                                if (user.getIsAdmin().equals("1")) {
+//                                                                    myEdit.putBoolean("isAdmin", true);
+//                                                                    myEdit.commit();
+//                                                                } else {
+//                                                                    myEdit.putBoolean("isAdmin", false);
+//                                                                    myEdit.commit();
+//                                                                }
+
+                                                                Toast.makeText(SignInActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                                                startActivity(new Intent(SignInActivity.this
+                                                                        , HomeScreenDashboard.class)
+                                                                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                                                finish();
+                                                            } else {
+                                                                displayToast("Your account is waiting for verification with admin!");
                                                             }
+
+
                                                         }
                                                     }
                                                 });
@@ -371,24 +378,29 @@ public class SignInActivity extends AppCompatActivity {
                                             } else {
                                                 //check if user is verified of not;
 
-                                                db.collection("User").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                db.collection("User").document().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                     @Override
-                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                        if (!queryDocumentSnapshots.isEmpty()) {
-                                                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                                                            for (DocumentSnapshot d : list) {
-                                                                User user = d.toObject(User.class);
-                                                                if (user.getUid().equals(firebaseUser.getUid())) {
-                                                                    if (user.getIsVerified().equals("1")) {
-                                                                        startActivity(new Intent(SignInActivity.this
-                                                                                , HomeScreenDashboard.class)
-                                                                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                                                                        finish();
-                                                                    } else {
-                                                                        displayToast("Your account is waiting for verification with admin!");
-                                                                    }
+                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                        if (documentSnapshot.exists()) {
+                                                            User user = documentSnapshot.toObject(User.class);
+                                                            if (user.getUid().equals(firebaseUser.getUid())) {
+                                                                if (user.getIsVerified().equals("1")) {
+//                                                                    if (user.getIsAdmin().equals("1")) {
+//                                                                        myEdit.putBoolean("isAdmin", true);
+//                                                                        myEdit.commit();
+//                                                                    } else {
+//                                                                        myEdit.putBoolean("isAdmin", false);
+//                                                                        myEdit.commit();
+//                                                                    }
+                                                                    startActivity(new Intent(SignInActivity.this
+                                                                            , HomeScreenDashboard.class)
+                                                                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                                                    finish();
+                                                                } else {
+                                                                    displayToast("Your account is waiting for verification with admin!");
                                                                 }
                                                             }
+
                                                         }
                                                     }
                                                 });
