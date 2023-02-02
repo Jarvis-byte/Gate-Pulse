@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -45,10 +46,9 @@ import java.util.Calendar;
 import java.util.List;
 
 public class TimesheetActivity extends AppCompatActivity {
-    TextView Welcome_User;
+
     GoogleSignInOptions googleSignInOptions;
     GoogleSignInClient googleSignInClient;
-    String TAG = "TAG";
     private TextView date_picker;
     private FirebaseFirestore db;
     private TextView time_Picker_from;
@@ -59,9 +59,8 @@ public class TimesheetActivity extends AppCompatActivity {
     private ALodingDialog aLodingDialog;
     String name;
     boolean emailLogin = false;
-    ImageView btn_logOut, back;
+    ImageView back;
     ArrayList<User> Userlist = new ArrayList<>();
-    ArrayList<Pin> PinList = new ArrayList<>();
     int hour1;
     int minute1;
     int hour2;
@@ -76,6 +75,11 @@ public class TimesheetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // Welcome_User = findViewById(R.id.Welcome_User);
+
+
+
+
+
         date_picker = findViewById(R.id.date_picker);
         time_Picker_from = findViewById(R.id.time_Picker_from);
         time_Picker_to = findViewById(R.id.time_Picker_to);
@@ -94,6 +98,7 @@ public class TimesheetActivity extends AppCompatActivity {
                 emailLogin = true;
             }
         }
+
 
 
         final Calendar calendar = Calendar.getInstance();

@@ -19,12 +19,17 @@ public class ViewVisitorRVAdapter extends RecyclerView.Adapter<ViewVisitorRVAdap
     private ArrayList<AddVisitor> roasterArrayList;
     private Context context;
     private ItemClickListner mItemListener;
-    // creating constructor for our adapter class
-    public ViewVisitorRVAdapter(ArrayList<AddVisitor> roasterArrayList, Context context, ItemClickListner itemClickListner) {
+    private boolean isAdmin;
+
+    public ViewVisitorRVAdapter(ArrayList<AddVisitor> roasterArrayList, boolean isAdmin, Context context, ItemClickListner mItemListener) {
         this.roasterArrayList = roasterArrayList;
         this.context = context;
-        this.mItemListener = itemClickListner;
+        this.mItemListener = mItemListener;
+        this.isAdmin = isAdmin;
     }
+
+    // creating constructor for our adapter class
+
 
     public ViewVisitorRVAdapter() {
     }
@@ -55,13 +60,21 @@ public class ViewVisitorRVAdapter extends RecyclerView.Adapter<ViewVisitorRVAdap
             holder.seenImage.setVisibility(View.VISIBLE);
             holder.checkBox_Seen.setVisibility(View.GONE);
         }
-        holder.checkBox_Seen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                ViewVisitor viewVisitor = new ViewVisitor();
-                viewVisitor.addSeen(isChecked, holder.checkBox_Seen, context, data, position,roasterArrayList,  holder.seenImage);
-            }
-        });
+
+        if (isAdmin) {
+            System.out.println("ADMIN FROM RV" + isAdmin);
+            holder.checkBox_Seen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                        ViewVisitor viewVisitor = new ViewVisitor();
+                        viewVisitor.addSeen(isChecked, holder.checkBox_Seen, context, data, position, roasterArrayList, holder.seenImage);
+                    }
+                });
+
+        } else {
+            holder.checkBox_Seen.setVisibility(View.GONE);
+        }
+
     }
 
 //    private void saveDataToDB(AddVisitor addVisitor) {

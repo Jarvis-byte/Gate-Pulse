@@ -1,15 +1,13 @@
 package com.example.fmoapplication;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,81 +55,87 @@ public class Roaster extends AppCompatActivity {
         // initializing our variable for firebase
         // firestore and getting its instance.
         db = FirebaseFirestore.getInstance();
-
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+        boolean isAdmin = sharedPreferences.getBoolean("isAdmin", false);
+        System.out.println("ADMIN:-\t" + isAdmin);
         // creating our new array list
         coursesArrayList = new ArrayList<>();
         dataRV.setHasFixedSize(true);
         dataRV.setLayoutManager(new LinearLayoutManager(this));
         //+ coursesArrayList.size()
-        System.out.println("ArrayList Size"+ coursesArrayList.size());
+        System.out.println("ArrayList Size" + coursesArrayList.size());
         // adding our array list to our recycler view adapter class.
         courseRVAdapter = new RoasterRVAdapter(coursesArrayList, this, new RoasterRVAdapter.ItemClickListner() {
             @Override
             public void onItemClick(Data data, int position) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(Roaster.this);
-                View dialogView = getLayoutInflater().inflate(R.layout.dialog_pin, null);
-                EditText emailBox = dialogView.findViewById(R.id.emailBox);
-                builder.setView(dialogView);
-                AlertDialog dialog = builder.create();
-                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String userEmail = emailBox.getText().toString();
-                        aLodingDialog.show();
-                        if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
-                            aLodingDialog.cancel();
-                            Toast.makeText(Roaster.this, "Enter your Admin PIN", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        db.collection("Pin").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                if (!queryDocumentSnapshots.isEmpty()) {
-                                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                                    for (DocumentSnapshot d : list) {
-                                        System.out.println(list);
-                                        Pin pin = d.toObject(Pin.class);
-                                        System.out.println("PIN" + pin.getAuthCode());
-                                        String enterpin = emailBox.getText().toString();
+                if (isAdmin) {
+                    aLodingDialog.cancel();
+                    String firstName = data.getName();
+                    String namearr[] = firstName.split(" ");
+                    verifyRoaster(data.getUid(), data.getDate(), namearr[0], data.getApprovalStatus(), data.getTime_FROM(), data.getTime_to(), position);
 
-                                        if (pin.getAuthCode().equals(enterpin)) {
-                                            dialog.dismiss();
-                                            aLodingDialog.cancel();
-                                            String firstName = data.getName();
-                                            String namearr[] = firstName.split(" ");
-                                            verifyRoaster(data.getUid(), data.getDate(), namearr[0], data.getApprovalStatus(), data.getTime_FROM(), data.getTime_to(), position);
-                                            // Toast.makeText(Roaster.this, "", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            aLodingDialog.cancel();
-                                            emailBox.setText("");
-                                            Toast.makeText(Roaster.this, "Wrong Pin!!! Please enter correct PIN", Toast.LENGTH_SHORT).show();
-                                        }
-
-                                    }
-                                }
-
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                aLodingDialog.cancel();
-                                Toast.makeText(Roaster.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-
-                    }
-                });
-                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-                if (dialog.getWindow() != null) {
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+//
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(Roaster.this);
+//                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_pin, null);
+//                    EditText emailBox = dialogView.findViewById(R.id.emailBox);
+//                    builder.setView(dialogView);
+//                    AlertDialog dialog = builder.create();
+//                    dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            String userEmail = emailBox.getText().toString();
+//                            aLodingDialog.show();
+//                            if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
+//                                aLodingDialog.cancel();
+//                                Toast.makeText(Roaster.this, "Enter your Admin PIN", Toast.LENGTH_SHORT).show();
+//                                return;
+//                            }
+//                            db.collection("Pin").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                                @Override
+//                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                                    if (!queryDocumentSnapshots.isEmpty()) {
+//                                        List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+//                                        for (DocumentSnapshot d : list) {
+//                                            System.out.println(list);
+//                                            Pin pin = d.toObject(Pin.class);
+//                                            System.out.println("PIN" + pin.getAuthCode());
+//                                            String enterpin = emailBox.getText().toString();
+//
+//                                            if (pin.getAuthCode().equals(enterpin)) {
+//
+//                                                // Toast.makeText(Roaster.this, "", Toast.LENGTH_SHORT).show();
+//                                            } else {
+//                                                aLodingDialog.cancel();
+//                                                emailBox.setText("");
+//                                                Toast.makeText(Roaster.this, "Wrong Pin!!! Please enter correct PIN", Toast.LENGTH_SHORT).show();
+//                                            }
+//
+//                                        }
+//                                    }
+//
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+//                                    aLodingDialog.cancel();
+//                                    Toast.makeText(Roaster.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//
+//
+//                        }
+//                    });
+//                    dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            dialog.dismiss();
+//                        }
+//                    });
+//                    if (dialog.getWindow() != null) {
+//                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+//                    }
+//                    dialog.show();
                 }
-                dialog.show();
             }
         });
 
@@ -186,6 +190,7 @@ public class Roaster extends AppCompatActivity {
         dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                aLodingDialog.show();
                 String datearr[] = date.split("/");
                 String finalDate = datearr[0] + datearr[1] + datearr[2] + time_from;
 
@@ -202,6 +207,7 @@ public class Roaster extends AppCompatActivity {
                     dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            aLodingDialog.show();
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                             System.out.println("Final Date\t" + finalDate);
                             DocumentReference docRef = db.collection("Data").document(name + finalDate);
@@ -209,6 +215,7 @@ public class Roaster extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
+                                        aLodingDialog.cancel();
                                         Toast.makeText(Roaster.this, "Your Data Deleted", Toast.LENGTH_SHORT).show();
                                         coursesArrayList.remove(position);
                                         courseRVAdapter.notifyDataSetChanged();
@@ -216,6 +223,7 @@ public class Roaster extends AppCompatActivity {
                                         dialog.dismiss();
 
                                     } else {
+                                        aLodingDialog.cancel();
                                         Toast.makeText(Roaster.this, "Not Deleted", Toast.LENGTH_SHORT).show();
 
                                     }
@@ -228,6 +236,7 @@ public class Roaster extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             dialog1.dismiss();
+                            aLodingDialog.cancel();
                         }
                     });
                     if (dialog1.getWindow() != null) {
@@ -249,11 +258,13 @@ public class Roaster extends AppCompatActivity {
                         coursesArrayList.set(position, data);
                         System.out.println("ArrayList Size" + coursesArrayList.size());
                         courseRVAdapter.notifyDataSetChanged();
+                        aLodingDialog.cancel();
                         dialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        aLodingDialog.cancel();
                         Toast.makeText(Roaster.this, "Fail to add data!! Please try again \n" + e, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -262,6 +273,7 @@ public class Roaster extends AppCompatActivity {
         dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                aLodingDialog.cancel();
                 dialog.dismiss();
             }
         });

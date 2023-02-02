@@ -32,10 +32,11 @@
                     android:id="@+id/btn_logOut"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:clickable="false"
                     android:layout_marginTop="32dp"
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
+                    android:visibility="invisible"
                     app:srcCompat="@drawable/log_out_32" />
 
                 <ImageView
@@ -46,6 +47,8 @@
                     android:layout_marginTop="32dp"
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
+                    android:clickable="false"
+                    android:visibility="invisible"
                     app:srcCompat="@drawable/menu" />
             </RelativeLayout>
 

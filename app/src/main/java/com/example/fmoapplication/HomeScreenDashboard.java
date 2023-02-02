@@ -5,11 +5,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -86,9 +87,12 @@ public class HomeScreenDashboard extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
         SharedPreferences.Editor myEdit = sharedPreferences.edit();
         String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        db = FirebaseFirestore.getInstance();
         myEdit.clear();
         myEdit.commit();
-        db = FirebaseFirestore.getInstance();
+        btn_menu = findViewById(R.id.btn_menu);
+        btn_logOut = findViewById(R.id.btn_logOut);
         db.collection("User").document(Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -97,33 +101,36 @@ public class HomeScreenDashboard extends AppCompatActivity {
                     System.out.println("ADMIN USER");
                     myEdit.putBoolean("isAdmin", true);
                     myEdit.commit();
+                    btn_logOut.setVisibility(View.GONE);
+                    btn_menu.setVisibility(View.VISIBLE);
+                    btn_menu.setClickable(true);
+                } else {
+                    btn_logOut.setClickable(true);
+                    btn_logOut.setVisibility(View.VISIBLE);
+                    btn_menu.setVisibility(View.GONE);
                 }
             }
         });
 
-        btn_menu = findViewById(R.id.btn_menu);
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Do something after 5s = 5000ms
-                boolean isAdmin = sharedPreferences.getBoolean("isAdmin", false);
-                System.out.println("isAdmin123" + isAdmin);
-                if (isAdmin) {
-                    btn_menu.setVisibility(View.GONE);
-                }
-            }
-        }, 1000);
+
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                // Do something after 5s = 5000ms
+//                boolean isAdmin = sharedPreferences.getBoolean("isAdmin", false);
+//                System.out.println("isAdmin123" + isAdmin);
+//                if (isAdmin) {
+//
+//                }
+//            }
+//        }, 1000);
 
         btn_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myEdit.clear();
-                myEdit.apply();
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(HomeScreenDashboard.this, SignInActivity.class);
+                Intent intent = new Intent(HomeScreenDashboard.this, PendingVerification.class);
                 startActivity(intent);
-                finish();
             }
         });
         Welcome_User = findViewById(R.id.Welcome_User);
@@ -132,8 +139,6 @@ public class HomeScreenDashboard extends AppCompatActivity {
         add_visitor = findViewById(R.id.add_visitor);
         view_visitor = findViewById(R.id.view_visitor);
         greeting_text = findViewById(R.id.greeting_text);
-
-
         curr_date = findViewById(R.id.curr_date);
         curr_location = findViewById(R.id.curr_location);
         curr_location.setCompoundDrawablesWithIntrinsicBounds(R.drawable.placeholder, 0, 0, 0);
@@ -219,7 +224,6 @@ public class HomeScreenDashboard extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Roaster.class);
                 startActivity(intent);
-
             }
         });
 
@@ -242,43 +246,38 @@ public class HomeScreenDashboard extends AppCompatActivity {
         // getLocation();
         setGreetingMessage();
 
-        btn_logOut = findViewById(R.id.btn_logOut);
+
         //Logout
         btn_logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeScreenDashboard.this);
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
+                builder.setView(dialogView);
+                AlertDialog dialog = builder.create();
+                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // aLodingDialog.show();
 
-                Intent intent = new Intent(HomeScreenDashboard.this, PendingVerification.class);
-                startActivity(intent);
+                        FirebaseAuth.getInstance().signOut();
+                        dialog.dismiss();
+                        Intent intent = new Intent(HomeScreenDashboard.this, SignInActivity.class);
+                        startActivity(intent);
+                        finish();
 
-                //finish();
-//                AlertDialog.Builder builder = new AlertDialog.Builder(HomeScreenDashboard.this);
-//                View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
-//                builder.setView(dialogView);
-//                AlertDialog dialog = builder.create();
-//                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        // aLodingDialog.show();
-//
-//                        FirebaseAuth.getInstance().signOut();
-//                        dialog.dismiss();
-//                        Intent intent = new Intent(HomeScreenDashboard.this, SignInActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//
-//                    }
-//                });
-//                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//                if (dialog.getWindow() != null) {
-//                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-//                }
-//                dialog.show();
+                    }
+                });
+                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                }
+                dialog.show();
 
             }
         });

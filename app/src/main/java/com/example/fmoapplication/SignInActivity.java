@@ -378,20 +378,14 @@ public class SignInActivity extends AppCompatActivity {
                                             } else {
                                                 //check if user is verified of not;
 
-                                                db.collection("User").document().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                db.collection("User").document(firebaseUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                     @Override
                                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                                         if (documentSnapshot.exists()) {
                                                             User user = documentSnapshot.toObject(User.class);
                                                             if (user.getUid().equals(firebaseUser.getUid())) {
                                                                 if (user.getIsVerified().equals("1")) {
-//                                                                    if (user.getIsAdmin().equals("1")) {
-//                                                                        myEdit.putBoolean("isAdmin", true);
-//                                                                        myEdit.commit();
-//                                                                    } else {
-//                                                                        myEdit.putBoolean("isAdmin", false);
-//                                                                        myEdit.commit();
-//                                                                    }
+//
                                                                     startActivity(new Intent(SignInActivity.this
                                                                             , HomeScreenDashboard.class)
                                                                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
