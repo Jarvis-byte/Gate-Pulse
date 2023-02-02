@@ -129,7 +129,8 @@ public class HomeScreenDashboard extends AppCompatActivity {
         btn_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeScreenDashboard.this, PendingVerification.class);
+
+                Intent intent = new Intent(HomeScreenDashboard.this, Profile_Page.class);
                 startActivity(intent);
             }
         });
