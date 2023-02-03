@@ -152,6 +152,16 @@ public class Profile_Page extends AppCompatActivity {
             }
         });
 
+
+        btn_make_admin = findViewById(R.id.btn_make_admin);
+        btn_make_admin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Profile_Page.this, Admin_User.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
