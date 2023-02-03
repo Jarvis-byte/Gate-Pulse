@@ -62,7 +62,7 @@ public class ViewVisitorRVAdapter extends RecyclerView.Adapter<ViewVisitorRVAdap
         }
 
         if (isAdmin) {
-            System.out.println("ADMIN FROM RV" + isAdmin);
+            //System.out.println("ADMIN FROM RV" + isAdmin);
             holder.checkBox_Seen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {

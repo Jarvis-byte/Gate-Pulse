@@ -1,15 +1,19 @@
 package com.example.fmoapplication;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -24,6 +28,9 @@ public class PendingVerificationRVAdapter extends RecyclerView.Adapter<PendingVe
         this.mItemListener = mItemListener;
     }
 
+    public PendingVerificationRVAdapter() {
+    }
+
     @NonNull
     @Override
     public PendingVerificationRVAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -31,10 +38,19 @@ public class PendingVerificationRVAdapter extends RecyclerView.Adapter<PendingVe
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PendingVerificationRVAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PendingVerificationRVAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         User user = userDataList.get(position);
         holder.idTVempName.setText(user.getName());
         holder.idTVemail.setText(user.getEmail());
+
+        holder.Check_box_verify.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                PendingVerification pendingVerification = new PendingVerification();
+                pendingVerification.addSeen(isChecked, holder.Check_box_verify, context, user, position, userDataList, PendingVerificationRVAdapter.this);
+            }
+        });
+
 
     }
 
