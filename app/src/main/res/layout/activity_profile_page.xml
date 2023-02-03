@@ -151,7 +151,7 @@
                         android:elevation="3dp"
                         android:paddingStart="20dp"
                         android:paddingEnd="10dp"
-                        android:text="Make Admin"
+                        android:text="Admin Users"
                         android:textAlignment="viewStart"
                         android:textColor="#7868e5"
                         android:textSize="18sp"

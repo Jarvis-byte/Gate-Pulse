@@ -26,10 +26,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".ui.login.Admin_User"
-            android:exported="false"
-            android:label="@string/title_activity_admin_user" />
+
         <activity
             android:name=".Profile_Page"
             android:exported="false">
