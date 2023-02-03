@@ -143,7 +143,6 @@ public class PendingVerification extends AppCompatActivity {
             @Override
             public void onSuccess(Void unused) {
                 lodingDialog.cancel();
-                //  checkbox.setChecked(false);
                 System.out.println("Position verified\t" + position);
                 userDataList.remove(position);
                 pendingVerificationRVAdapter1.notifyDataSetChanged();
