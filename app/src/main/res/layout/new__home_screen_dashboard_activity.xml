@@ -48,8 +48,7 @@
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
                     android:clickable="false"
-                    android:visibility="invisible"
-                    app:srcCompat="@drawable/menu" />
+                    app:srcCompat="@drawable/menu_bar" />
             </RelativeLayout>
 
 
