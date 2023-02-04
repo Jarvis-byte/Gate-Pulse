@@ -12,6 +12,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -46,6 +47,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,6 +62,11 @@ import co.mobiwise.materialintro.shape.Focus;
 import co.mobiwise.materialintro.shape.FocusGravity;
 import co.mobiwise.materialintro.shape.ShapeType;
 import co.mobiwise.materialintro.view.MaterialIntroView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class HomeScreenDashboard extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -74,7 +83,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
     ImageView btn_logOut, profile_pic, btn_menu;
     private final static int REQUEST_CODE = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
-
+    String MYresponse;
     //ConstraintLayout constraint;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -419,12 +428,13 @@ public class HomeScreenDashboard extends AppCompatActivity {
 //                }
 //            }
 //        });
+        //fetchWeather();
 
     }
 
     private void getLastLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-         //   System.out.println("Location first if");
+            //   System.out.println("Location first if");
             LocationRequest mLocationRequest = LocationRequest.create();
             mLocationRequest.setInterval(60000);
             mLocationRequest.setFastestInterval(5000);
@@ -441,11 +451,10 @@ public class HomeScreenDashboard extends AppCompatActivity {
 
                             try {
                                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
                                 StrictMode.setThreadPolicy(policy);
                                 Geocoder geocoder = new Geocoder(HomeScreenDashboard.this, Locale.getDefault());
                                 List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-
+                                fetchWeather(location.getLatitude(), location.getLongitude());
                                 curr_location.setText(addresses.get(0).getLocality() + ",\t" + addresses.get(0).getCountryName());
 
                             } catch (IOException e) {
@@ -566,24 +575,68 @@ public class HomeScreenDashboard extends AppCompatActivity {
 
             greeting_text.setText(" Good Morning");
 
-        //   greeting_text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.sunrise, 0, 0, 0);
+            //   greeting_text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.sunrise, 0, 0, 0);
         } else if (timeOfDay >= 12 && timeOfDay < 16) {
             greeting_text.setText(" Good Afternoon");
 
 
-         //   greeting_text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.afternoon, 0, 0, 0);
+            //   greeting_text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.afternoon, 0, 0, 0);
         } else if (timeOfDay >= 16 && timeOfDay < 21) {
 
             greeting_text.setText(" Good Evening");
 
 
-           // greeting_text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.sunset, 0, 0, 0);
+            // greeting_text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.sunset, 0, 0, 0);
 
         } else if (timeOfDay >= 21 && timeOfDay < 24) {
 
             greeting_text.setText(" Good Night");
-           // greeting_text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.night, 0, 0, 0);
+            // greeting_text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.night, 0, 0, 0);
 
         }
     }
+
+    public void fetchWeather(double getLatitude, double getLongitude) {
+        OkHttpClient client = new OkHttpClient();
+        String url = "https://api.open-meteo.com/v1/forecast?current_weather=true&latitude=" + getLatitude + "&longitude=" + getLongitude + "&timezone=auto";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.i("Failed to call", e.getMessage());
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    MYresponse = response.body().string();
+
+                    System.out.println("Response:-\t" + MYresponse);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(MYresponse);
+                        JSONObject daily = jsonObject.getJSONObject("current_weather");
+                        System.out.println("Temperature" + daily.get("temperature"));
+                        String temp = String.valueOf(daily.get("temperature"));
+                        HomeScreenDashboard.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                curr_date.append("\t" + temp+"°");
+                            }
+                        });
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+    }
+
 }
