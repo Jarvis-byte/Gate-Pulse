@@ -2,6 +2,7 @@ package com.example.fmoapplication;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -42,13 +43,16 @@ public class ViewVisitor extends AppCompatActivity {
     private ALodingDialog aLodingDialog;
     TextView text_no_data;
     LayoutInflater inflater;
-
+    String User_Name;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_visitor);
+        Intent intent = getIntent();
+        User_Name = intent.getStringExtra("User_Name");
+        System.out.println("User Name" + User_Name);
         dataRV = findViewById(R.id.idRVdata);
         text_no_data = findViewById(R.id.text_no_data);
         imageView = findViewById(R.id.imageView);
@@ -72,7 +76,7 @@ public class ViewVisitor extends AppCompatActivity {
         System.out.println("ADMIN:-\t" + isAdmin);
 
 
-        courseRVAdapter = new ViewVisitorRVAdapter(coursesArrayList, isAdmin, this, new ViewVisitorRVAdapter.ItemClickListner() {
+        courseRVAdapter = new ViewVisitorRVAdapter(coursesArrayList, isAdmin, User_Name, this, new ViewVisitorRVAdapter.ItemClickListner() {
             @Override
             public void onItemClick(AddVisitor data, int position) {
                 if (isAdmin) {
@@ -123,68 +127,6 @@ public class ViewVisitor extends AppCompatActivity {
                     dialog1.show();
                     return;
                 }
-
-//                AlertDialog.Builder builder = new AlertDialog.Builder(ViewVisitor.this);
-//                View dialogView = getLayoutInflater().inflate(R.layout.dialog_pin, null);
-//                EditText emailBox = dialogView.findViewById(R.id.emailBox);
-//                builder.setView(dialogView);
-//                AlertDialog dialog = builder.create();
-//                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        String userEmail = emailBox.getText().toString();
-//                        aLodingDialog.show();
-//                        if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
-//                            aLodingDialog.cancel();
-//                            Toast.makeText(ViewVisitor.this, "Enter your Admin PIN", Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//                        db.collection("Pin").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                                if (!queryDocumentSnapshots.isEmpty()) {
-//                                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-//                                    for (DocumentSnapshot d : list) {
-//                                        System.out.println(list);
-//                                        Pin pin = d.toObject(Pin.class);
-//                                        System.out.println("PIN" + pin.getAuthCode());
-//                                        String enterpin = emailBox.getText().toString();
-//
-//                                        if (pin.getAuthCode().equals(enterpin)) {
-//                                            dialog.dismiss();
-//
-//
-//                                        } else {
-//                                            aLodingDialog.cancel();
-//                                            emailBox.setText("");
-//                                            Toast.makeText(ViewVisitor.this, "Wrong Pin!!! Please enter correct PIN", Toast.LENGTH_SHORT).show();
-//                                        }
-//
-//                                    }
-//                                }
-//
-//                            }
-//                        }).addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                aLodingDialog.cancel();
-//                                Toast.makeText(ViewVisitor.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//
-//
-//                    }
-//                });
-//                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//                if (dialog.getWindow() != null) {
-//                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-//                }
-//                dialog.show();
             }
         });
 
@@ -252,11 +194,11 @@ public class ViewVisitor extends AppCompatActivity {
         });
     }
 
-    public void addSeen(boolean isChecked, CheckBox checkbox, Context context, AddVisitor data, int position, ArrayList<AddVisitor> roasterArrayList, ImageView checkBox_Seen) {
+    public void addSeen(boolean isChecked, CheckBox checkbox, Context context, AddVisitor data, int position, ArrayList<AddVisitor> roasterArrayList, ImageView checkBox_Seen, String User_name_Seen) {
         ALodingDialog LodingDialog = new ALodingDialog(context);
         LodingDialog.show();
         db = FirebaseFirestore.getInstance();
-        System.out.println("Posistion" + position);
+        System.out.println("SEEN BY " + User_Name);
         if (isChecked) {
 //            boolean isSuccessful = performActivity();
 //            if (isSuccessful) {
@@ -265,7 +207,7 @@ public class ViewVisitor extends AppCompatActivity {
 //                checkbox.setChecked(false);
 //            }
 
-            addDataToFirestore(data.getUid(), data.getNameofsubmitor(), data.getNameOfVisitor(), data.getPurposeOfvisit(), data.getDate(), data.getTime_from(), data.getTime_to(), 1, context, LodingDialog, checkBox_Seen, checkbox);
+            addDataToFirestore(data.getUid(), data.getNameofsubmitor(), data.getNameOfVisitor(), data.getPurposeOfvisit(), data.getDate(), data.getTime_from(), data.getTime_to(), 1, context, LodingDialog, checkBox_Seen, checkbox, User_name_Seen);
 
             //  SharedPreferences sharedPref = getSharedPreferences("application", MODE_PRIVATE);
 //            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -331,10 +273,11 @@ public class ViewVisitor extends AppCompatActivity {
 
     }
 
-    private void addDataToFirestore(String uid, String nameofsubmitor, String nameOfVisitor, String purposeOfvisit, String date, String time_from, String time_to, int i, Context context, ALodingDialog lodingDialog, ImageView checkBox_Seen, CheckBox checkbox) {
-        AddVisitor addVisitor = new AddVisitor(uid, nameofsubmitor, nameOfVisitor, purposeOfvisit, date, time_from, time_to, i);
+    private void addDataToFirestore(String uid, String nameofsubmitor, String nameOfVisitor, String purposeOfvisit, String date, String time_from, String time_to, int i, Context context, ALodingDialog lodingDialog, ImageView checkBox_Seen, CheckBox checkbox, String User_name_Seen) {
+        AddVisitor addVisitor = new AddVisitor(uid, nameofsubmitor, nameOfVisitor, purposeOfvisit, date, time_from, time_to, i, User_name_Seen);
+        System.out.println("User Name seen" + User_name_Seen);
         String finalDocName = uid + nameOfVisitor + nameofsubmitor;
-
+        // db.collection("Visitor Data").document(finalDocName).set("seenBy", User_Name);
         db.collection("Visitor Data").document(finalDocName).set(addVisitor).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {

@@ -9,11 +9,9 @@ public class AddVisitor {
     private String Time_from;
     private String Time_to;
     private int seen;
+    private String seenBy;
 
-    public AddVisitor() {
-    }
-
-    public AddVisitor(String uid, String nameofsubmitor, String nameOfVisitor, String purposeOfvisit, String date, String time_from, String time_to, int seen) {
+    public AddVisitor(String uid, String nameofsubmitor, String nameOfVisitor, String purposeOfvisit, String date, String time_from, String time_to, int seen, String seenBy) {
         this.uid = uid;
         this.nameofsubmitor = nameofsubmitor;
         this.nameOfVisitor = nameOfVisitor;
@@ -22,6 +20,10 @@ public class AddVisitor {
         Time_from = time_from;
         Time_to = time_to;
         this.seen = seen;
+        this.seenBy = seenBy;
+    }
+
+    public AddVisitor() {
     }
 
     public String getUid() {
@@ -86,5 +88,13 @@ public class AddVisitor {
 
     public void setSeen(int seen) {
         this.seen = seen;
+    }
+
+    public String getSeenBy() {
+        return seenBy;
+    }
+
+    public void setSeenBy(String seenBy) {
+        this.seenBy = seenBy;
     }
 }

@@ -303,7 +303,7 @@ public class AddNewVisitor extends AppCompatActivity {
     private void addDataToFirestore(String uid, String nameFirst, String visitorName, String purposeOfvisit, String date, String time_from, String time_to, String firstName) {
 
 
-        AddVisitor addVisitor = new AddVisitor(uid, nameFirst, visitorName, purposeOfvisit, date, time_from, time_to, 0);
+        AddVisitor addVisitor = new AddVisitor(uid, nameFirst, visitorName, purposeOfvisit, date, time_from, time_to, 0, null);
         String finalDocName = uid + visitorName + nameFirst;
 
         db.collection("Visitor Data").document(finalDocName).set(addVisitor).addOnSuccessListener(new OnSuccessListener<Void>() {

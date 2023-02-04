@@ -20,12 +20,14 @@ public class ViewVisitorRVAdapter extends RecyclerView.Adapter<ViewVisitorRVAdap
     private Context context;
     private ItemClickListner mItemListener;
     private boolean isAdmin;
+    private String User_name;
 
-    public ViewVisitorRVAdapter(ArrayList<AddVisitor> roasterArrayList, boolean isAdmin, Context context, ItemClickListner mItemListener) {
+    public ViewVisitorRVAdapter(ArrayList<AddVisitor> roasterArrayList, boolean isAdmin, String UserName, Context context, ItemClickListner mItemListener) {
         this.roasterArrayList = roasterArrayList;
         this.context = context;
         this.mItemListener = mItemListener;
         this.isAdmin = isAdmin;
+        this.User_name = UserName;
     }
 
     // creating constructor for our adapter class
@@ -67,7 +69,7 @@ public class ViewVisitorRVAdapter extends RecyclerView.Adapter<ViewVisitorRVAdap
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                         ViewVisitor viewVisitor = new ViewVisitor();
-                        viewVisitor.addSeen(isChecked, holder.checkBox_Seen, context, data, position, roasterArrayList, holder.seenImage);
+                        viewVisitor.addSeen(isChecked, holder.checkBox_Seen, context, data, position, roasterArrayList, holder.seenImage,User_name);
                     }
                 });
 
