@@ -6,12 +6,12 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\arkam\.android\avd\Nexus_One_API_24.avd" />
+            <type value="SERIAL_NUMBER" />
+            <value value="ZD2222JZP3" />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2023-02-05T14:02:05.506900500Z" />
+    <timeTargetWasSelectedWithDropDown value="2023-02-05T15:16:57.525269800Z" />
   </component>
 </project>

@@ -618,16 +618,64 @@ public class HomeScreenDashboard extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(MYresponse);
                         JSONObject daily = jsonObject.getJSONObject("current_weather");
-                        String temp = String.valueOf(daily.get("temperature"));
+                        double temp = (double) daily.get("temperature");
                         String wind = String.valueOf(daily.get("windspeed"));
+                        int weathercode = (int) daily.get("weathercode");
+                        String Weather;
+
+                        if (weathercode == 0 || weathercode == 1) {
+                            Weather = "Clear sky";
+                        } else if (weathercode == 2) {
+                            Weather = "Partly cloudy";
+                        } else if (weathercode == 3) {
+                            Weather = "Overcast";
+                        } else if (weathercode == 51 || weathercode == 53 || weathercode == 55 || weathercode == 56 || weathercode == 57) {
+                            Weather = "Drizzle";
+                        } else if (weathercode == 61 || weathercode == 63 || weathercode == 65 || weathercode == 66 || weathercode == 67 || weathercode == 81 || weathercode == 82 || weathercode == 83) {
+                            Weather = "Rainy";
+                        } else if (weathercode == 45 || weathercode == 48) {
+                            Weather = "Fog";
+                        } else {
+                            Weather = "Unable to fetch";
+                        }
 
                         HomeScreenDashboard.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                curr_weather.setText(temp + "°C");
-                                curr_wind.setText(wind + " km/h");
+                                curr_weather.setText(Math.round(temp) + "°C");
+                                curr_wind.setText(Weather);
                                 LLWeather.setVisibility(View.VISIBLE);
-                               // Glide.with(HomeScreenDashboard.this).load(R.drawable.sun).into(image_weather);
+                                // Glide.with(HomeScreenDashboard.this).load(R.drawable.sun).into(image_weather);
+                                if (Weather.equals("Clear sky")) {
+                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.clear_sky_32, 0, 0, 0);
+                                    curr_wind.setCompoundDrawablePadding(15);
+                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                } else if (Weather.equals("Partly cloudy")) {
+                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.partly_cloudy, 0, 0, 0);
+                                    curr_wind.setCompoundDrawablePadding(15);
+                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                } else if (Weather.equals("Overcast")) {
+                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.overcast, 0, 0, 0);
+                                    curr_wind.setCompoundDrawablePadding(15);
+                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                } else if (Weather.equals("Drizzle")) {
+                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.drizzle, 0, 0, 0);
+                                    curr_wind.setCompoundDrawablePadding(15);
+                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                } else if (Weather.equals("Rainy")) {
+                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.rainy, 0, 0, 0);
+                                    curr_wind.setCompoundDrawablePadding(15);
+                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                } else if (Weather.equals("Fog")) {
+                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.fog, 0, 0, 0);
+                                    curr_wind.setCompoundDrawablePadding(15);
+                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                } else {
+                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.na, 0, 0, 0);
+                                    curr_wind.setCompoundDrawablePadding(15);
+                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                }
+
                             }
                         });
 

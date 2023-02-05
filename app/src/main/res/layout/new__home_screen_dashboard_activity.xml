@@ -135,7 +135,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="15dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
+                    android:visibility="invisible"
                     android:weightSum="2">
 
 
@@ -144,7 +144,9 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/curr_location"
+                        android:layout_gravity="center_vertical"
                         android:layout_weight="1"
+                        android:padding="5dp"
                         android:drawableLeft="@drawable/thermometer"
                         android:drawablePadding="5dp"
                         android:gravity="center_vertical"
@@ -157,15 +159,17 @@
                         android:id="@+id/curr_wind"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:drawableLeft="@drawable/na"
                         android:layout_below="@+id/curr_location"
                         android:layout_weight="1"
-                        android:drawableLeft="@drawable/wind_4"
                         android:drawablePadding="5dp"
+                        android:padding="5dp"
                         android:gravity="center_vertical"
                         android:textColor="#ffffff"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        tools:text="11.5 km/h" />
+                        tools:text="Partly" />
 
                 </LinearLayout>
 
