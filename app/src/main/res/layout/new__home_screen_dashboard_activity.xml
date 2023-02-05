@@ -103,7 +103,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/greeting_text" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <RelativeLayout
                 android:id="@+id/constraint"
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
@@ -111,53 +111,82 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/bottom_banner"
+                android:background="@drawable/gradient_background"
                 android:layout_marginTop="20dp">
 
-                <!--                <ImageView-->
-                <!--                    android:id="@+id/imageView10"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="match_parent"-->
-                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                    app:layout_constraintStart_toStartOf="parent"-->
-                <!--                    app:layout_constraintTop_toTopOf="parent"-->
-
-                <!--                    app:srcCompat="@drawable/bottom_banner" />-->
 
                 <TextView
                     android:id="@+id/curr_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginTop="20dp"
-                    android:textColor="#ffffff"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginEnd="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/curr_location"
                     tools:text="arka"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textColor="#FEDD06" />
+
+
+                <LinearLayout
+                    android:id="@+id/LLWeather"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/curr_date"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="2">
+
+
+                    <TextView
+                        android:id="@+id/curr_weather"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/curr_location"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/thermometer"
+                        android:drawablePadding="5dp"
+                        android:gravity="center_vertical"
+                        android:textColor="#ffffff"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        tools:text="20.5 °C " />
+
+                    <TextView
+                        android:id="@+id/curr_wind"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/curr_location"
+                        android:layout_weight="1"
+                        android:drawableLeft="@drawable/wind_4"
+                        android:drawablePadding="5dp"
+                        android:gravity="center_vertical"
+                        android:textColor="#ffffff"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        tools:text="11.5 km/h" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/curr_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginBottom="40dp"
-                    android:layout_marginEnd="5dp"
+                    android:layout_below="@+id/LLWeather"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="25dp"
                     android:text="Fetching Location..."
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="#FEDD06"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:singleLine="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintVertical_bias="0.657" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:singleLine="true" />
+
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -24,7 +24,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -57,11 +56,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import co.mobiwise.materialintro.animation.MaterialIntroListener;
-import co.mobiwise.materialintro.shape.Focus;
-import co.mobiwise.materialintro.shape.FocusGravity;
-import co.mobiwise.materialintro.shape.ShapeType;
-import co.mobiwise.materialintro.view.MaterialIntroView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -70,9 +64,9 @@ import okhttp3.Response;
 
 public class HomeScreenDashboard extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    TextView Welcome_User, curr_date, curr_location, greeting_text, textView3, textView4, textView2, textView1;
+    TextView Welcome_User, curr_date, curr_location, greeting_text, textView3, textView4, textView2, textView1, curr_weather, curr_wind;
     boolean emailLogin = false;
-    LinearLayout enterSchedule, add_visitor, view_visitor;
+    LinearLayout enterSchedule, add_visitor, view_visitor, LLWeather;
     String name;
     ArrayList<User> Userlist = new ArrayList<>();
     GoogleSignInOptions googleSignInOptions;
@@ -84,6 +78,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
     private final static int REQUEST_CODE = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
     String MYresponse;
+
     //ConstraintLayout constraint;
     @SuppressLint("MissingInflatedId")
     @Override
@@ -158,7 +153,10 @@ public class HomeScreenDashboard extends AppCompatActivity {
         curr_date.setCompoundDrawablePadding(15);
         curr_date.setGravity(Gravity.CENTER_VERTICAL);
         aLodingDialog = new ALodingDialog(this);
-
+        //image_weather = findViewById(R.id.image_weather);
+        curr_weather = findViewById(R.id.curr_weather);
+        curr_wind = findViewById(R.id.curr_wind);
+        LLWeather = findViewById(R.id.LLWeather);
 
         for (UserInfo user : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
             if (user.getProviderId().equals("password")) {
@@ -301,99 +299,99 @@ public class HomeScreenDashboard extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
 
-        new MaterialIntroView.Builder(this)
-                .enableDotAnimation(true)
-                .enableIcon(false)
-                .setFocusGravity(FocusGravity.CENTER)
-                .setFocusType(Focus.MINIMUM)
-                .setDelayMillis(500)
-                .enableFadeAnimation(true)
-                .performClick(true)
-                .setInfoText("Click here to Log Out")
-                .setShape(ShapeType.CIRCLE)
-                .setIdempotent(true)
-                .setTarget(btn_logOut)
-                .setUsageId("logout")
-                .setListener(new MaterialIntroListener() {
-                    @Override
-                    public void onUserClicked(String materialIntroViewId) {
-                        new MaterialIntroView.Builder(HomeScreenDashboard.this)
-                                .enableDotAnimation(true)
-                                .enableIcon(false)
-                                .setFocusGravity(FocusGravity.CENTER)
-                                .setFocusType(Focus.MINIMUM)
-                                .setDelayMillis(500)
-                                .enableFadeAnimation(true)
-                                .performClick(true)
-                                .setInfoText("Click here to input your timesheet")
-                                .setShape(ShapeType.CIRCLE)
-                                .setIdempotent(true)
-                                .setTarget(enterSchedule)
-                                .setUsageId("intro_card")
-                                .setListener(new MaterialIntroListener() {
-                                    @Override
-                                    public void onUserClicked(String materialIntroViewId) {
-                                        new MaterialIntroView.Builder(HomeScreenDashboard.this)
-                                                .enableDotAnimation(true)
-                                                .enableIcon(false)
-                                                .setFocusGravity(FocusGravity.CENTER)
-                                                .setFocusType(Focus.MINIMUM)
-                                                .setDelayMillis(500)
-                                                .enableFadeAnimation(true)
-                                                .performClick(true)
-                                                .setInfoText("Click here to input Visitor details")
-                                                .setShape(ShapeType.CIRCLE)
-                                                .setTarget(add_visitor)
-                                                .setUsageId("visitor") //THIS SHOULD BE UNIQUE ID
-                                                .setListener(new MaterialIntroListener() {
-                                                    @Override
-                                                    public void onUserClicked(String materialIntroViewId) {
-                                                        new MaterialIntroView.Builder(HomeScreenDashboard.this)
-                                                                .enableDotAnimation(true)
-                                                                .enableIcon(false)
-                                                                .setFocusGravity(FocusGravity.CENTER)
-                                                                .setFocusType(Focus.MINIMUM)
-                                                                .setDelayMillis(500)
-                                                                .enableFadeAnimation(true)
-                                                                .performClick(true)
-                                                                .setInfoText("View Your Schedule here")
-                                                                .setShape(ShapeType.CIRCLE)
-                                                                .setIdempotent(true)
-                                                                .setTarget(checkSchedule)
-                                                                .setUsageId("schedule")
-                                                                .setListener(new MaterialIntroListener() {
-                                                                    @Override
-                                                                    public void onUserClicked(String materialIntroViewId) {
-                                                                        new MaterialIntroView.Builder(HomeScreenDashboard.this)
-                                                                                .enableDotAnimation(true)
-                                                                                .enableIcon(false)
-                                                                                .setFocusGravity(FocusGravity.CENTER)
-                                                                                .setFocusType(Focus.MINIMUM)
-                                                                                .setDelayMillis(500)
-                                                                                .enableFadeAnimation(true)
-                                                                                .performClick(true)
-                                                                                .setInfoText("Click here to View Visitor details")
-                                                                                .setShape(ShapeType.CIRCLE)
-                                                                                .setTarget(view_visitor)
-                                                                                .setUsageId("visitor_schedule")
-                                                                                .show();
-
-                                                                    }
-                                                                })
-                                                                .show();
-                                                    }
-                                                })
-                                                .show();
-                                    }
-                                })//THIS SHOULD BE UNIQUE ID
-                                .show();
-                    }
-                }).show();
+//        new MaterialIntroView.Builder(this)
+//                .enableDotAnimation(true)
+//                .enableIcon(false)
+//                .setFocusGravity(FocusGravity.CENTER)
+//                .setFocusType(Focus.MINIMUM)
+//                .setDelayMillis(500)
+//                .enableFadeAnimation(true)
+//                .performClick(true)
+//                .setInfoText("Click here to Log Out")
+//                .setShape(ShapeType.CIRCLE)
+//                .setIdempotent(true)
+//                .setTarget(btn_logOut)
+//                .setUsageId("logout")
+//                .setListener(new MaterialIntroListener() {
+//                    @Override
+//                    public void onUserClicked(String materialIntroViewId) {
+//                        new MaterialIntroView.Builder(HomeScreenDashboard.this)
+//                                .enableDotAnimation(true)
+//                                .enableIcon(false)
+//                                .setFocusGravity(FocusGravity.CENTER)
+//                                .setFocusType(Focus.MINIMUM)
+//                                .setDelayMillis(500)
+//                                .enableFadeAnimation(true)
+//                                .performClick(true)
+//                                .setInfoText("Click here to input your timesheet")
+//                                .setShape(ShapeType.CIRCLE)
+//                                .setIdempotent(true)
+//                                .setTarget(enterSchedule)
+//                                .setUsageId("intro_card")
+//                                .setListener(new MaterialIntroListener() {
+//                                    @Override
+//                                    public void onUserClicked(String materialIntroViewId) {
+//                                        new MaterialIntroView.Builder(HomeScreenDashboard.this)
+//                                                .enableDotAnimation(true)
+//                                                .enableIcon(false)
+//                                                .setFocusGravity(FocusGravity.CENTER)
+//                                                .setFocusType(Focus.MINIMUM)
+//                                                .setDelayMillis(500)
+//                                                .enableFadeAnimation(true)
+//                                                .performClick(true)
+//                                                .setInfoText("Click here to input Visitor details")
+//                                                .setShape(ShapeType.CIRCLE)
+//                                                .setTarget(add_visitor)
+//                                                .setUsageId("visitor") //THIS SHOULD BE UNIQUE ID
+//                                                .setListener(new MaterialIntroListener() {
+//                                                    @Override
+//                                                    public void onUserClicked(String materialIntroViewId) {
+//                                                        new MaterialIntroView.Builder(HomeScreenDashboard.this)
+//                                                                .enableDotAnimation(true)
+//                                                                .enableIcon(false)
+//                                                                .setFocusGravity(FocusGravity.CENTER)
+//                                                                .setFocusType(Focus.MINIMUM)
+//                                                                .setDelayMillis(500)
+//                                                                .enableFadeAnimation(true)
+//                                                                .performClick(true)
+//                                                                .setInfoText("View Your Schedule here")
+//                                                                .setShape(ShapeType.CIRCLE)
+//                                                                .setIdempotent(true)
+//                                                                .setTarget(checkSchedule)
+//                                                                .setUsageId("schedule")
+//                                                                .setListener(new MaterialIntroListener() {
+//                                                                    @Override
+//                                                                    public void onUserClicked(String materialIntroViewId) {
+//                                                                        new MaterialIntroView.Builder(HomeScreenDashboard.this)
+//                                                                                .enableDotAnimation(true)
+//                                                                                .enableIcon(false)
+//                                                                                .setFocusGravity(FocusGravity.CENTER)
+//                                                                                .setFocusType(Focus.MINIMUM)
+//                                                                                .setDelayMillis(500)
+//                                                                                .enableFadeAnimation(true)
+//                                                                                .performClick(true)
+//                                                                                .setInfoText("Click here to View Visitor details")
+//                                                                                .setShape(ShapeType.CIRCLE)
+//                                                                                .setTarget(view_visitor)
+//                                                                                .setUsageId("visitor_schedule")
+//                                                                                .show();
+//
+//                                                                    }
+//                                                                })
+//                                                                .show();
+//                                                    }
+//                                                })
+//                                                .show();
+//                                    }
+//                                })//THIS SHOULD BE UNIQUE ID
+//                                .show();
+//                    }
+//                }).show();
         textView3 = findViewById(R.id.textView3);
         textView1 = findViewById(R.id.textView1);
         textView2 = findViewById(R.id.textView2);
         textView4 = findViewById(R.id.textView4);
-        ConstraintLayout constraint = findViewById(R.id.constraint);
+        //  RelativeLayout constraint = findViewById(R.id.constraint);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -407,7 +405,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
             textView1.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_small));
             textView2.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_small));
             textView4.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_small));
-            //   curr_date.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_small));
+            curr_date.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_small));
             curr_location.setText("Asansol, India");
 //            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(50, 50);
 //            constraint.setLayoutParams(params);
@@ -620,12 +618,16 @@ public class HomeScreenDashboard extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(MYresponse);
                         JSONObject daily = jsonObject.getJSONObject("current_weather");
-                        System.out.println("Temperature" + daily.get("temperature"));
                         String temp = String.valueOf(daily.get("temperature"));
+                        String wind = String.valueOf(daily.get("windspeed"));
+
                         HomeScreenDashboard.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                curr_date.append("\t" + temp+"°");
+                                curr_weather.setText(temp + "°C");
+                                curr_wind.setText(wind + " km/h");
+                                LLWeather.setVisibility(View.VISIBLE);
+                               // Glide.with(HomeScreenDashboard.this).load(R.drawable.sun).into(image_weather);
                             }
                         });
 
