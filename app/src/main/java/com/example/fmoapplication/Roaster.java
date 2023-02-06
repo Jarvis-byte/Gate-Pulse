@@ -1,6 +1,7 @@
 package com.example.fmoapplication;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,6 +44,9 @@ public class Roaster extends AppCompatActivity {
     private ALodingDialog aLodingDialog;
     ImageView back, imageView;
     TextView text_no_data;
+    String User_Name;
+
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,9 @@ public class Roaster extends AppCompatActivity {
         aLodingDialog.show();
         // initializing our variable for firebase
         // firestore and getting its instance.
+        Intent intent = getIntent();
+        User_Name = intent.getStringExtra("User_Name");
+
         db = FirebaseFirestore.getInstance();
         SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
         boolean isAdmin = sharedPreferences.getBoolean("isAdmin", false);
@@ -211,24 +219,35 @@ public class Roaster extends AppCompatActivity {
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                             System.out.println("Final Date\t" + finalDate);
                             DocumentReference docRef = db.collection("Data").document(name + finalDate);
-                            docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                            CollectionReference newCollRef = db.collection("Archive_Roaster");
+                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        aLodingDialog.cancel();
-                                        Toast.makeText(Roaster.this, "Your Data Deleted", Toast.LENGTH_SHORT).show();
-                                        coursesArrayList.remove(position);
-                                        courseRVAdapter.notifyDataSetChanged();
-                                        dialog1.dismiss();
-                                        dialog.dismiss();
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    newCollRef.document(name + finalDate).set(documentSnapshot.getData());
+                                    System.out.println("User Name in view Schedule" + User_Name);
+                                    newCollRef.document(name + finalDate).update("DeletedBy", User_Name);
+                                    docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                aLodingDialog.cancel();
+                                                Toast.makeText(Roaster.this, "Your Data Deleted", Toast.LENGTH_SHORT).show();
+                                                coursesArrayList.remove(position);
+                                                courseRVAdapter.notifyDataSetChanged();
+                                                dialog1.dismiss();
+                                                dialog.dismiss();
 
-                                    } else {
-                                        aLodingDialog.cancel();
-                                        Toast.makeText(Roaster.this, "Not Deleted", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                aLodingDialog.cancel();
+                                                Toast.makeText(Roaster.this, "Not Deleted", Toast.LENGTH_SHORT).show();
 
-                                    }
+                                            }
+                                        }
+                                    });
                                 }
                             });
+
                             return;
                         }
                     });

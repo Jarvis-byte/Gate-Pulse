@@ -20,9 +20,9 @@ public class AdminUserRVAdapter extends RecyclerView.Adapter<AdminUserRVAdapter.
 
     private ArrayList<User> userDataList;
     private Context context;
-    private RoasterRVAdapter.ItemClickListner mItemListener;
+    private ItemClickListner mItemListener;
 
-    public AdminUserRVAdapter(ArrayList<User> userDataList, Context context, RoasterRVAdapter.ItemClickListner mItemListener) {
+    public AdminUserRVAdapter(ArrayList<User> userDataList, Context context, ItemClickListner mItemListener) {
         this.userDataList = userDataList;
         this.context = context;
         this.mItemListener = mItemListener;
@@ -30,6 +30,7 @@ public class AdminUserRVAdapter extends RecyclerView.Adapter<AdminUserRVAdapter.
 
     public AdminUserRVAdapter() {
     }
+
 
     @NonNull
     @Override
@@ -48,13 +49,20 @@ public class AdminUserRVAdapter extends RecyclerView.Adapter<AdminUserRVAdapter.
             holder.seenImage.setVisibility(View.VISIBLE);
             holder.Check_box_verify.setVisibility(View.GONE);
         }
-
+        if (isadmin == 0) {
+            holder.seenImage.setVisibility(View.GONE);
+            holder.Check_box_verify.setVisibility(View.VISIBLE);
+            holder.Check_box_verify.setChecked(false);
+        }
         holder.Check_box_verify.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 Admin_User admin_user = new Admin_User();
                 admin_user.addSeen(isChecked, holder.Check_box_verify, context, user, position, userDataList, AdminUserRVAdapter.this, holder.seenImage);
             }
+        });
+        holder.itemView.setOnClickListener(v -> {
+            mItemListener.onItemClick(user, position);
         });
     }
 
@@ -63,12 +71,17 @@ public class AdminUserRVAdapter extends RecyclerView.Adapter<AdminUserRVAdapter.
         return userDataList.size();
     }
 
+    public interface ItemClickListner {
+        void onItemClick(User user, int position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView idTVempName;
         private final TextView idTVemail;
         private final LinearLayout card_rv_layout;
         private final CheckBox Check_box_verify;
         public final ImageView seenImage;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             idTVempName = itemView.findViewById(R.id.idTVempName);

@@ -231,6 +231,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Roaster.class);
+                intent.putExtra("User_Name", name);
                 startActivity(intent);
             }
         });

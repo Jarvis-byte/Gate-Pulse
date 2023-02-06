@@ -5,14 +5,12 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -75,10 +73,6 @@ public class TimesheetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // Welcome_User = findViewById(R.id.Welcome_User);
-
-
-
-
 
         date_picker = findViewById(R.id.date_picker);
         time_Picker_from = findViewById(R.id.time_Picker_from);
@@ -326,7 +320,7 @@ public class TimesheetActivity extends AppCompatActivity {
                 aLodingDialog.cancel();
                 time_Picker_from.setText("Time - From");
                 time_Picker_to.setText("Time - To");
-                displayToast("Your Entry has been succefully saved", TimesheetActivity.this);
+                Toast.makeText(TimesheetActivity.this, "Your Entry has been successfully saved", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(TimesheetActivity.this, HomeScreenDashboard.class));
                 finish();
             }
@@ -349,7 +343,6 @@ public class TimesheetActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // aLodingDialog.show();
-
                 startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                 dialog.dismiss();
 

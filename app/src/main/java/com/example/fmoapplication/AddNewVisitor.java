@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -222,10 +221,10 @@ public class AddNewVisitor extends AppCompatActivity {
         GoogleSignInAccount finalAccount = account;
         scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
         scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
-        btn_done.setOnTouchListener(new View.OnTouchListener() {
+        btn_done.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            public void onClick(View view) {
                 if (!isConnected(AddNewVisitor.this)) {
                     showCustomeDialog();
                 } else {
@@ -249,7 +248,7 @@ public class AddNewVisitor extends AppCompatActivity {
                         if (finalEmailLogin == false) {
                             uid = finalAccount.getId();
                             String firstName = finalAccount.getDisplayName();
-                            //  System.out.println("name" + user.getName());
+                            System.out.println("name_Gmail" + user.getName());
                             String namearr[] = firstName.split(" ");
                             String visitorName = visitor_name.getText().toString().trim();
                             String purposeOfvisit = purpose_of_visit.getText().toString().trim();
@@ -263,7 +262,7 @@ public class AddNewVisitor extends AppCompatActivity {
                         } else {
                             uid = Userlist.get(0).getUid();
                             String firstName = Userlist.get(0).getName();
-                            System.out.println("name" + user.getName());
+                            System.out.println("name_Email" + user.getName());
                             String namearr[] = firstName.split(" ");
                             String visitorName = visitor_name.getText().toString().trim();
                             String purposeOfvisit = purpose_of_visit.getText().toString().trim();
@@ -275,9 +274,6 @@ public class AddNewVisitor extends AppCompatActivity {
                         }
                     }
                 }
-
-
-                return true;
             }
         });
 
@@ -322,8 +318,6 @@ public class AddNewVisitor extends AppCompatActivity {
                 visitor_name.setText("");
                 purpose_of_visit.setText("");
                 //  CustomMessagingService customMessagingService = new CustomMessagingService(0, visitorName);
-
-
                 Toast.makeText(AddNewVisitor.this, "New Visitor has been added successfully", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {

@@ -2,6 +2,7 @@ package com.example.fmoapplication;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -10,13 +11,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -49,10 +55,59 @@ public class Admin_User extends AppCompatActivity {
         dataRV.setHasFixedSize(true);
         aLodingDialog = new ALodingDialog(this);
         aLodingDialog.show();
-        pendingVerificationRVAdapter = new AdminUserRVAdapter(UserArrayList, this, new RoasterRVAdapter.ItemClickListner() {
+        FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        String UserID = currentFirebaseUser.getUid();
+        pendingVerificationRVAdapter = new AdminUserRVAdapter(UserArrayList, this, new AdminUserRVAdapter.ItemClickListner() {
             @Override
-            public void onItemClick(Data data, int position) {
+            public void onItemClick(User data, int position) {
                 //click
+                FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                String UserIDClick = currentFirebaseUser.getUid();
+                System.out.println("User if from click " + UserIDClick);
+                if (UserIDClick.equals("xIci8Tdyeaf4Kz7nl6rYDEzY2Qy2") || UserIDClick.equals("4j5QWfHitnYGRFa9P8Q0wGHhfi13")) {
+                    if (UserArrayList.get(position).getIsAdmin().equals("1")) {
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Admin_User.this);
+                        View dialogView = getLayoutInflater().inflate(R.layout.dialog_sure_admin, null);
+                        builder.setView(dialogView);
+                        AlertDialog dialog = builder.create();
+                        dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                aLodingDialog.show();
+                                db.collection("User").document(UserArrayList.get(position).getUid()).update("isAdmin", "0").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        dialog.dismiss();
+                                        aLodingDialog.cancel();
+                                        data.setIsAdmin("0");
+                                        UserArrayList.set(position, data);
+                                        pendingVerificationRVAdapter.notifyDataSetChanged();
+                                        Toast.makeText(Admin_User.this, "User " + UserArrayList.get(position).getName() + " has been removed from an Admin User", Toast.LENGTH_SHORT).show();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                        Toast.makeText(Admin_User.this, "Failed to remove!!! Please try again", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        });
+                        dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+
+                            }
+                        });
+                        if (dialog.getWindow() != null) {
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                        }
+                        dialog.show();
+                        return;
+                    }
+                }
             }
         });
 
@@ -79,9 +134,17 @@ public class Admin_User extends AppCompatActivity {
                     List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                     for (DocumentSnapshot d : list) {
                         User user = d.toObject(User.class);
+
+                        //  System.out.println("USER ID IN ADMIN :- " + user.getUid());
                         assert user != null;
                         if ((user.getIsAdmin().equals("0") && user.getIsVerified().equals("1")) || (user.getIsAdmin().equals("1") && user.getIsVerified().equals("1"))) {
-                            UserArrayList.add(user);
+                            if ((user.getUid().equals("4j5QWfHitnYGRFa9P8Q0wGHhfi13")) || (user.getUid().equals("x4eWms44LtYeykcpoVw7YD787tD2"))) {
+                                System.out.println("USER ID IN ADMIN :- " + user.getUid());
+
+                            } else {
+                                UserArrayList.add(user);
+                            }
+
                         }
                     }
                     if (UserArrayList.isEmpty()) {
@@ -89,7 +152,6 @@ public class Admin_User extends AppCompatActivity {
                         text_no_data.setVisibility(View.VISIBLE);
                         dataRV.setVisibility(View.GONE);
                         Glide.with(Admin_User.this).load(R.drawable.empty_3).into(imageView);
-
                     }
 
                     Collections.sort(UserArrayList, new Comparator<User>() {
@@ -118,10 +180,10 @@ public class Admin_User extends AppCompatActivity {
 
     public void addSeen(boolean isChecked, CheckBox checkbox, Context context, User data, int position, ArrayList<User> userDataList, AdminUserRVAdapter pendingVerificationRVAdapter1,ImageView checkBox_Seen) {
         ALodingDialog LodingDialog = new ALodingDialog(context);
-        LodingDialog.show();
         db = FirebaseFirestore.getInstance();
-        // System.out.println("Posistion" + position);
+
         if (isChecked) {
+            LodingDialog.show();
             addDataToFirestore(data.getUid(), data.getName(), data.getEmail(), LodingDialog, checkbox, context, position, userDataList, pendingVerificationRVAdapter1, checkBox_Seen);
 
         }

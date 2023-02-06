@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -86,31 +87,45 @@ public class ViewVisitor extends AppCompatActivity {
                     String docname[] = NameOfSub.split(" ");
                     String finalDocName = uid + visitorName + docname[0];
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(ViewVisitor.this);
                     View dialogView = getLayoutInflater().inflate(R.layout.dialog_sure_delete, null);
                     builder.setView(dialogView);
                     AlertDialog dialog1 = builder.create();
+
                     dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             DocumentReference docRef = db.collection("Visitor Data").document(finalDocName);
-                            docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            CollectionReference newCollRef = db.collection("Archive_Visitor");
+                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    coursesArrayList.remove(position);
-                                    courseRVAdapter.notifyDataSetChanged();
-                                    dialog1.dismiss();
-                                    aLodingDialog.cancel();
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    // Copy the document to the new collection
+                                    newCollRef.document(finalDocName).set(documentSnapshot.getData());
+                                    newCollRef.document(finalDocName).update("DeletedBy", User_Name);
+                                    docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            coursesArrayList.remove(position);
+                                            courseRVAdapter.notifyDataSetChanged();
+                                            dialog1.dismiss();
+                                            aLodingDialog.cancel();
 
-                                    if (coursesArrayList.size() == 0) {
-                                        imageView.setVisibility(View.VISIBLE);
-                                        text_no_data.setVisibility(View.VISIBLE);
-                                        dataRV.setVisibility(View.GONE);
-                                        Glide.with(ViewVisitor.this).load(R.drawable.empty_3).into(imageView);
-                                    }
-                                    Toast.makeText(ViewVisitor.this, "Data has been successfully deleted", Toast.LENGTH_SHORT).show();
+                                            if (coursesArrayList.size() == 0) {
+                                                imageView.setVisibility(View.VISIBLE);
+                                                text_no_data.setVisibility(View.VISIBLE);
+                                                dataRV.setVisibility(View.GONE);
+                                                Glide.with(ViewVisitor.this).load(R.drawable.empty_3).into(imageView);
+                                            }
+                                            Toast.makeText(ViewVisitor.this, "Data has been successfully deleted", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
                                 }
                             });
+
                             return;
                         }
                     });
@@ -200,74 +215,7 @@ public class ViewVisitor extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         System.out.println("SEEN BY " + User_Name);
         if (isChecked) {
-//            boolean isSuccessful = performActivity();
-//            if (isSuccessful) {
-//                checkbox.setChecked(true);
-//            } else {
-//                checkbox.setChecked(false);
-//            }
-
             addDataToFirestore(data.getUid(), data.getNameofsubmitor(), data.getNameOfVisitor(), data.getPurposeOfvisit(), data.getDate(), data.getTime_from(), data.getTime_to(), 1, context, LodingDialog, checkBox_Seen, checkbox, User_name_Seen);
-
-            //  SharedPreferences sharedPref = getSharedPreferences("application", MODE_PRIVATE);
-//            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//            db.collection("Pin").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                @Override
-//                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                    if (!queryDocumentSnapshots.isEmpty()) {
-//                        List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-//                        for (DocumentSnapshot d : list) {
-//                            System.out.println(list);
-//                            Pin pin = d.toObject(Pin.class);
-//                            System.out.println("PIN" + pin.getAuthCode());
-//                            String enterpin = emailBox.getText().toString();
-//
-//                            if (pin.getAuthCode().equals(enterpin)) {
-//                                dialog.dismiss();
-//                                LodingDialog.cancel();
-//                                // Perform the activity
-//
-//                                // Toast.makeText(Roaster.this, "", Toast.LENGTH_SHORT).show();
-//                            } else {
-//                                LodingDialog.cancel();
-//                                emailBox.setText("");
-//                                Toast.makeText(context, "Wrong Pin!!! Please enter correct PIN", Toast.LENGTH_SHORT).show();
-//                            }
-//
-//                        }
-//                    }
-//
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    LodingDialog.cancel();
-//                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//            inflater = LayoutInflater.from(context.getApplicationContext());
-//            View dialogView = inflater.inflate(R.layout.dialog_pin, null);
-//            EditText emailBox = dialogView.findViewById(R.id.emailBox);
-//            builder.setView(dialogView);
-//            AlertDialog dialog = builder.create();
-//            dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                }
-//            });
-//            dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    checkbox.setChecked(false);
-//                    dialog.dismiss();
-//                }
-//            });
-//            if (dialog.getWindow() != null) {
-//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-//            }
-//            dialog.show();
         }
 
 

@@ -3,7 +3,6 @@ package com.example.fmoapplication;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -103,7 +102,7 @@ public class SignInActivity extends AppCompatActivity {
                                             if (authResult.getUser().isEmailVerified()) {
                                                 aLodingDialog.cancel();
                                                 String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                                System.out.println("UID from shared pref" + Uid);
+                                               // System.out.println("UID from shared pref" + Uid);
                                                 db.collection("User").document(Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                     @Override
                                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -120,7 +119,7 @@ public class SignInActivity extends AppCompatActivity {
 //                                                                    myEdit.commit();
 //                                                                }
 
-                                                                Toast.makeText(SignInActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(SignInActivity.this, "Sign In Successfully, Welcome !", Toast.LENGTH_SHORT).show();
                                                                 startActivity(new Intent(SignInActivity.this
                                                                         , HomeScreenDashboard.class)
                                                                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -143,7 +142,7 @@ public class SignInActivity extends AppCompatActivity {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             aLodingDialog.cancel();
-                                            Toast.makeText(SignInActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(SignInActivity.this, "Login Failed:- " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         } else {
@@ -343,10 +342,9 @@ public class SignInActivity extends AppCompatActivity {
             if (signInAccountTask.isSuccessful()) {
                 // When google sign in successful
                 // Initialize string
-                String s = "Google sign in successful";
                 // Display Toast
                 aLodingDialog.cancel();
-                displayToast(s);
+
                 // Initialize sign in account
                 try {
                     // Initialize sign in account
@@ -367,9 +365,8 @@ public class SignInActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         // Check condition
-                                        boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
-
                                         if (task.isSuccessful()) {
+                                            boolean isNewUser = task.getResult().getAdditionalUserInfo().isNewUser();
                                             // When task is successful
                                             // Redirect to profile activity
                                             firebaseUser = firebaseAuth.getCurrentUser();
@@ -385,7 +382,7 @@ public class SignInActivity extends AppCompatActivity {
                                                             User user = documentSnapshot.toObject(User.class);
                                                             if (user.getUid().equals(firebaseUser.getUid())) {
                                                                 if (user.getIsVerified().equals("1")) {
-//
+                                                                    displayToast("Sign In Successfully, Welcome !");
                                                                     startActivity(new Intent(SignInActivity.this
                                                                             , HomeScreenDashboard.class)
                                                                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -402,11 +399,14 @@ public class SignInActivity extends AppCompatActivity {
                                             }
 
                                         } else {
-                                            // When task is unsuccessful
-                                            // Display Toast
                                             displayToast("Authentication Failed :" + task.getException()
                                                     .getMessage());
                                         }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(SignInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
