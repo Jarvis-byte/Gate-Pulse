@@ -14,10 +14,18 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SplashScreen extends AppCompatActivity {
     ImageView splashimg;
     TextView appname, made_by;
+    FirebaseAuth firebaseAuth;
+    private FirebaseFirestore db;
+    FirebaseUser firebaseUser;
 
     //LottieAnimationView lottieAnimationView;
     @Override
@@ -49,17 +57,70 @@ public class SplashScreen extends AppCompatActivity {
 
         }
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        // Initialize firebase user
+        firebaseUser = firebaseAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        if (firebaseUser != null) {
+            db.collection("User").document(firebaseUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+                        User user = documentSnapshot.toObject(User.class);
+                        if (user.getUid().equals(firebaseUser.getUid())) {
+                            if (user.getIsVerified().equals("1")) {
+                                if (firebaseUser.isEmailVerified()) {
+                                    // When user already sign in
+                                    // redirect to profile activity
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
 
-        //   lottieAnimationView.animate().translationY(1500).setDuration(200).setStartDelay(5000);
+                                            startActivity(new Intent(SplashScreen.this, HomeScreenDashboard.class));
+                                            finish();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+                                        }
+                                    }, 2000);
+                                }
+                            } else {
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                startActivity(new Intent(SplashScreen.this, SignInActivity.class));
-                finish();
+                                        startActivity(new Intent(SplashScreen.this, SignInActivity.class));
+                                        finish();
 
-            }
-        }, 3000);
+                                    }
+                                }, 2000);
+                                // displayToast("Your account is waiting for verification with admin!");
+                            }
+                        }
+
+                    }
+                }
+            });
+        }
+        else{
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    startActivity(new Intent(SplashScreen.this, SignInActivity.class));
+                    finish();
+
+                }
+            }, 3000);
+        }
+
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                startActivity(new Intent(SplashScreen.this, SignInActivity.class));
+//                finish();
+//
+//            }
+//        }, 3000);
     }
 }

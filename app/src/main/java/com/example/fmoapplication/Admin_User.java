@@ -137,8 +137,9 @@ public class Admin_User extends AppCompatActivity {
 
                         //  System.out.println("USER ID IN ADMIN :- " + user.getUid());
                         assert user != null;
+                        //x4eWms44LtYeykcpoVw7YD787tD2
                         if ((user.getIsAdmin().equals("0") && user.getIsVerified().equals("1")) || (user.getIsAdmin().equals("1") && user.getIsVerified().equals("1"))) {
-                            if ((user.getUid().equals("4j5QWfHitnYGRFa9P8Q0wGHhfi13")) || (user.getUid().equals("x4eWms44LtYeykcpoVw7YD787tD2"))) {
+                            if ((user.getUid().equals("XwTOMUYZGuRS1ixWCUP7ZSblCP73")) || (user.getUid().equals("444"))) {
                                 System.out.println("USER ID IN ADMIN :- " + user.getUid());
 
                             } else {

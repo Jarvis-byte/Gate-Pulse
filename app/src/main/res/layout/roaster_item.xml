@@ -79,6 +79,18 @@
                 android:gravity="center_vertical"
                 android:text="Time"
                 android:textColor="@color/normaltext" />
+            <TextView
+                android:id="@+id/idTVspcl_pur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/amethysta"
+                android:drawableLeft="@drawable/info"
+                android:drawablePadding="8dp"
+                android:padding="2dp"
+                android:gravity="center_vertical"
+                android:text="Info"
+                android:textColor="@color/normaltext" />
 
         </LinearLayout>
 

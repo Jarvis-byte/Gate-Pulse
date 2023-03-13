@@ -88,17 +88,6 @@ public class PendingVerification extends AppCompatActivity {
                         Glide.with(PendingVerification.this).load(R.drawable.empty_3).into(imageView);
 
                     }
-
-//                    Collections.sort(coursesArrayList, new Comparator<Data>() {
-//                        @Override
-//                        public int compare(Data a, Data b) {
-//                            if (a.getDate().equals(b.getDate())) {
-//                                return b.getName().compareTo(a.getName());
-//                            } else {
-//                                return b.getDate().compareTo(a.getDate());
-//                            }
-//                        }
-//                    });
                     pendingVerificationRVAdapter.notifyDataSetChanged();
                 } else {
                     aLodingDialog.cancel();
@@ -118,40 +107,37 @@ public class PendingVerification extends AppCompatActivity {
     }
 
     public void addSeen(boolean isChecked, CheckBox checkbox, Context context, User data, int position, ArrayList<User> userDataList, PendingVerificationRVAdapter pendingVerificationRVAdapter1) {
-        ALodingDialog LodingDialog = new ALodingDialog(context);
-        LodingDialog.show();
+
         db = FirebaseFirestore.getInstance();
         // System.out.println("Posistion" + position);
         if (isChecked) {
             // checkbox.setChecked(false);
-            addDataToFirestore(data.getUid(), data.getName(), data.getEmail(), LodingDialog, checkbox, context, position, userDataList, pendingVerificationRVAdapter1);
-
+            addDataToFirestore(data.getUid(), data.getName(), data.getEmail(), checkbox, context, position, userDataList, pendingVerificationRVAdapter1);
+           // LodingDialog.cancel();
         }
 
 
     }
 
-    private void addDataToFirestore(String uId, String Name, String email, ALodingDialog lodingDialog, CheckBox checkbox, Context context, int position, ArrayList<User> userDataList, PendingVerificationRVAdapter pendingVerificationRVAdapter1) {
+    private void addDataToFirestore(String uId, String Name, String email, CheckBox checkbox, Context context, int position, ArrayList<User> userDataList, PendingVerificationRVAdapter pendingVerificationRVAdapter1) {
         HashMap<String, String> map = new HashMap<>();
         map.put("Name", Name);
         map.put("Uid", uId);
         map.put("isAdmin", "0");
         map.put("isVerified", "1");
         map.put("Email", email);
-
         db.collection("User").document(uId).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                lodingDialog.cancel();
                 System.out.println("Position verified\t" + position);
                 userDataList.remove(position);
+                checkbox.setChecked(false);
                 pendingVerificationRVAdapter1.notifyDataSetChanged();
                 Toast.makeText(context, Name + " is now a verified user", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                aLodingDialog.cancel();
                 Toast.makeText(context, "Fail to make \t" + Name + "a verified user as,  " + e, Toast.LENGTH_SHORT).show();
             }
         });

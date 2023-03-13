@@ -160,6 +160,35 @@
                         android:textColor="#404040"
                         android:textStyle="bold" />
 
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Special Info"
+                        android:textColor="#7868e5"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/timesheet_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:background="@drawable/background_edt"
+                        android:drawablePadding="8dp"
+                        android:scrollbars="vertical"
+                        android:overScrollMode="always"
+                        android:gravity="top"
+                        android:hint="Please enter anything regarding your timesheet"
+                        android:inputType="textMultiLine"
+                        android:padding="15dp"
+                        android:textColorHint="#825bc3"
+                        android:textColor="#825bc3"/>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/btn_done"
                         android:layout_width="match_parent"

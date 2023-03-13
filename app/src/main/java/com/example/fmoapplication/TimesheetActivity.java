@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -52,7 +53,7 @@ public class TimesheetActivity extends AppCompatActivity {
     private TextView time_Picker_from;
     private TextView time_Picker_to;
     private ConstraintLayout btn_done;
-
+    EditText timesheet_info;
     Animation scaleUp, scaleDown;
     private ALodingDialog aLodingDialog;
     String name;
@@ -65,7 +66,7 @@ public class TimesheetActivity extends AppCompatActivity {
     int minute2;
     Toast toast;
 
-    @SuppressLint("WrongViewCast")
+    @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class TimesheetActivity extends AppCompatActivity {
         btn_done = findViewById(R.id.btn_done);
         db = FirebaseFirestore.getInstance();
         aLodingDialog = new ALodingDialog(this);
-
+        timesheet_info = findViewById(R.id.timesheet_info);
         //Animation
         scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
         scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
@@ -265,7 +266,8 @@ public class TimesheetActivity extends AppCompatActivity {
                                 String date = date_picker.getText().toString();
                                 String time_from = time_Picker_from.getText().toString();
                                 String time_to = time_Picker_to.getText().toString();
-                                addDataToFirestore(uid, namearr[0], date, time_from, time_to);
+                                String timesheet_info_str = timesheet_info.getText().toString().trim();
+                                addDataToFirestore(uid, namearr[0], date, time_from, time_to, timesheet_info_str);
 
                             } else {
                                 uid = Userlist.get(0).getUid();
@@ -275,7 +277,8 @@ public class TimesheetActivity extends AppCompatActivity {
                                 String date = date_picker.getText().toString();
                                 String time_from = time_Picker_from.getText().toString();
                                 String time_to = time_Picker_to.getText().toString();
-                                addDataToFirestore(uid, namearr[0], date, time_from, time_to);
+                                String timesheet_info_str = timesheet_info.getText().toString().trim();
+                                addDataToFirestore(uid, namearr[0], date, time_from, time_to, timesheet_info_str);
 
                             }
                         }
@@ -304,10 +307,10 @@ public class TimesheetActivity extends AppCompatActivity {
 
     }
 
-    private void addDataToFirestore(String uid, String nameFirst, String date, String time_from, String time_to) {
+    private void addDataToFirestore(String uid, String nameFirst, String date, String time_from, String time_to, String timesheet_info_str) {
 
 
-        Data data = new Data(uid, nameFirst, date, time_from, time_to, true, 0);
+        Data data = new Data(uid, nameFirst, date, time_from, time_to, timesheet_info_str, true, 0);
 
         String docName = data.getDate();
         String docname[] = docName.split("/");

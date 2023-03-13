@@ -80,7 +80,7 @@ public class Roaster extends AppCompatActivity {
                     aLodingDialog.cancel();
                     String firstName = data.getName();
                     String namearr[] = firstName.split(" ");
-                    verifyRoaster(data.getUid(), data.getDate(), namearr[0], data.getApprovalStatus(), data.getTime_FROM(), data.getTime_to(), position);
+                    verifyRoaster(data.getUid(), data.getDate(), namearr[0], data.getApprovalStatus(), data.getTime_FROM(), data.getTime_to(), position, data.getTimesheet_info());
 
 //
 //                    AlertDialog.Builder builder = new AlertDialog.Builder(Roaster.this);
@@ -159,7 +159,7 @@ public class Roaster extends AppCompatActivity {
         });
     }
 
-    private void verifyRoaster(String uid, String date, String name, int approvalStatus, String time_from, String time_to, int position) {
+    private void verifyRoaster(String uid, String date, String name, int approvalStatus, String time_from, String time_to, int position, String timesheet_info_str) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Roaster.this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_schedule, null);
         TextView nameFor = dialogView.findViewById(R.id.Name);
@@ -267,7 +267,7 @@ public class Roaster extends AppCompatActivity {
                     choice = 2;
                 }
 
-                Data data = new Data(uid, name, date, time_from, time_to, true, choice);
+                Data data = new Data(uid, name, date, time_from, time_to, timesheet_info_str, true, choice);
 
                 db.collection("Data").document(name + finalDate).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

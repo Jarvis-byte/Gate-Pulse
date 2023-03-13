@@ -111,14 +111,6 @@ public class SignInActivity extends AppCompatActivity {
                                                             User user = documentSnapshot.toObject(User.class);
                                                             System.out.println("Document from shared pref" + user.getName());
                                                             if (user.getIsVerified().equals("1")) {
-//                                                                if (user.getIsAdmin().equals("1")) {
-//                                                                    myEdit.putBoolean("isAdmin", true);
-//                                                                    myEdit.commit();
-//                                                                } else {
-//                                                                    myEdit.putBoolean("isAdmin", false);
-//                                                                    myEdit.commit();
-//                                                                }
-
                                                                 Toast.makeText(SignInActivity.this, "Sign In Successfully, Welcome !", Toast.LENGTH_SHORT).show();
                                                                 startActivity(new Intent(SignInActivity.this
                                                                         , HomeScreenDashboard.class)
@@ -236,16 +228,32 @@ public class SignInActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         // Initialize firebase user
         firebaseUser = firebaseAuth.getCurrentUser();
+
         //  Check condition
-        if (firebaseUser != null && firebaseUser.isEmailVerified()) {
-            // When user already sign in
-            // redirect to profile activity
-            startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class)
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            finish();
-
-
-        }
+//if (firebaseUser != null) {
+//    db.collection("User").document(firebaseUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//        @Override
+//        public void onSuccess(DocumentSnapshot documentSnapshot) {
+//            if (documentSnapshot.exists()) {
+//                User user = documentSnapshot.toObject(User.class);
+//                if (user.getUid().equals(firebaseUser.getUid())) {
+//                    if (user.getIsVerified().equals("1")) {
+//                        if (firebaseUser.isEmailVerified()) {
+//                            // When user already sign in
+//                            // redirect to profile activity
+//                            startActivity(new Intent(SignInActivity.this, HomeScreenDashboard.class)
+//                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+//                            finish();
+//                        }
+//                    } else {
+//                        // displayToast("Your account is waiting for verification with admin!");
+//                    }
+//                }
+//
+//            }
+//        }
+//    });
+//}
 
 
         loginPassword.setOnTouchListener(new View.OnTouchListener() {
@@ -382,6 +390,7 @@ public class SignInActivity extends AppCompatActivity {
                                                             User user = documentSnapshot.toObject(User.class);
                                                             if (user.getUid().equals(firebaseUser.getUid())) {
                                                                 if (user.getIsVerified().equals("1")) {
+                                                                    System.out.println("IS VERIFIED STATUS" + user.getIsVerified());
                                                                     displayToast("Sign In Successfully, Welcome !");
                                                                     startActivity(new Intent(SignInActivity.this
                                                                             , HomeScreenDashboard.class)

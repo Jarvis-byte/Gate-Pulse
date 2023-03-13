@@ -46,8 +46,10 @@ public class RoasterRVAdapter extends RecyclerView.Adapter<RoasterRVAdapter.View
         Data data = roasterArrayList.get(position);
         holder.idTVempName.setText(data.getName());
         holder.idTVdate.setText(data.getDate());
-        String time = data.getTime_FROM() + "\t|\t" + data.getTime_to();
+        String time = data.getTime_FROM() + "\t | \t" + data.getTime_to();
         holder.idTVCtime.setText(time);
+        String info = data.getTimesheet_info();
+        holder.idTVspcl_pur.setText(info);
         int approval = data.getApprovalStatus();
         if (approval == 1) {
             holder.status.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.remove_approved_round));
@@ -78,6 +80,7 @@ public class RoasterRVAdapter extends RecyclerView.Adapter<RoasterRVAdapter.View
         private final TextView idTVCtime;
         private final LinearLayout card_rv_layout;
         private final ImageView status;
+        private final TextView idTVspcl_pur;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,6 +90,7 @@ public class RoasterRVAdapter extends RecyclerView.Adapter<RoasterRVAdapter.View
             idTVCtime = itemView.findViewById(R.id.idTVCtime);
             card_rv_layout = itemView.findViewById(R.id.card_rv_layout);
             status = itemView.findViewById(R.id.status);
+            idTVspcl_pur = itemView.findViewById(R.id.idTVspcl_pur);
         }
     }
 }
