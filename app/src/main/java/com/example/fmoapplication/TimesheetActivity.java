@@ -257,6 +257,7 @@ public class TimesheetActivity extends AppCompatActivity {
 
                             String uid = "";
                             User user = new User();
+                            String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                             if (finalEmailLogin == false) {
 
                                 uid = finalAccount.getId();
@@ -267,7 +268,7 @@ public class TimesheetActivity extends AppCompatActivity {
                                 String time_from = time_Picker_from.getText().toString();
                                 String time_to = time_Picker_to.getText().toString();
                                 String timesheet_info_str = timesheet_info.getText().toString().trim();
-                                addDataToFirestore(uid, namearr[0], date, time_from, time_to, timesheet_info_str);
+                                addDataToFirestore(Uid, namearr[0], date, time_from, time_to, timesheet_info_str);
 
                             } else {
                                 uid = Userlist.get(0).getUid();
@@ -278,9 +279,10 @@ public class TimesheetActivity extends AppCompatActivity {
                                 String time_from = time_Picker_from.getText().toString();
                                 String time_to = time_Picker_to.getText().toString();
                                 String timesheet_info_str = timesheet_info.getText().toString().trim();
-                                addDataToFirestore(uid, namearr[0], date, time_from, time_to, timesheet_info_str);
+                                addDataToFirestore(Uid, namearr[0], date, time_from, time_to, timesheet_info_str);
 
                             }
+                            System.out.println(uid);
                         }
                     }
 

@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -62,6 +63,9 @@ public class Roaster extends AppCompatActivity {
         Intent intent = getIntent();
         User_Name = intent.getStringExtra("User_Name");
 
+        String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        System.out.println("UID from Roaster" + Uid);
+
         db = FirebaseFirestore.getInstance();
         SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
         boolean isAdmin = sharedPreferences.getBoolean("isAdmin", false);
@@ -71,7 +75,7 @@ public class Roaster extends AppCompatActivity {
         dataRV.setHasFixedSize(true);
         dataRV.setLayoutManager(new LinearLayoutManager(this));
         //+ coursesArrayList.size()
-        System.out.println("ArrayList Size" + coursesArrayList.size());
+
         // adding our array list to our recycler view adapter class.
         courseRVAdapter = new RoasterRVAdapter(coursesArrayList, this, new RoasterRVAdapter.ItemClickListner() {
             @Override
@@ -144,6 +148,17 @@ public class Roaster extends AppCompatActivity {
 //                    }
 //                    dialog.show();
                 }
+                if (Uid.equals(data.getUid())) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Roaster.this);
+                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_timesheet, null);
+
+                    builder.setView(dialogView);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    Toast.makeText(Roaster.this, data.getName(), Toast.LENGTH_SHORT).show();
+                }
+                //check if the current position Uid is equal to the Uid of current user
+
             }
         });
 
