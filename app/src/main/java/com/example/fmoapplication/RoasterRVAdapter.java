@@ -112,6 +112,18 @@ public class RoasterRVAdapter extends RecyclerView.Adapter<RoasterRVAdapter.View
 
                 edit_text_date.setText(data.getDate());
                 edit_text_time_from.setText(data.getTime_FROM());
+                System.out.println("TIME FROM RV\t:-\t" + data.getTime_FROM());
+
+                String fullTimeFrom[] = data.getTime_FROM().split(":");
+                hour1 = Integer.parseInt(fullTimeFrom[0]);
+                String minute1_Original[] = fullTimeFrom[1].split(" ");
+                minute1 = Integer.parseInt(minute1_Original[0]);
+
+                String fullTimeTo[] = data.getTime_to().split(":");
+                hour2 = Integer.parseInt(fullTimeFrom[0]);
+                String minute2_Original[] = fullTimeTo[1].split(" ");
+                minute2 = Integer.parseInt(minute2_Original[0]);
+
                 edit_text_time_to.setText(data.getTime_to());
                 edit_text_desc.setText(info);
 
