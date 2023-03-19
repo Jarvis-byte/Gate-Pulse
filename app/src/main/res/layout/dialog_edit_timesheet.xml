@@ -19,19 +19,90 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/lavender_round"
-            android:drawableLeft="@drawable/ic_baseline_verified_24"
+            android:drawableLeft="@drawable/ic_baseline_edit_24"
             android:drawablePadding="8dp"
             android:padding="10dp"
-            android:text="Verify"
+            android:text="Edit"
             android:textColor="@color/white"
             android:textSize="17sp" />
 
+        <EditText
+            android:id="@+id/edit_text_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/forgotTitle"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/black"
+            android:hint="Input Date"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:padding="10dp"
+            android:textColor="@color/normaltext"
+            android:textColorHint="@color/normaltext" />
 
+        <LinearLayout
+            android:id="@+id/LLDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_text_date"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edit_text_time_from"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/black"
+                android:hint="Time - From"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:textColor="@color/normaltext"
+                android:textColorHint="@color/normaltext" />
+
+            <EditText
+                android:id="@+id/edit_text_time_to"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/black"
+                android:hint="Time - To"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:textColor="@color/normaltext"
+                android:textColorHint="@color/normaltext" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edit_text_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/LLDate"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/black"
+            android:hint="Input Reason"
+            android:padding="10dp"
+            android:textColor="@color/normaltext"
+            android:textColorHint="@color/normaltext" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/spinner1"
+            android:layout_below="@+id/edit_text_desc"
             android:orientation="horizontal"
             android:gravity="center_horizontal"
 
@@ -57,14 +128,14 @@
             <Button
                 android:id="@+id/btnReset"
                 android:layout_width="wrap_content"
-                android:layout_weight="1"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="40dp"
                 android:layout_marginBottom="8dp"
-                android:text="GO"
+                android:layout_weight="1"
                 android:backgroundTint="@color/okButton"
+                android:text="GO"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 app:cornerRadius="20dp" />

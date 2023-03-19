@@ -633,7 +633,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
                             Weather = "Overcast";
                         } else if (weathercode == 51 || weathercode == 53 || weathercode == 55 || weathercode == 56 || weathercode == 57) {
                             Weather = "Drizzle";
-                        } else if (weathercode == 61 || weathercode == 63 || weathercode == 65 || weathercode == 66 || weathercode == 67 || weathercode == 81 || weathercode == 82 || weathercode == 83) {
+                        } else if (weathercode == 61 || weathercode == 63 || weathercode == 65 || weathercode == 66 || weathercode == 67 || weathercode == 80 || weathercode == 81 || weathercode == 82 || weathercode == 83) {
                             Weather = "Rainy";
                         } else if (weathercode == 45 || weathercode == 48) {
                             Weather = "Fog";

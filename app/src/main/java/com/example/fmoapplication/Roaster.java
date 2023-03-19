@@ -83,84 +83,10 @@ public class Roaster extends AppCompatActivity {
                 if (isAdmin) {
                     aLodingDialog.cancel();
                     String firstName = data.getName();
-                    String namearr[] = firstName.split(" ");
-                    verifyRoaster(data.getUid(), data.getDate(), namearr[0], data.getApprovalStatus(), data.getTime_FROM(), data.getTime_to(), position, data.getTimesheet_info());
-
-//
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(Roaster.this);
-//                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_pin, null);
-//                    EditText emailBox = dialogView.findViewById(R.id.emailBox);
-//                    builder.setView(dialogView);
-//                    AlertDialog dialog = builder.create();
-//                    dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            String userEmail = emailBox.getText().toString();
-//                            aLodingDialog.show();
-//                            if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
-//                                aLodingDialog.cancel();
-//                                Toast.makeText(Roaster.this, "Enter your Admin PIN", Toast.LENGTH_SHORT).show();
-//                                return;
-//                            }
-//                            db.collection("Pin").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                                @Override
-//                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                                    if (!queryDocumentSnapshots.isEmpty()) {
-//                                        List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-//                                        for (DocumentSnapshot d : list) {
-//                                            System.out.println(list);
-//                                            Pin pin = d.toObject(Pin.class);
-//                                            System.out.println("PIN" + pin.getAuthCode());
-//                                            String enterpin = emailBox.getText().toString();
-//
-//                                            if (pin.getAuthCode().equals(enterpin)) {
-//
-//                                                // Toast.makeText(Roaster.this, "", Toast.LENGTH_SHORT).show();
-//                                            } else {
-//                                                aLodingDialog.cancel();
-//                                                emailBox.setText("");
-//                                                Toast.makeText(Roaster.this, "Wrong Pin!!! Please enter correct PIN", Toast.LENGTH_SHORT).show();
-//                                            }
-//
-//                                        }
-//                                    }
-//
-//                                }
-//                            }).addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    aLodingDialog.cancel();
-//                                    Toast.makeText(Roaster.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-//
-//
-//                        }
-//                    });
-//                    dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            dialog.dismiss();
-//                        }
-//                    });
-//                    if (dialog.getWindow() != null) {
-//                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-//                    }
-//                    dialog.show();
+                    verifyRoaster(data.getUid(), data.getDate(), firstName, data.getApprovalStatus(), data.getTime_FROM(), data.getTime_to(), position, data.getTimesheet_info());
                 }
-                if (Uid.equals(data.getUid())) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Roaster.this);
-                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_timesheet, null);
-
-                    builder.setView(dialogView);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                    Toast.makeText(Roaster.this, data.getName(), Toast.LENGTH_SHORT).show();
-                }
-                //check if the current position Uid is equal to the Uid of current user
-
             }
-        });
+        }, Uid);
 
         // setting adapter to our recycler view.
         dataRV.setAdapter(courseRVAdapter);

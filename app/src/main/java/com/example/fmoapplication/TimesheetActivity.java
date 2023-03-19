@@ -117,7 +117,14 @@ public class TimesheetActivity extends AppCompatActivity {
                     }
                 }, year, month - 1, day);
 
-                dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                Calendar calendar = Calendar.getInstance();
+                long currentTime = calendar.getTimeInMillis();
+                dialog.getDatePicker().setMinDate(currentTime);
+
+                // Set the maximum date to tomorrow's date
+                calendar.add(Calendar.DAY_OF_MONTH, 3);
+                long tomorrowTime = calendar.getTimeInMillis();
+                dialog.getDatePicker().setMaxDate(tomorrowTime);
                 dialog.show();
             }
         });
@@ -263,23 +270,23 @@ public class TimesheetActivity extends AppCompatActivity {
                                 uid = finalAccount.getId();
                                 String firstName = finalAccount.getDisplayName();
                                 //  System.out.println("name" + user.getName());
-                                String namearr[] = firstName.split(" ");
+
                                 String date = date_picker.getText().toString();
                                 String time_from = time_Picker_from.getText().toString();
                                 String time_to = time_Picker_to.getText().toString();
                                 String timesheet_info_str = timesheet_info.getText().toString().trim();
-                                addDataToFirestore(Uid, namearr[0], date, time_from, time_to, timesheet_info_str);
+                                addDataToFirestore(Uid, firstName, date, time_from, time_to, timesheet_info_str);
 
                             } else {
                                 uid = Userlist.get(0).getUid();
                                 String firstName = Userlist.get(0).getName();
                                 System.out.println("name" + user.getName());
-                                String namearr[] = firstName.split(" ");
+
                                 String date = date_picker.getText().toString();
                                 String time_from = time_Picker_from.getText().toString();
                                 String time_to = time_Picker_to.getText().toString();
                                 String timesheet_info_str = timesheet_info.getText().toString().trim();
-                                addDataToFirestore(Uid, namearr[0], date, time_from, time_to, timesheet_info_str);
+                                addDataToFirestore(Uid, firstName, date, time_from, time_to, timesheet_info_str);
 
                             }
                             System.out.println(uid);
@@ -287,7 +294,6 @@ public class TimesheetActivity extends AppCompatActivity {
                     }
 
                 }
-
             }
         });
 
