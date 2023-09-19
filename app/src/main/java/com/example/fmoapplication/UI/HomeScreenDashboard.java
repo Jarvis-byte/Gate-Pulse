@@ -134,6 +134,13 @@ public class HomeScreenDashboard extends AppCompatActivity {
                 curr_weather.setText(Math.round(temperature) + "°C");
             }
         });
+        weatherViewModel.getWeatherConditionLiveData().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String weatherCondition) {
+                curr_wind.setText(weatherCondition);
+            }
+        });
+//        weatherViewModel.getWindLiveData().observe(this, new );
         // Observe the visibility LiveData and update the visibility of curr_weather
         weatherViewModel.getVisibilityLiveData().observe(this, new Observer<Integer>() {
             @Override
@@ -141,22 +148,6 @@ public class HomeScreenDashboard extends AppCompatActivity {
                 LLWeather.setVisibility(visibility);
             }
         });
-
-
-//        final Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                // Do something after 5s = 5000ms
-//                boolean isAdmin = sharedPreferences.getBoolean("isAdmin", false);
-//                System.out.println("isAdmin123" + isAdmin);
-//                if (isAdmin) {
-//
-//                }
-//            }
-//        }, 1000);
-
-
         btn_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -665,6 +656,7 @@ public class HomeScreenDashboard extends AppCompatActivity {
                             @Override
                             public void run() {
                                 weatherViewModel.setTemperature(temp);
+
                                 weatherViewModel.setVisibility(View.VISIBLE);
                             }
                         });
@@ -691,9 +683,9 @@ public class HomeScreenDashboard extends AppCompatActivity {
                         HomeScreenDashboard.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                curr_weather.setText(Math.round(temp) + "°C");
-                                curr_wind.setText(Weather);
-                                LLWeather.setVisibility(View.VISIBLE);
+                                weatherViewModel.setTemperature(temp);
+                                weatherViewModel.setWeatherCondition(Weather);
+                                weatherViewModel.setVisibility(View.VISIBLE);
                                 // Glide.with(HomeScreenDashboard.this).load(R.drawable.sun).into(image_weather);
                                 if (Weather.equals("Clear sky")) {
                                     curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.clear_sky_32, 0, 0, 0);
