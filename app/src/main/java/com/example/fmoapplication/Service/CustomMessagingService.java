@@ -18,7 +18,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.fmoapplication.R;
-import com.example.fmoapplication.ViewVisitor;
+import com.example.fmoapplication.UI.ViewVisitor;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 

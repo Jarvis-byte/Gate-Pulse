@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EDE7F8"
-    tools:context=".HomeScreenDashboard">
+    tools:context=".UI.HomeScreenDashboard">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -123,7 +123,7 @@
                     android:layout_marginTop="20dp"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    tools:text="arka"
+                    tools:text=""
                     android:textColor="#FEDD06" />
 
 

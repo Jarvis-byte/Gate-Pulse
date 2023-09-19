@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".HomeScreenDashboard">
+    tools:context=".UI.HomeScreenDashboard">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

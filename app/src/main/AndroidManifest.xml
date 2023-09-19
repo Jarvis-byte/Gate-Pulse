@@ -21,7 +21,7 @@
         android:theme="@style/Theme.FMOApplication"
         tools:targetApi="31">
         <activity
-            android:name=".Admin_User"
+            android:name=".UI.Admin_User"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -29,14 +29,14 @@
         </activity>
 
         <activity
-            android:name=".Profile_Page"
+            android:name=".UI.Profile_Page"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".PendingVerification"
+            android:name=".UI.PendingVerification"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -54,7 +54,7 @@
         <!-- android:enabled="true" -->
         <!-- android:exported="false" /> -->
         <activity
-            android:name=".ViewVisitor"
+            android:name=".UI.ViewVisitor"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -67,7 +67,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddNewVisitor"
+            android:name=".UI.AddNewVisitor"
             android:exported="false"
             android:windowSoftInputMode="adjustResize">
             <meta-data
@@ -75,7 +75,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".HomeScreenDashboard"
+            android:name=".UI.HomeScreenDashboard"
             android:exported="false"
             android:launchMode="singleTop">
             <meta-data
@@ -83,7 +83,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".SplashScreen"
+            android:name=".UI.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -96,21 +96,21 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".SignUpActivity"
+            android:name=".UI.SignUpActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Roaster"
+            android:name=".UI.Roaster"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".TimesheetActivity"
+            android:name=".UI.TimesheetActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize">
             <meta-data
@@ -118,7 +118,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".SignInActivity"
+            android:name=".UI.SignInActivity"
             android:exported="true"
             android:theme="@style/Theme.FMOApplication.NoActionBarAndStatusbar">
             <meta-data
