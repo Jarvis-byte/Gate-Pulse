@@ -140,6 +140,15 @@ public class HomeScreenDashboard extends AppCompatActivity {
                 curr_wind.setText(weatherCondition);
             }
         });
+
+        weatherViewModel.getWeatherDrawableLiveData().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer drawableResId) {
+                curr_wind.setCompoundDrawablesWithIntrinsicBounds(drawableResId, 0, 0, 0);
+                curr_wind.setCompoundDrawablePadding(15);
+                curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+            }
+        });
 //        weatherViewModel.getWindLiveData().observe(this, new );
         // Observe the visibility LiveData and update the visibility of curr_weather
         weatherViewModel.getVisibilityLiveData().observe(this, new Observer<Integer>() {
@@ -687,35 +696,24 @@ public class HomeScreenDashboard extends AppCompatActivity {
                                 weatherViewModel.setWeatherCondition(Weather);
                                 weatherViewModel.setVisibility(View.VISIBLE);
                                 // Glide.with(HomeScreenDashboard.this).load(R.drawable.sun).into(image_weather);
+                                int drawableResId;
                                 if (Weather.equals("Clear sky")) {
-                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.clear_sky_32, 0, 0, 0);
-                                    curr_wind.setCompoundDrawablePadding(15);
-                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                    drawableResId = R.drawable.clear_sky_32;
                                 } else if (Weather.equals("Partly cloudy")) {
-                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.partly_cloudy, 0, 0, 0);
-                                    curr_wind.setCompoundDrawablePadding(15);
-                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                    drawableResId = R.drawable.partly_cloudy;
                                 } else if (Weather.equals("Overcast")) {
-                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.overcast, 0, 0, 0);
-                                    curr_wind.setCompoundDrawablePadding(15);
-                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                    drawableResId = R.drawable.overcast;
                                 } else if (Weather.equals("Drizzle")) {
-                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.drizzle, 0, 0, 0);
-                                    curr_wind.setCompoundDrawablePadding(15);
-                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                    drawableResId = R.drawable.drizzle;
                                 } else if (Weather.equals("Rainy")) {
-                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.rainy, 0, 0, 0);
-                                    curr_wind.setCompoundDrawablePadding(15);
-                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                    drawableResId = R.drawable.rainy;
                                 } else if (Weather.equals("Fog")) {
-                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.fog, 0, 0, 0);
-                                    curr_wind.setCompoundDrawablePadding(15);
-                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                    drawableResId = R.drawable.fog;
                                 } else {
-                                    curr_wind.setCompoundDrawablesWithIntrinsicBounds(R.drawable.na, 0, 0, 0);
-                                    curr_wind.setCompoundDrawablePadding(15);
-                                    curr_wind.setGravity(Gravity.CENTER_VERTICAL);
+                                    drawableResId = R.drawable.na;
                                 }
+
+                                weatherViewModel.setWeatherDrawable(drawableResId);
 
                             }
                         });

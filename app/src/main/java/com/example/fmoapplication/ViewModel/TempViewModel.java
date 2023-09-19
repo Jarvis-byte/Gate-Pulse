@@ -11,6 +11,8 @@ public class TempViewModel extends ViewModel {
 
     private MutableLiveData<String> weatherConditionLiveData = new MutableLiveData<>();
 
+    private MutableLiveData<Integer> weatherDrawableLiveData = new MutableLiveData<>();
+
     public LiveData<Double> getTemperatureLiveData() {
         return temperatureLiveData;
     }
@@ -31,6 +33,14 @@ public class TempViewModel extends ViewModel {
 
     public void setVisibility(int visibility) {
         visibilityLiveData.setValue(visibility);
+    }
+
+    public LiveData<Integer> getWeatherDrawableLiveData() {
+        return weatherDrawableLiveData;
+    }
+
+    public void setWeatherDrawable(int drawableResId) {
+        weatherDrawableLiveData.setValue(drawableResId);
     }
 
 }
