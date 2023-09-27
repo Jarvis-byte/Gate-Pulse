@@ -25,6 +25,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.json.JSONArray;
 
 import java.util.Map;
+import java.util.Random;
 
 public class CustomMessagingService extends FirebaseMessagingService {
 
@@ -32,6 +33,7 @@ public class CustomMessagingService extends FirebaseMessagingService {
     Notification notification;
 
     Uri defaultSoundUri;
+
 
 
     @Override
@@ -42,12 +44,14 @@ public class CustomMessagingService extends FirebaseMessagingService {
 
             String title = remoteMessage.getNotification().getTitle();
             String message = remoteMessage.getNotification().getBody();
-            notifyUser(title, message);
+            Random random = new Random();
+            int id = random.nextInt(1000);
+            notifyUser(title, message,id);
 
 
             if (remoteMessage.getData().size() > 0) {
 
-                notifyUser(title, message);
+                notifyUser(title, message,id);
 
             }
             defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -56,7 +60,7 @@ public class CustomMessagingService extends FirebaseMessagingService {
 
     }
 
-    private void notifyUser(String title, String messageBody) {
+    private void notifyUser(String title, String messageBody,int id) {
         Intent intent = new Intent(this, ViewVisitor.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent;
@@ -68,7 +72,7 @@ public class CustomMessagingService extends FirebaseMessagingService {
         else
         {
             pendingIntent = PendingIntent.getActivity
-                    (this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+                    (this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_MUTABLE);
         }
         String channelId = getString(R.string.default_notification_channel_id);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -92,7 +96,7 @@ public class CustomMessagingService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
         }
 
-        notificationManager.notify(0, notificationBuilder.build());
+        notificationManager.notify(id, notificationBuilder.build());
 
     }
 
@@ -192,7 +196,7 @@ public class CustomMessagingService extends FirebaseMessagingService {
 
         Intent cancelIntent = new Intent(getBaseContext(), NotificationReceiver.class);
         cancelIntent.putExtra("ID", 0);
-        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getBaseContext(), 0, cancelIntent, 0);
+        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(getBaseContext(), 0, cancelIntent, PendingIntent.FLAG_MUTABLE);
 
         builder3.setSmallIcon(R.drawable.storm)
                 .setContentTitle(title)

@@ -11,6 +11,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.fmoapplication.R;
 
+import java.util.Random;
+
 public class NotificationReceiver extends BroadcastReceiver {
     NotificationManager notificationManager;
 
@@ -29,8 +31,9 @@ public class NotificationReceiver extends BroadcastReceiver {
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.storm)
                         .setContentTitle("Thank you for your feedback!!!");
-
-                notificationManager.notify(0, mBuilder.build());
+                Random random = new Random();
+                int id = random.nextInt(1000);
+                notificationManager.notify(id, mBuilder.build());
             }
 
         }
